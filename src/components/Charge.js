@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { View, Text, Image, TouchableOpacity , I18nManager } from "react-native";
-import {Container, Content, } from 'native-base'
+import {Button, Container, Content,} from 'native-base'
 import Styles from '../../assets/styles'
 import i18n from '../../local/i18n'
 
-class Congrats extends Component {
+class Charge extends Component {
     constructor(props){
         super(props);
 
@@ -21,8 +21,12 @@ class Congrats extends Component {
 
             <Container style={{}}>
                 <Content style={{padding:15}}>
-                    <View style={{justifyContent:'center' , alignItems:'center' , flexDirection:'column'}}>
-                        <Image source={require('../../assets/images/congrats.png')}  style={{width:70 , height:70}} resizeMode={'contain'} />
+                    <View style={Styles.confirm}>
+                        <Image source={require('../../assets/images/sad.png')}  style={{width:220 , height:220}} resizeMode={'contain'} />
+                        <Text style={Styles.confirmText}>عفواً لا يوجد رصيد كافي بالمحفظة ، يرجي إعادة شحن محفظتك لدينا </Text>
+                        <Button onPress={() => this.props.navigation.navigate('reCharge')} style={Styles.loginBtn}>
+                            <Text style={Styles.btnTxt}>اعادة شحن</Text>
+                        </Button>
                     </View>
                 </Content>
             </Container>
@@ -31,4 +35,4 @@ class Congrats extends Component {
     }
 }
 
-export default Congrats;
+export default Charge;
