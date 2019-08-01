@@ -24,24 +24,24 @@ class Notifications extends Component {
                 <Header style={Styles.header} noShadow>
                     <View style={Styles.headerView}>
                         <TouchableOpacity onPress={() => this.props.navigation.goBack()} style={Styles.headerTouch}>
-                            <Image source={require('../../assets/images/back.png')} style={Styles.headerMenu} resizeMode={'contain'} />
+                            <Image source={require('../../assets/images/back.png')} style={[Styles.headerMenu , Styles.transform]} resizeMode={'contain'} />
                         </TouchableOpacity>
                         <Text style={[Styles.headerBody , { flex:1, top:-3 , left:-15 , textAlign:'center'}]}>{ i18n.t('notifications') }</Text>
                     </View>
                 </Header>
                 <Content style={{padding:15}}>
-                    <View style={Styles.noti}>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('rate')} style={Styles.noti}>
                         <View style={Styles.notiBall}/>
                         <Text style={Styles.notiText}>هناك طلب جديد على وظيفتك</Text>
-                    </View>
-                    <View style={Styles.noti}>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('rate')} style={Styles.noti}>
                         <View style={Styles.notiBall}/>
                         <Text style={Styles.notiText}>لا تنسي تقييم صاحب الاعلان</Text>
-                    </View>
-                    <View style={Styles.noti}>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('rate')} style={Styles.noti}>
                         <View style={Styles.notiBall}/>
                         <Text style={Styles.notiText}>لا تنسي تقييم الباحث عن العمل</Text>
-                    </View>
+                    </TouchableOpacity>
                 </Content>
             </Container>
 

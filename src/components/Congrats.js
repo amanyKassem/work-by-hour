@@ -23,8 +23,8 @@ class Congrats extends Component {
                 <Content style={{padding:15}}>
                     <View style={Styles.confirm}>
                         <Image source={require('../../assets/images/congrats.png')}  style={{width:220 , height:220}} resizeMode={'contain'} />
-                        <Text style={Styles.confirmText}>تهانينا تم اضافة رصيدك بنجاح</Text>
-                        <Button onPress={() => this.props.navigation.navigate('drawerNavigator')} style={Styles.loginBtn}>
+                        <Text style={Styles.confirmText}>{ i18n.t('addCredit') }</Text>
+                        <Button onPress={() => this.props.navigation.navigate('home')} style={Styles.loginBtn}>
                             <Text style={Styles.btnTxt}>{ i18n.t('home') }</Text>
                         </Button>
                     </View>

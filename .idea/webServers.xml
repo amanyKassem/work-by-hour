@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="77b50002-8097-43be-9789-c5f2536b234a" name="fallah" url="http://shams.arabsdesign.com">
+        <fileTransfer host="shams.arabsdesign.com" port="21" rootFolder="/public_html/fallah">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+          <option name="port" value="21" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

@@ -34,7 +34,7 @@ class Login extends Component {
 
                         <View style={Styles.LoginParentView}>
                             <Form style={{width: '100%' , marginTop:30}}>
-                                <Text style={Styles.title}>تسجيل الدخول</Text>
+                                <Text style={Styles.title}>{ i18n.t('login') }</Text>
                                 <View style={Styles.inputParent}>
                                     <Item stackedLabel style={Styles.item } bordered>
                                         <Label style={Styles.labelItem}>{ i18n.t('phoneNumber') }</Label>
@@ -47,16 +47,16 @@ class Login extends Component {
                                         <Input autoCapitalize='none' value={this.state.password} onChangeText={(password) => this.setState({password})} secureTextEntry  style={Styles.itemInput}  />
                                     </Item>
                                 </View>
-                                <TouchableOpacity>
-                                    <Text style={Styles.forgetPass}>هل نسيت كلمة المرور</Text>
+                                <TouchableOpacity onPress={() => this.props.navigation.navigate('forgetPass')}>
+                                    <Text style={Styles.forgetPass}>{ i18n.t('forgetPass') }</Text>
                                 </TouchableOpacity>
 
                                 <Button onPress={() => this.props.navigation.navigate('drawerNavigator')} style={Styles.loginBtn}>
                                     <Text style={Styles.btnTxt}>{ i18n.t('loginButton') }</Text>
                                 </Button>
 
-                                <TouchableOpacity>
-                                    <Text style={Styles.tegisterText}>لا تمتلك حساب ؟ تسجيل جديد</Text>
+                                <TouchableOpacity  onPress={() => this.props.navigation.navigate('register')}>
+                                    <Text style={Styles.tegisterText}>{ i18n.t('noAcc') }</Text>
                                 </TouchableOpacity>
 
                             </Form>

@@ -1,9 +1,8 @@
 import React, { Component } from "react";
-import { View, Text, Image, TouchableOpacity , I18nManager , FlatList} from "react-native";
+import { View, Text, Image, TouchableOpacity , I18nManager , KeyboardAvoidingView} from "react-native";
 import {Container, Content, Icon, Header, Item, Input, Label, Picker, Button, Form} from 'native-base'
 import Styles from '../../assets/styles'
 import i18n from '../../local/i18n'
-import Modal from "react-native-modal";
 import { ImagePicker } from 'expo';
 
 class ReChargeWallet extends Component {
@@ -44,80 +43,81 @@ class ReChargeWallet extends Component {
                 <Header style={Styles.header} noShadow>
                     <View style={Styles.headerView}>
                         <TouchableOpacity onPress={() => this.props.navigation.goBack()} style={Styles.headerTouch}>
-                            <Image source={require('../../assets/images/back.png')} style={Styles.headerMenu} resizeMode={'contain'} />
+                            <Image source={require('../../assets/images/back.png')} style={[Styles.headerMenu , Styles.transform]} resizeMode={'contain'} />
                         </TouchableOpacity>
-                        <Text style={[Styles.headerBody , { flex:1, top:-3 , left:-15 , textAlign:'center'}]}>المحفظة</Text>
+                        <Text style={[Styles.headerBody , { flex:1, top:-3 , left:-15 , textAlign:'center'}]}>{i18n.t('wallet')}</Text>
                     </View>
                 </Header>
                 <Content style={{padding:15}}>
-                    <View style={Styles.bankImg}>
-                        <Image source={require('../../assets/images/walletCharge.png')} style={{width:100 , height:100}} resizeMode={'contain'} />
-                        <View style={{flexDirection:'column' ,marginLeft:5 }}>
-                            <Text  style={[ Styles.bankName ]}>مصرف الراجحي</Text>
-                            <Text style={[ Styles.bankName ,{color:'#8B8E8D'}]}>Sa211sd25422SaA221</Text>
-                            <Text style={[ Styles.bankName ,{color:'#8B8E8D'}]}>32645523563561</Text>
+                    <KeyboardAvoidingView behavior={'padding'} style={Styles.keyboardAvoid}>
+                        <View style={Styles.bankImg}>
+                            <Image source={require('../../assets/images/walletCharge.png')} style={{width:100 , height:100}} resizeMode={'contain'} />
+                            <View style={{flexDirection:'column' ,marginLeft:5 }}>
+                                <Text  style={[ Styles.bankName ]}>مصرف الراجحي</Text>
+                                <Text style={[ Styles.bankName ,{color:'#8B8E8D'}]}>Sa211sd25422SaA221</Text>
+                                <Text style={[ Styles.bankName ,{color:'#8B8E8D'}]}>32645523563561</Text>
+                            </View>
                         </View>
-                    </View>
-                    <View style={Styles.bankImg}>
-                        <Image source={require('../../assets/images/walletCharge.png')} style={{width:100 , height:100}} resizeMode={'contain'} />
-                        <View style={{flexDirection:'column' ,marginLeft:5 }}>
-                            <Text  style={[ Styles.bankName ]}>مصرف الراجحي</Text>
-                            <Text style={[ Styles.bankName ,{color:'#8B8E8D'}]}>Sa211sd25422SaA221</Text>
-                            <Text style={[ Styles.bankName ,{color:'#8B8E8D'}]}>32645523563561</Text>
+                        <View style={Styles.bankImg}>
+                            <Image source={require('../../assets/images/walletCharge.png')} style={{width:100 , height:100}} resizeMode={'contain'} />
+                            <View style={{flexDirection:'column' ,marginLeft:5 }}>
+                                <Text  style={[ Styles.bankName ]}>مصرف الراجحي</Text>
+                                <Text style={[ Styles.bankName ,{color:'#8B8E8D'}]}>Sa211sd25422SaA221</Text>
+                                <Text style={[ Styles.bankName ,{color:'#8B8E8D'}]}>32645523563561</Text>
+                            </View>
                         </View>
-                    </View>
-                    <View style={Styles.line}/>
-                    <Text style={[ Styles.bankName ,{color:'#444444' , textAlign:'center'}]}>يمكنك شحن رصيدك عن طريق تزويدنا بمعلومات
-                        حسابك البنكى</Text>
-                    <Form style={{width: '100%' , marginTop:15}}>
-                        <View style={[Styles.inputParent ,{ borderColor:  '#707070' , borderRadius:25 , height:40 , marginBottom:10}]}>
-                            <Item stackedLabel style={Styles.item } bordered>
-                                <Label style={[Styles.labelItem , {top:-25 , left:-13 , backgroundColor:'transparent'}]}>اسم البنك المحول منه</Label>
-                                <Input value={this.state.bankName} onChangeText={(bankName) => this.setState({bankName})} autoCapitalize='none' style={[Styles.itemInput , {top:-20}]}  />
-                            </Item>
-                        </View>
-                        <View style={[Styles.inputParent ,{ borderColor:  '#707070' , borderRadius:25 , height:40, marginBottom:10}]}>
-                            <Item stackedLabel style={Styles.item } bordered>
-                                <Label style={[Styles.labelItem , {top:-25 , left:-13 , backgroundColor:'transparent'}]}>اسم صاحب الحساب</Label>
-                                <Input value={this.state.username} onChangeText={(username) => this.setState({username})} autoCapitalize='none' style={[Styles.itemInput , {top:-20}]}  />
-                            </Item>
-                        </View>
-                        <View style={[Styles.inputParent ,{ borderColor:  '#707070' , borderRadius:25 , height:40, marginBottom:10}]}>
-                            <Item stackedLabel style={Styles.item } bordered>
-                                <Label style={[Styles.labelItem , {top:-25 , left:-13 , backgroundColor:'transparent'}]}>رقم الحساب</Label>
-                                <Input value={this.state.accNum} onChangeText={(accNum) => this.setState({accNum})}keyboardType={'number-pad'} style={[Styles.itemInput , {top:-20}]}  />
-                            </Item>
-                        </View>
-                        <View style={[Styles.inputParent ,{ borderColor:  '#707070' , borderRadius:25 , height:40, marginBottom:10}]}>
-                            <Item stackedLabel style={Styles.item } bordered>
-                                <Label style={[Styles.labelItem , {top:-25 , left:-13 , backgroundColor:'transparent'}]}>المبلغ المطلوب شحنه</Label>
-                                <Input value={this.state.money} onChangeText={(money) => this.setState({money})}keyboardType={'number-pad'} style={[Styles.itemInput , {top:-20}]}  />
-                            </Item>
-                        </View>
-                        <Label style={[Styles.labelItem , {top:0 , left:0 , marginBottom:10 , backgroundColor:'transparent'}]}>صورة إيصال التحويل</Label>
+                        <View style={Styles.line}/>
+                        <Text style={[ Styles.bankName ,{color:'#444444' , textAlign:'center'}]}>{i18n.t('bankInfo')}</Text>
+                        <Form style={{width: '100%' , marginTop:15}}>
+                            <View style={[Styles.inputParent ,{ borderColor:  '#707070' , borderRadius:25 , height:40 , marginBottom:10}]}>
+                                <Item stackedLabel style={Styles.item } bordered>
+                                    <Label style={[Styles.labelItem , {top:-25 , left:-13 , backgroundColor:'transparent'}]}>{i18n.t('transBank')}</Label>
+                                    <Input value={this.state.bankName} onChangeText={(bankName) => this.setState({bankName})} autoCapitalize='none' style={[Styles.itemInput , {top:-20}]}  />
+                                </Item>
+                            </View>
+                            <View style={[Styles.inputParent ,{ borderColor:  '#707070' , borderRadius:25 , height:40, marginBottom:10}]}>
+                                <Item stackedLabel style={Styles.item } bordered>
+                                    <Label style={[Styles.labelItem , {top:-25 , left:-13 , backgroundColor:'transparent'}]}>{i18n.t('accUser')}</Label>
+                                    <Input value={this.state.username} onChangeText={(username) => this.setState({username})} autoCapitalize='none' style={[Styles.itemInput , {top:-20}]}  />
+                                </Item>
+                            </View>
+                            <View style={[Styles.inputParent ,{ borderColor:  '#707070' , borderRadius:25 , height:40, marginBottom:10}]}>
+                                <Item stackedLabel style={Styles.item } bordered>
+                                    <Label style={[Styles.labelItem , {top:-25 , left:-13 , backgroundColor:'transparent'}]}>{i18n.t('accNum')}</Label>
+                                    <Input value={this.state.accNum} onChangeText={(accNum) => this.setState({accNum})}keyboardType={'number-pad'} style={[Styles.itemInput , {top:-20}]}  />
+                                </Item>
+                            </View>
+                            <View style={[Styles.inputParent ,{ borderColor:  '#707070' , borderRadius:25 , height:40, marginBottom:10}]}>
+                                <Item stackedLabel style={Styles.item } bordered>
+                                    <Label style={[Styles.labelItem , {top:-25 , left:-13 , backgroundColor:'transparent'}]}>{i18n.t('chargedCredit')}</Label>
+                                    <Input value={this.state.money} onChangeText={(money) => this.setState({money})}keyboardType={'number-pad'} style={[Styles.itemInput , {top:-20}]}  />
+                                </Item>
+                            </View>
+                            <Label style={[Styles.labelItem , {top:0 , left:0 , marginBottom:10 , backgroundColor:'transparent'}]}>{i18n.t('transferReceipt')}</Label>
 
-                        <View style={{marginVertical:5}}>
+                            <View style={{marginVertical:5}}>
 
-                            {image != null?
-                                <TouchableOpacity  style={{width:100 , height:100  }} onPress={()=> this._pickImage()} >
-                                    <Image
-                                        onPress={()=> this._pickImage()}
-                                        resizeMode={'cover'}
-                                        style={{width:'100%' , height:'100%' , borderRadius:25}}
-                                        source={{ uri: image }}
-                                    />
-                                </TouchableOpacity>
-                                :
-                                <TouchableOpacity  onPress={()=> this._pickImage()} >
-                                    <Image source={require('../../assets/images/addImg.png')} style={{width:100 , height:100}} resizeMode={'contain'} />
-                                </TouchableOpacity>
-                            }
+                                {image != null?
+                                    <TouchableOpacity  style={{width:100 , height:100  }} onPress={()=> this._pickImage()} >
+                                        <Image
+                                            onPress={()=> this._pickImage()}
+                                            resizeMode={'cover'}
+                                            style={{width:'100%' , height:'100%' , borderRadius:25}}
+                                            source={{ uri: image }}
+                                        />
+                                    </TouchableOpacity>
+                                    :
+                                    <TouchableOpacity  onPress={()=> this._pickImage()} >
+                                        <Image source={require('../../assets/images/addImg.png')} style={{width:100 , height:100}} resizeMode={'contain'} />
+                                    </TouchableOpacity>
+                                }
 
-                        </View>
-                        <Button onPress={() => this.props.navigation.navigate('congrats')} style={[Styles.loginBtn , {marginBottom:40}]}>
-                            <Text style={Styles.btnTxt}>{ i18n.t('confirm') }</Text>
-                        </Button>
-                    </Form>
+                            </View>
+                            <Button onPress={() => this.props.navigation.navigate('congrats')} style={[Styles.loginBtn , {marginBottom:40}]}>
+                                <Text style={Styles.btnTxt}>{ i18n.t('confirm') }</Text>
+                            </Button>
+                        </Form>
+                    </KeyboardAvoidingView>
                 </Content>
 
             </Container>

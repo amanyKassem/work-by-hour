@@ -56,7 +56,7 @@ class Home extends Component {
                 <Header style={Styles.header} noShadow>
                     <View style={Styles.headerView}>
                         <TouchableOpacity onPress={() => this.props.navigation.openDrawer()} style={Styles.headerTouch}>
-                            <Image source={require('../../assets/images/menu.png')} style={Styles.headerMenu} resizeMode={'contain'} />
+                            <Image source={require('../../assets/images/menu.png')} style={[Styles.headerMenu , Styles.transform]} resizeMode={'contain'} />
                         </TouchableOpacity>
                         <Text style={Styles.headerBody}>{ i18n.t('home') }</Text>
                         <TouchableOpacity onPress={() => this.props.navigation.navigate('notifications')} style={Styles.headerTouch}>
@@ -67,9 +67,9 @@ class Home extends Component {
                 <Content style={{}}>
                     <View style={Styles.inputView}>
                         <Item  style={Styles.inputItem} bordered>
-                            <Input onChangeText={(search) => this.setState({ search })} placeholder={'اكتب ما تريد أن تبحث عنه'} placeholderTextColor={'#acabae'} style={Styles.modalInput}   />
+                            <Input onChangeText={(search) => this.setState({ search })} placeholder={ i18n.t('searchPlaceholder') } placeholderTextColor={'#acabae'} style={Styles.modalInput}   />
                         </Item>
-                        <Image source={require('../../assets/images/search.png')} style={Styles.searchImg} resizeMode={'contain'}/>
+                        <Image source={require('../../assets/images/search.png')} style={[Styles.searchImg , Styles.transform]} resizeMode={'contain'}/>
                     </View>
                     <View style={Styles.flatContainer}>
                         <FlatList

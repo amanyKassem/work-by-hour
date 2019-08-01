@@ -1,5 +1,15 @@
 import React, { Component } from "react";
-import {View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, I18nManager, KeyboardAvoidingView} from "react-native";
+import {
+    View,
+    Text,
+    StyleSheet,
+    Image,
+    TouchableOpacity,
+    Dimensions,
+    I18nManager,
+    KeyboardAvoidingView,
+    Platform
+} from "react-native";
 import {Container, Content, Button, Icon, Picker, Form, Item,  Label, Input, } from 'native-base'
 import Styles from '../../assets/styles'
 import i18n from "../../local/i18n";
@@ -46,7 +56,13 @@ class Register extends Component {
         return (
 
             <Container style={{backgroundColor:'#fff'}}>
-
+                <View style={{ marginTop: Platform.OS === 'ios' ? 40 : 10, height:Platform.OS === 'ios' ?70:60 , top:Platform.OS === 'ios' ? 10 : 40 , backgroundColor: 'transparent', position: 'absolute', width: '100%' }} noShadow>
+                    <View style={ {flexDirection:'row' , paddingHorizontal:10 , top:-5}}>
+                        <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
+                            <Image source={require('../../assets/images/back.png')} style={{ transform: I18nManager.isRTL ? [{rotateY : '0deg'}] : [{rotateY : '-180deg'}] , width:25 , height:25 } } resizeMode={'contain'} />
+                        </TouchableOpacity>
+                    </View>
+                </View>
                 <Content style={Styles.homecontent}>
                     <KeyboardAvoidingView behavior={'padding'} style={Styles.keyboardAvoid}>
                         <View style={Styles.HeadImg }>
@@ -56,7 +72,7 @@ class Register extends Component {
 
                         <View style={Styles.LoginParentView}>
                             <Form style={{width: '100%' , marginTop:30}}>
-                                <Text style={Styles.title}>تسجيل جديد</Text>
+                                <Text style={Styles.title}>{ i18n.t('newReg') }</Text>
                                 <View style={Styles.formImgView}>
 
                                     {image != null?
@@ -126,9 +142,9 @@ class Register extends Component {
                                             onValueChange={(value) => this.setState({ selectedKayan: value })}
                                         >
                                             <Picker.Item label={''} value={null} />
-                                            <Picker.Item label={'الرياض'} value={"1"} />
-                                            <Picker.Item label={'الامارات'} value={"2"} />
-                                            <Picker.Item label={'مصر'} value={"3"} />
+                                            <Picker.Item label={'هيئة ١'} value={"1"} />
+                                            <Picker.Item label={'هيئة ٢'} value={"2"} />
+                                            <Picker.Item label={'هيئة ٣'} value={"3"} />
                                         </Picker>
                                         <Image source={require('../../assets/images/dropdown.png')} style={Styles.pickerImg} resizeMode={'contain'} />
                                     </Item>
@@ -146,16 +162,14 @@ class Register extends Component {
                                     </Item>
                                 </View>
 
-                                <TouchableOpacity style={{flexDirection:'row'}}>
-                                    <Text style={{color: '#035F5B',fontSize: 15, marginTop:20}}>بتسجيلك في التطبيق فـأنت موافق على </Text>
-                                    <Text style={[Styles.forgetPass , {color:'#00918B'}]}>الشروط والأحكام</Text>
+                                <TouchableOpacity style={{flexDirection:'row' , justifyContent: 'center' , flexWrap: 'wrap'}}>
+                                    <Text style={{color: '#035F5B',fontSize: 15, marginTop:20}}>{ i18n.t('agreement') } </Text>
+                                    <Text style={[Styles.forgetPass , {color:'#00918B'}]}>{ i18n.t('terms') }</Text>
                                 </TouchableOpacity>
 
-                                <Button onPress={() => this.props.navigation.navigate('drawerNavigator')} style={Styles.loginBtn}>
+                                <Button onPress={() => this.props.navigation.navigate('activateAcc')} style={Styles.loginBtn}>
                                     <Text style={Styles.btnTxt}>{ i18n.t('registerButton') }</Text>
                                 </Button>
-
-
                             </Form>
                         </View>
                     </KeyboardAvoidingView>

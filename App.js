@@ -15,7 +15,7 @@ export default class App extends React.Component {
 
 
   componentWillMount() {
-    I18nManager.forceRTL(true);
+    I18nManager.forceRTL(false);
   }
 
 

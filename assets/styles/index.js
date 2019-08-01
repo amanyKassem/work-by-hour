@@ -4,6 +4,9 @@ const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
 const styles = ({
+    transform:{
+        transform: I18nManager.isRTL ? [{rotateY : '0deg'}] : [{rotateY : '-180deg'}]
+    },
     imageBackgroundStyle: {
         width: null,
         height: null,
@@ -138,7 +141,6 @@ const styles = ({
     },
     keyboardAvoid: {
         width:'100%',
-        height: null,
         flex: 1
     },
     formImgView:{
@@ -203,8 +205,10 @@ const styles = ({
         position: 'absolute',
         zIndex:1,
         bottom:0,
-        borderTopRightRadius: 25,
-        borderBottomLeftRadius: 25,
+        borderTopRightRadius: I18nManager.isRTL ? 25 : 0,
+        borderBottomLeftRadius: I18nManager.isRTL ? 25 : 0,
+        borderTopLeftRadius: I18nManager.isRTL ? 0 : 25,
+        borderBottomRightRadius:  I18nManager.isRTL ? 0 : 25,
     },
 
     homeText: {
@@ -218,8 +222,10 @@ const styles = ({
         alignSelf: 'center',
         flex: 1,
         margin: 5 ,
-        borderTopLeftRadius: 25,
-        borderBottomRightRadius: 25,
+        borderTopLeftRadius: I18nManager.isRTL ? 25 : 0,
+        borderBottomRightRadius:  I18nManager.isRTL ? 25 : 0,
+        borderTopRightRadius: I18nManager.isRTL ? 0 : 25,
+        borderBottomLeftRadius:  I18nManager.isRTL ? 0 : 25,
     },
     headerTouch:{
         width:35,
@@ -420,15 +426,23 @@ const styles = ({
     },
     interestParent:{
         borderWidth:1 ,
-        borderColor:'#035F5B' ,
+        borderColor:'#00918B' ,
         marginHorizontal:5 ,
-        marginBottom:5,
+        marginBottom:15,
         paddingHorizontal:10 ,
         borderRadius: 25 ,
         paddingBottom:5,
         flexWrap:'wrap',
         flex:1
-    }
+    },
+    itemImage:{
+        width: 17,
+        height: 17,
+        right: 15,
+        top: 10,
+        position: 'absolute',
+        flex: 1
+    },
 
 });
 

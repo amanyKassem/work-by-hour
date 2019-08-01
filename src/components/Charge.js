@@ -23,9 +23,9 @@ class Charge extends Component {
                 <Content style={{padding:15}}>
                     <View style={Styles.confirm}>
                         <Image source={require('../../assets/images/sad.png')}  style={{width:220 , height:220}} resizeMode={'contain'} />
-                        <Text style={Styles.confirmText}>عفواً لا يوجد رصيد كافي بالمحفظة ، يرجي إعادة شحن محفظتك لدينا </Text>
+                        <Text style={Styles.confirmText}>{ i18n.t('noCredit') }</Text>
                         <Button onPress={() => this.props.navigation.navigate('reCharge')} style={Styles.loginBtn}>
-                            <Text style={Styles.btnTxt}>اعادة شحن</Text>
+                            <Text style={Styles.btnTxt}>{ i18n.t('recharge') }</Text>
                         </Button>
                     </View>
                 </Content>
