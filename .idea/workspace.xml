@@ -5,59 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3117f9af-5ec7-4477-9799-dd59271b8851" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/deployment.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/webServers.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/ActivateAcc.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/AddAd.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/AddAdCongrats.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/AddCertify.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/AddDet.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/AddInterest.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/Certify.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/ChangePass.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/Chat.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/CompSug.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/ContactUs.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/EditProfile.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/ForgetPass.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/Messages.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/Policy.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/Profile.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/Rate.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/Settings.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/ShareApp.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/Socials.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/VerifyCode.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/app.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/Group 768.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/alarm.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/alarm.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/noun_Share_1029561.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/noun_messages_718325.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/styles/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/assets/styles/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/local/ar.js" beforeDir="false" afterPath="$PROJECT_DIR$/local/ar.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/local/en.js" beforeDir="false" afterPath="$PROJECT_DIR$/local/en.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/local/i18n.js" beforeDir="false" afterPath="$PROJECT_DIR$/local/i18n.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Category.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Category.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Charge.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Charge.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Congrats.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Congrats.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/FooterSection.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/FooterSection.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Home.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Home.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Interests.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Interests.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Language.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Language.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Login.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Login.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/MyAdds.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MyAdds.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Notifications.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Notifications.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Orders.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Orders.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ReCharge.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ReCharge.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ReChargeWallet.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ReChargeWallet.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Register.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Register.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/DrawerCustomization.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/DrawerCustomization.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -80,41 +28,7 @@
     <select />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/routes/index.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="849">
-              <caret line="139" column="6" lean-forward="true" selection-start-line="133" selection-end-line="139" selection-end-column="6" />
-              <folding>
-                <element signature="e#0#26#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/components/VerifyCode.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="452">
-              <caret line="43" column="81" selection-start-line="43" selection-start-column="81" selection-end-line="43" selection-end-column="81" />
-              <folding>
-                <element signature="e#0#41#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/assets/styles/index.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
-              <caret line="7" column="85" lean-forward="true" selection-start-line="7" selection-start-column="8" selection-end-line="7" selection-end-column="85" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf />
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
@@ -211,9 +125,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" fullScreen="true">
-    <option name="y" value="23" />
     <option name="width" value="1920" />
-    <option name="height" value="999" />
+    <option name="height" value="1080" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -309,18 +222,18 @@
       <workItem from="1564302805017" duration="16947000" />
       <workItem from="1564383999659" duration="43439000" />
       <workItem from="1564567813771" duration="6162000" />
-      <workItem from="1564579432795" duration="26688000" />
+      <workItem from="1564579432795" duration="26813000" />
+      <workItem from="1564908121173" duration="472000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="155318000" />
+    <option name="totallyTimeSpent" value="155915000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1920" height="1080" extended-state="0" />
-    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.14323749" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.14483494" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
