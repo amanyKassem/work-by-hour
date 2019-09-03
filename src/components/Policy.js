@@ -1,22 +1,35 @@
 import React, { Component } from "react";
-import { View, Text, Image, TouchableOpacity , I18nManager , FlatList} from "react-native";
+import {View, Text, Image, TouchableOpacity, I18nManager, WebView, Dimensions} from "react-native";
 import {Container, Content, Icon, Header, Item, Input, Button, Form} from 'native-base'
 import Styles from '../../assets/styles'
 import i18n from '../../local/i18n'
+import axios from "axios";
+import CONST from "../consts";
+import {connect} from "react-redux";
 
+const height = Dimensions.get('window').height;
 class Policy extends Component {
     constructor(props){
         super(props);
 
         this.state={
+			loader: false,
+            terms: ''
         }
     }
-
 
     static navigationOptions = () => ({
         drawerLabel: i18n.t('terms') ,
         drawerIcon: (<Image source={require('../../assets/images/policy.png')} style={{ height: 20, width: 20 , top:3 }} resizeMode={'contain'} /> )
-    })
+    });
+
+	componentWillMount() {
+		this.setState({ loader: true });
+		axios.post( CONST.url + 'user/condition', { lang : (this.props.lang).toUpperCase() })
+			.then(response => {
+				this.setState({ terms: response.data.data.conditionControll, loader: false });
+			});
+	}
 
     render() {
         return (
@@ -31,7 +44,7 @@ class Policy extends Component {
                     </View>
                 </Header>
                 <Content style={{padding:15}}>
-                    <Text style={[Styles.notiText , {textAlign:'center'}]}> هناك طلب جديد على وظيفتك هناك طلب جديد على وظيفتك هناك طلب جديد على وظيفتك هناك طلب جديد على وظيفتك هناك طلب جديد على وظيفتك هناك طلب جديد على وظيفتك هناك طلب جديد على وظيفتك</Text>
+                    <WebView source={{ html: this.state.terms }} style={{ width: '100%', height }} />
                 </Content>
             </Container>
 
@@ -39,4 +52,12 @@ class Policy extends Component {
     }
 }
 
-export default Policy;
+
+const mapStateToProps = ({ lang, profile  }) => {
+	return {
+		lang: lang.lang,
+		user: profile.user,
+	};
+};
+
+export default connect(mapStateToProps, {})(Policy);

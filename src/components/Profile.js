@@ -4,6 +4,8 @@ import { Container, Content, Icon, Header  ,Item , Input } from 'native-base'
 import FooterSection from './FooterSection';
 import Styles from '../../assets/styles'
 import i18n from '../../local/i18n'
+import {connect} from "react-redux";
+
 
 
 class Profile extends Component {
@@ -18,7 +20,6 @@ class Profile extends Component {
     static navigationOptions = () => ({
         drawerLabel: () => null
     });
-
 
 
     render() {
@@ -39,10 +40,10 @@ class Profile extends Component {
                 <Content style={{padding:15}}>
                     <View style={{flexDirection:'row' , justifyContent:'space-between', alignItems:'center'}}>
                         <View style={{flexDirection:'row' , alignItems:'center'}}>
-                            <Image source={require('../../assets/images/profile_pic.png')} resizeMode={'cover'} style={{ width: 60, height: 60 , borderRadius:50 , marginRight:10}}/>
+                            <Image source={{ uri: 'https://' + this.props.user.imageProfile }} resizeMode={'cover'} style={{ width: 60, height: 60 , borderRadius:50 , marginRight:10}}/>
                             <View>
-                                <Text style={{color:'#00918B',  fontSize:17, fontFamily: 'RegularFont' , lineHeight:14}}>اماني قاسم</Text>
-                                <Text style={{color:'#878787',  fontSize:15, fontFamily: 'RegularFont', textAlign: I18nManager.isRTL ?'right' : 'left'}}>فرد</Text>
+                                <Text style={{color:'#00918B',  fontSize:17, fontFamily: 'RegularFont' , lineHeight:14}}>{ this.props.user.userName }</Text>
+                                <Text style={{color:'#878787',  fontSize:15, fontFamily: 'RegularFont', textAlign: I18nManager.isRTL ?'right' : 'left'}}>{ this.props.user.userType }</Text>
                             </View>
                         </View>
                         <TouchableOpacity onPress={() => this.props.navigation.navigate('editProfile')}>
@@ -68,4 +69,12 @@ class Profile extends Component {
     }
 }
 
-export default Profile;
+
+const mapStateToProps = ({ lang, profile  }) => {
+	return {
+		lang: lang.lang,
+		user: profile.user,
+	};
+};
+
+export default connect(mapStateToProps, {})(Profile);

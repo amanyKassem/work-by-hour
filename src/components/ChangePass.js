@@ -1,8 +1,12 @@
 import React, { Component } from "react";
 import { View, Text, Image, TouchableOpacity , I18nManager , KeyboardAvoidingView , Dimensions} from "react-native";
-import {Container, Content, Icon, Header, Item, Input, Button, Form, Label} from 'native-base'
+import {Container, Content, Icon, Header, Item, Input, Button, Form, Label, Toast} from 'native-base'
 import Styles from '../../assets/styles'
 import i18n from '../../local/i18n'
+import {DoubleBounce} from "react-native-loader";
+import axios from 'axios';
+import CONST from '../consts'
+import {connect} from "react-redux";
 
 const height = Dimensions.get('window').height;
 class ChangePass extends Component {
@@ -13,13 +17,77 @@ class ChangePass extends Component {
             password: '',
             newPass: '',
             verifyNewPass: '',
+			isSubmitted: false
         }
     }
-
 
     static navigationOptions = () => ({
         drawerLabel: () => null
     });
+
+    onChangePassword(){
+        if (this.state.newPass !== this.state.verifyNewPass){
+			return Toast.show({
+                        text: i18n.t('passwordNotMatch'),
+                        type: "danger",
+                        duration: 3000
+                    });
+        }
+
+        if ((this.state.newPass).length < 6){
+			return Toast.show({
+				text: i18n.t('passwordLength'),
+				type: "danger",
+				duration: 3000
+			});
+        }
+
+		this.setState({ isSubmitted: true });
+
+        axios.post( CONST.url + 'user/editPassword', {
+            lang: (this.props.lang).toUpperCase(),
+            user_id: this.props.user.user_id,
+            oldPassword: this.state.password,
+            newPassword: this.state.newPass
+        }).then( response => {
+
+			Toast.show({
+				text: response.data.message,
+				type: response.data.status == 1 ? "success" : "danger",
+				duration: 3000
+			});
+
+			if (response.data.status == 1){
+				this.setState({ password: '', newPass: '', verifyNewPass: '' });
+				this.props.navigation.navigate('profile');
+			}
+			this.setState({ isSubmitted: false });
+        })
+    }
+
+	renderSubmit(){
+		if (this.state.password == '' || this.state.newPass == '' || this.state.verifyNewPass == '' ){
+			return(
+				<Button disabled style={[Styles.loginBtn , {marginBottom:40, backgroundColor: '#999' }]}>
+					<Text style={Styles.btnTxt}>{ i18n.t('confirm') }</Text>
+				</Button>
+			)
+		}
+
+		if (this.state.isSubmitted){
+			return (
+				<View style={{ width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+					<DoubleBounce size={20} color="#00918B" />
+				</View>
+			);
+		}
+
+		return (
+			<Button onPress={() => this.onChangePassword() } style={[Styles.loginBtn , {marginBottom:40 , width:'90%'}]}>
+				<Text style={Styles.btnTxt}>{ i18n.t('confirm') }</Text>
+			</Button>
+		);
+	}
 
     render() {
         return (
@@ -56,9 +124,7 @@ class ChangePass extends Component {
                             </View>
                         </Form>
                     </KeyboardAvoidingView>
-                    <Button onPress={() => this.props.navigation.navigate('editProfile')} style={[Styles.loginBtn , {marginBottom:40 , width:'90%'}]}>
-                        <Text style={Styles.btnTxt}>{ i18n.t('confirm') }</Text>
-                    </Button>
+                    { this.renderSubmit() }
                 </Content>
             </Container>
 
@@ -66,4 +132,12 @@ class ChangePass extends Component {
     }
 }
 
-export default ChangePass;
+
+const mapStateToProps = ({ lang, profile  }) => {
+	return {
+		lang: lang.lang,
+		user: profile.user,
+	};
+};
+
+export default connect(mapStateToProps, {})(ChangePass);

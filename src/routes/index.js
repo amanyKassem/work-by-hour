@@ -37,6 +37,9 @@ import CompSug from "../components/CompSug";
 import ActivateAcc from "../components/ActivateAcc";
 import ContactUs from "../components/ContactUs";
 import AddAdCongrats from "../components/AddAdCongrats";
+import InitScreen from "../components/InitScreen";
+import SearchResult from "../components/SearchResult";
+import AdEdit from "../components/AdEdit";
 
 const drawerCust = (props) => (<DrawerCustomization {...props} />)
 const DrawerNavigator = createDrawerNavigator({
@@ -82,7 +85,24 @@ const DrawerNavigator = createDrawerNavigator({
     contentComponent:drawerCust
 })
 const AppNavigator = createStackNavigator({
-
+    initScreen: {
+		screen: InitScreen,
+		navigationOptions: {
+			header: null
+		}
+	},
+	language: {
+		screen: Language,
+		navigationOptions: {
+			header: null
+		}
+	},
+	register: {
+		screen: Register,
+		navigationOptions: {
+			header: null
+		}
+	},
     drawerNavigator: {
         screen: DrawerNavigator,
         navigationOptions: {
@@ -107,14 +127,14 @@ const AppNavigator = createStackNavigator({
             header: null
         }
     },
+	adEdit: {
+		screen: AdEdit,
+		navigationOptions: {
+			header: null
+		}
+	},
     contactUs: {
         screen: ContactUs,
-        navigationOptions: {
-            header: null
-        }
-    },
-    register: {
-        screen: Register,
         navigationOptions: {
             header: null
         }
@@ -131,7 +151,6 @@ const AppNavigator = createStackNavigator({
             header: null
         }
     },
-
     verifyCode: {
         screen: VerifyCode,
         navigationOptions: {
@@ -162,8 +181,8 @@ const AppNavigator = createStackNavigator({
             header: null
         }
     },
-    chat: {
-        screen: Chat,
+	searchResult: {
+        screen: SearchResult,
         navigationOptions: {
             header: null
         }
@@ -204,14 +223,14 @@ const AppNavigator = createStackNavigator({
             header: null
         }
     },
+	editProfile: {
+		screen: EditProfile,
+		navigationOptions: {
+			header: null
+		}
+	},
     certify: {
         screen: Certify,
-        navigationOptions: {
-            header: null
-        }
-    },
-    editProfile: {
-        screen: EditProfile,
         navigationOptions: {
             header: null
         }
@@ -282,13 +301,6 @@ const AppNavigator = createStackNavigator({
             header: null
         }
     },
-    language: {
-        screen: Language,
-        navigationOptions: {
-            header: null
-        }
-    },
-
 });
 
 export default createAppContainer(AppNavigator);

@@ -1,8 +1,12 @@
 import React, { Component } from "react";
 import {View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, I18nManager, KeyboardAvoidingView , Platform} from "react-native";
-import {Container, Content, Button, Icon, Left, Form, Item,  Label, Input, } from 'native-base'
+import {Container, Content, Button, Icon, Left, Form, Item, Label, Input, Toast,} from 'native-base'
 import Styles from '../../assets/styles'
 import i18n from "../../local/i18n";
+import axios from "axios";
+import CONST from "../consts";
+import {DoubleBounce} from "react-native-loader";
+import connect from "react-redux/es/connect/connect";
 
 
 const height = Dimensions.get('window').height;
@@ -21,7 +25,58 @@ class VerifyCode extends Component {
         drawerLabel: () => null
     });
 
-    render() {
+	onCheckPhone(){
+	    if (this.state.password == this.state.verifyPass ){
+			this.setState({ isSubmitted: true });
+			axios.post(CONST.url + '/user/confirmPassword' ,{
+				user_id: this.props.user.user_id,
+				verificationCode: this.props.user.user_id,
+				newPassword: this.props.user.user_id,
+				lang: (this.props.lang).toUpperCase(),
+			}).then(response => {
+				Toast.show({
+					text: response.data.message,
+					type: response.data.status == 1 ? "success" : "danger",
+					duration: 3000
+				});
+				this.setState({ isSubmitted: false , phone:'' });
+				this.props.navigation.navigate("verifyCode" , { id:response.data.data.user_id , code: response.data.data.activitionCode });
+			})
+        }else {
+			Toast.show({
+				text: i18n.t('passwordNotMatch'),
+				type: "danger",
+				duration: 3000
+			});
+        }
+	}
+
+	renderSubmit(){
+		if (this.state.verifyCode == '' || this.state.password == '' || this.state.verifyPass == '' ){
+			return(
+				<Button disabled style={[Styles.loginBtn , {marginBottom:40, backgroundColor: '#999' }]}>
+					<Text style={Styles.btnTxt}>{ i18n.t('sendButton') }</Text>
+				</Button>
+			)
+		}
+
+		if (this.state.isSubmitted){
+			return (
+				<View style={{ width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+					<DoubleBounce size={20} color="#00918B" />
+				</View>
+			);
+		}
+
+		return (
+			<Button onPress={() => this.onCheckPhone()} style={Styles.loginBtn}>
+				<Text style={Styles.btnTxt}>{ i18n.t('sendButton') }</Text>
+			</Button>
+		);
+	}
+
+
+	render() {
         return (
 
             <Container style={{backgroundColor:'#fff'}}>
@@ -36,7 +91,6 @@ class VerifyCode extends Component {
                     <KeyboardAvoidingView behavior={'padding'} style={Styles.keyboardAvoid}>
                         <View style={Styles.HeadImg }>
                             <Image source={require('../../assets/images/headBg.png')} style={Styles.HeadImg} resizeMode={'contain'} />
-
                         </View>
 
                         <View style={Styles.LoginParentView}>
@@ -76,4 +130,10 @@ class VerifyCode extends Component {
     }
 }
 
-export default VerifyCode;
+const mapStateToProps = ({ lang }) => {
+	return {
+		lang: lang.lang,
+	};
+};
+
+export default connect(mapStateToProps, {})(VerifyCode);

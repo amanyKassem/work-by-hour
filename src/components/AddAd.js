@@ -1,5 +1,16 @@
 import React, { Component } from "react";
-import {View, Text, Image, TouchableOpacity, I18nManager, FlatList, KeyboardAvoidingView} from "react-native";
+import {
+	View,
+	Text,
+	Image,
+	TouchableOpacity,
+	I18nManager,
+	FlatList,
+	KeyboardAvoidingView,
+	Dimensions,
+    ImageEditor,
+    ImageStore
+} from "react-native";
 import {Container, Content, Icon, Header, Item, Input, Button, Form, Label, Picker , Textarea} from 'native-base'
 import Styles from '../../assets/styles'
 import i18n from '../../local/i18n'
@@ -7,9 +18,14 @@ import DateTimePicker from "react-native-modal-datetime-picker";
 import { MapView, Location, Permissions } from 'expo';
 import axios from 'axios';
 import {ImageBrowser,CameraBrowser} from 'expo-multiple-imagepicker';
+import {DoubleBounce} from "react-native-loader";
+import {connect} from "react-redux";
 
 import Modal from "react-native-modal";
+import CONST from "../consts";
 
+const height = Dimensions.get('window').height;
+const base64 = [];
 class AddAd extends Component {
     constructor(props){
         super(props);
@@ -22,12 +38,13 @@ class AddAd extends Component {
             jobDet:'',
             date: '',
             time: '',
-            hoursNo: '',
-            pricePerHour: '',
-            finalFee: '',
+            hoursNo: null,
+            pricePerHour: null,
+            finalFee: null,
             isDatePickerVisible: false,
             isTimePickerVisible: false,
             location: '',
+            activity: '',
             isModalVisible: false,
             city: '',
             mapRegion: null,
@@ -40,6 +57,11 @@ class AddAd extends Component {
             refreshed: false,
             base64: [],
             modalAddAd: false,
+			categories: [],
+			countries: [],
+			loader: false,
+            isSubmitted: false,
+			percentItem: null
         }
     }
 
@@ -51,6 +73,7 @@ class AddAd extends Component {
     _toggleModalAd = () => this.setState({ modalAddAd: !this.state.modalAddAd });
 
     onConfirm() {
+    	this.addAd();
         this.setState({ modalAddAd: !this.state.modalAddAd });
         this.props.navigation.navigate('addAdCongrats');
     };
@@ -80,7 +103,7 @@ class AddAd extends Component {
 
     handleTimePicked = time => {
         console.log("A time has been picked: ", time);
-        let formatedTime = time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds()
+        let formatedTime = time.getHours() + ":" + time.getMinutes()
         this.setState({ time : formatedTime })
         this.hideTimePicker();
     };
@@ -90,9 +113,23 @@ class AddAd extends Component {
     _toggleModal = () => this.setState({ isModalVisible: !this.state.isModalVisible });
 
 
-
-
     async componentWillMount() {
+
+		this.setState({ loader: true });
+		axios.post( CONST.url + 'department/allDepartment', { lang : (this.props.lang).toUpperCase()})
+			.then(response => {
+				this.setState({ categories: response.data.data, loader: false });
+			});
+
+		axios.post( CONST.url + 'country/allCountry', { lang : (this.props.lang).toUpperCase() })
+			.then(response => {
+				this.setState({ countries: response.data.data, loader: false });
+			});
+
+		axios.post( CONST.url + 'user/percent', { lang : (this.props.lang).toUpperCase() })
+			.then(response => {
+				this.setState({ percentItem: response.data.data.percentItem, loader: false });
+			});
 
 
         let { status } = await Permissions.askAsync(Permissions.LOCATION);
@@ -182,11 +219,11 @@ class AddAd extends Component {
 
     deleteImage(item){
         let index = this.state.photos.indexOf(item);
-        console.log('this is item ....', index)
+        console.log('this is item ....', index);
 
         let photos = this.state.photos;
         photos.splice(index, 1);
-        console.log('this is photos ....', photos)
+        console.log('this is photos ....', photos);
         this.setState({ photos, refreshed: !this.state.refreshed, imageId: null })
     }
 
@@ -226,29 +263,31 @@ class AddAd extends Component {
             });
 
             const imgs = this.state.photos;
-            //  console.log(imgs);
+             console.log('imgs', imgs);
             for (var i =0; i < imgs.length; i++){
-                const imageURL = imgs[i+1].file;
-                Image.getSize(imageURL, (width, height) => {
-                    var imageSize = {
-                        size: {
-                            width,
-                            height
-                        },
-                        offset: {
-                            x: 0,
-                            y: 0,
-                        },
-                    };
+                if (imgs[i].file != null){
+					const imageURL = imgs[i].file;
+					Image.getSize(imageURL, (width, height) => {
+						var imageSize = {
+							size: {
+								width,
+								height
+							},
+							offset: {
+								x: 0,
+								y: 0,
+							},
+						};
 
-                    // ImageEditor.cropImage(imageURL, imageSize, (imageURI) => {
-                    //     console.log(imageURI);
-                    //     ImageStore.getBase64ForTag(imageURI, (base64Data) => {
-                    //         base64.push(base64Data);
-                    //         ImageStore.removeImageForTag(imageURI);
-                    //     }, (reason) => console.log(reason) )
-                    // }, (reason) => console.log(reason) )
-                }, (reason) => console.log(reason))
+						ImageEditor.cropImage(imageURL, imageSize, (imageURI) => {
+							console.log('imageURI', imageURI);
+							ImageStore.getBase64ForTag(imageURI, (base64Data) => {
+								base64.push(base64Data);
+								ImageStore.removeImageForTag(imageURI);
+							}, (reason) => console.log(reason) )
+						}, (reason) => console.log(reason) )
+					}, (reason) => console.log(reason))
+                }
             }
         }).catch((e) => console.log(e))
     };
@@ -258,11 +297,64 @@ class AddAd extends Component {
         return arr; // for testing
     };
 
+    addAd(){
+        this.setState({ isSubmitted: true });
+        axios.post(CONST.url + 'advertise/addAdvertiseApp', {
+			workName: this.state.jobName,
+			department_id: this.state.selectedSection,
+			user_id: this.props.user.user_id,
+			country_id: this.state.selectedCountry,
+			details: this.state.jobDet,
+			lat: this.state.mapRegion.latitude,
+			long: this.state.mapRegion.longitude,
+			time_Started: this.state.date,
+			timeOFWork: this.state.time,
+			NumberOfHour: this.state.hoursNo,
+			PriceOfHour: this.state.pricePerHour,
+			finalPrice: this.state.finalFee,
+			workStyle: this.state.activity,
+			keyImage: 0,
+			Attachments: base64,
+			lang: (this.props.lang).toUpperCase(),
+			typeWork: this.state.selectedType === 1 ? 'with' : 'withNot',
+        }).then(response => {
+        	// alert(JSON.stringify(response.data))
+		}).catch(e => console.warn(e));
+    }
 
+	renderLoader(){
+		if (this.state.loader){
+			return(
+				<View style={{ alignItems: 'center', justifyContent: 'center', height : height - 200, alignSelf:'center' , backgroundColor:'#fff' , width:'100%'  , position:'absolute' , zIndex:1 }}>
+					<DoubleBounce size={20} color="#00918B" />
+				</View>
+			);
+		}
+	}
+
+	renderSubmit(){
+    	console.log('name :', this.state.jobName , 'desc :', this.state.jobDet, 'date :', this.state.date, 'time :', this.state.time, 'country :', this.state.selectedCountry , 'cat :', this.state.selectedSection, 'cost :', ( (( this.state.selectedType == 1 && this.state.hoursNo == null ) || ( this.state.selectedType == 1  && this.state.pricePerHour == null )) || (this.state.selectedType == 2 && this.state.finalFee == null) ));
+		if (this.state.jobName == '' || this.state.jobDet == '' || this.state.date == '' || this.state.time == ''
+			|| this.state.selectedSection == null || this.state.selectedCountry == null ||
+			( (( this.state.selectedType == 1 && this.state.hoursNo == null ) || ( this.state.selectedType == 1  && this.state.pricePerHour == null )) || (this.state.selectedType == 2 && this.state.finalFee == null) )
+		){
+			console.log('not valid');
+			return(
+				<Button disabled style={[Styles.loginBtn , {marginBottom:40, backgroundColor: '#999' }]}>
+					<Text style={Styles.btnTxt}>{ i18n.t('add') }</Text>
+				</Button>
+			)
+		}
+
+		return (
+			<Button onPress={this._toggleModalAd} style={[Styles.loginBtn , {marginBottom:40 }]}>
+				<Text style={Styles.btnTxt}>{ i18n.t('add') }</Text>
+			</Button>
+		);
+	}
 
     render() {
 
-        console.log('render corr', this.state.mapRegion);
         if (this.state.imageBrowserOpen) {
             return(<ImageBrowser base64={true} max={10} callback={this.imageBrowserCallback}/>);
         }else if (this.state.cameraBrowserOpen) {
@@ -271,11 +363,8 @@ class AddAd extends Component {
 
         const oldIndex =  (this.state.photos).findIndex(x => x.file === null );
         const photos = this.array_move(this.state.photos, oldIndex, (this.state.photos).length - 1);
-        console.log('image arr ..', photos);
-
 
         return (
-
             <Container style={{}}>
                 <Header style={Styles.header} noShadow>
                     <View style={Styles.headerView}>
@@ -286,6 +375,7 @@ class AddAd extends Component {
                     </View>
                 </Header>
                 <Content style={{padding:15}}>
+					{ this.renderLoader() }
                     <KeyboardAvoidingView behavior={'padding'} style={Styles.keyboardAvoid}>
                     <Form style={{width: '100%' }}>
                         <View style={[Styles.inputParent ,{ borderColor:  '#eee' , backgroundColor:'#F6F6F6' , borderRadius:25 , height:40 , marginBottom:20}]}>
@@ -306,10 +396,12 @@ class AddAd extends Component {
                                     selectedValue={this.state.selectedSection}
                                     onValueChange={(value) => this.setState({ selectedSection: value })}
                                 >
-                                    <Picker.Item label={''} value={null} />
-                                    <Picker.Item label={'قسم ١'} value={"1"} />
-                                    <Picker.Item label={'قسم ٢'} value={"2"} />
-                                    <Picker.Item label={'قسم ٣'} value={"3"} />
+									<Picker.Item label={ i18n.t('categories') } value={null} />
+									{
+										this.state.categories.map((category, i) => (
+											<Picker.Item label={category.departmentName} value={category.departement_id} key={i} />
+										))
+									}
                                 </Picker>
                                 <Icon name='angle-down' type={"FontAwesome"} style={Styles.pickerImg} style={{ color: "#878787", fontSize:23 , right: 0}}/>
                             </Item>
@@ -320,6 +412,12 @@ class AddAd extends Component {
                             </Item>
                             <Textarea value={this.state.jobDet} onChangeText={(jobDet) => this.setState({jobDet})} autoCapitalize='none' style={[Styles.inputParent ,{ color: '#035F5B',borderColor:  '#eee', textAlign: I18nManager.isRTL ?'right' : 'left' , paddingVertical:10 , paddingHorizontal: 35 , backgroundColor:'#F6F6F6' , borderRadius:25 , height:150 , marginBottom:20}]}  />
                         </View>
+						<View style={[Styles.inputParent ,{ borderColor:  '#eee' , backgroundColor:'#F6F6F6' , borderRadius:25 , height:40 , marginBottom:20}]}>
+							<Item stackedLabel style={Styles.item } bordered>
+								<Label style={[Styles.labelItem , {top:-25 , left:-13 , backgroundColor:'transparent'}]}>{ i18n.t('activity') }</Label>
+								<Input value={this.state.activity} onChangeText={(activity) => this.setState({activity})} autoCapitalize='none' style={[Styles.itemInput , {top:-20 , paddingRight:15}]}  />
+							</Item>
+						</View>
                         <View>
                             <Item style={[Styles.inputParent ,{ borderColor:  '#eee' , backgroundColor:'#F6F6F6' , borderRadius:25 , height:40 , marginBottom:20}]} regular >
                                 <Label style={[Styles.labelItem , {top:-35 , left:0 , position:'absolute'}]}>{ i18n.t('workType') }</Label>
@@ -397,15 +495,18 @@ class AddAd extends Component {
                                 <Picker
                                     mode="dropdown"
                                     iosIcon={<Icon name="arrow-down" />}
-                                    style={Styles.picker}
+                                    style={[ Styles.picker, { width: '60%' } ]}
                                     placeholderStyle={{ color: "#acabae" }}
                                     placeholderIconColor="#acabae"
                                     selectedValue={this.state.selectedCountry}
                                     onValueChange={(value) => this.setState({ selectedCountry: value })}
                                 >
-                                    <Picker.Item label={''} value={null} />
-                                    <Picker.Item label={'مصر'} value={"1"} />
-                                    <Picker.Item label={'السعودية'} value={"2"} />
+									<Picker.Item label={ i18n.t('countries') } value={null} />
+									{
+										this.state.countries.map((country, i) => (
+											<Picker.Item label={country.countryName} value={country.country_id} key={i} />
+										))
+									}
                                 </Picker>
                                 <Icon name='angle-down' type={"FontAwesome"} style={{ color: "#878787", fontSize:23 , right: 0}}/>
                             </Item>
@@ -452,24 +553,23 @@ class AddAd extends Component {
                                 </Button>
                             </View>
                         </Modal>
-                        <Modal onBackdropPress={()=> this.setState({ modalAddAd : false })} isVisible={this.state.modalAddAd}>
-                            <View style={Styles.modalStyle}>
-                                <Image source={require('../../assets/images/alarm.png')}  style={{width:70 , height:70 , transform: I18nManager.isRTL ? [{rotateY : '0deg'}] : [{rotateY : '-180deg'}]}} resizeMode={'contain'} />
-                                <Text style={[Styles.tegisterText , { fontSize:13 , color:'#fff' , top:20 , textAlign:'center', position:'absolute'}]}>{ i18n.t('attention') }</Text>                                <Text style={[Styles.tegisterText , {marginTop:5 , marginBottom:15 , fontSize:13 , color:'#444444' , textAlign:'center'}]}>{ i18n.t('noteThat') } <Text style={{color:'#035F5B'}}>1$</Text> { i18n.t('ofUrWallet') } </Text>
-                                <View style={{flexDirection:'row' , justifyContent:'center'}}>
-                                    <TouchableOpacity onPress={() => this.onConfirm()} style={[Styles.touchModal , {backgroundColor:'#035F5B'}]}>
-                                        <Text style={[Styles.headerBody , {fontSize:14}]}>{ i18n.t('confirm') }</Text>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity onPress={this._toggleModalAd} style={Styles.touchModal}>
-                                        <Text style={[Styles.headerBody , {fontSize:14}]}>{ i18n.t('cancel') }</Text>
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-                        </Modal>
+						<Modal onBackdropPress={()=> this.setState({ modalAddAd : false })} isVisible={this.state.modalAddAd}>
+							<View style={Styles.modalStyle}>
+								<Image source={require('../../assets/images/alarm.png')}  style={{width:70 , height:70 , transform: I18nManager.isRTL ? [{rotateY : '0deg'}] : [{rotateY : '-180deg'}]}} resizeMode={'contain'} />
+								<Text style={[Styles.tegisterText , { fontSize:13 , color:'#fff' , top:20 , textAlign:'center', position:'absolute'}]}>{ i18n.t('attention') }</Text>
+                                <Text style={[Styles.tegisterText , {marginTop:5 , marginBottom:15 , fontSize:13 , color:'#444444' , textAlign:'center'}]}>{ i18n.t('noteThat') } <Text style={{color:'#035F5B'}}>{ this.state.percentItem }$</Text> { i18n.t('ofUrWallet') } </Text>
+								<View style={{flexDirection:'row' , justifyContent:'center'}}>
+									<TouchableOpacity onPress={() => this.onConfirm()} style={[Styles.touchModal , {backgroundColor:'#035F5B'}]}>
+										<Text style={[Styles.headerBody , {fontSize:14}]}>{ i18n.t('confirm') }</Text>
+									</TouchableOpacity>
+									<TouchableOpacity onPress={this._toggleModalAd} style={Styles.touchModal}>
+										<Text style={[Styles.headerBody , {fontSize:14}]}>{ i18n.t('cancel') }</Text>
+									</TouchableOpacity>
+								</View>
+							</View>
+						</Modal>
                     </Form>
-                    <Button onPress={this._toggleModalAd} style={[Styles.loginBtn , {marginBottom:40 }]}>
-                        <Text style={Styles.btnTxt}>{ i18n.t('add') }</Text>
-                    </Button>
+                        { this.renderSubmit() }
                     </KeyboardAvoidingView>
                 </Content>
             </Container>
@@ -478,4 +578,11 @@ class AddAd extends Component {
     }
 }
 
-export default AddAd;
+const mapStateToProps = ({ lang, profile  }) => {
+	return {
+		lang: lang.lang,
+		user: profile.user,
+	};
+};
+
+export default connect(mapStateToProps, {})(AddAd);

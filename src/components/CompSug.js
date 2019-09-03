@@ -1,8 +1,12 @@
 import React, { Component } from "react";
 import {View, Text, Image, TouchableOpacity, I18nManager, FlatList, KeyboardAvoidingView} from "react-native";
-import {Container, Content, Icon, Header, Item, Input, Button, Form, Label, Textarea} from 'native-base'
+import {Container, Content, Icon, Header, Item, Input, Button, Form, Label, Textarea, Toast} from 'native-base'
 import Styles from '../../assets/styles'
 import i18n from '../../local/i18n'
+import axios from "axios";
+import CONST from "../consts";
+import {DoubleBounce} from "react-native-loader";
+import {connect} from "react-redux";
 
 class CompSug extends Component {
     constructor(props){
@@ -11,16 +15,62 @@ class CompSug extends Component {
         this.state={
             address:'',
             msg:'',
+			isSubmitted: false
         }
     }
-
 
     static navigationOptions = () => ({
         drawerLabel: i18n.t('CompSug') ,
         drawerIcon: (<Image source={require('../../assets/images/pros-and-cons.png')} style={{ height: 20, width: 20 , top:3 }} resizeMode={'contain'} /> )
-    })
+    });
 
-    render() {
+	onContactUs(){
+		this.setState({ isSubmitted: true });
+
+		axios.post( CONST.url + 'user/comunicatedWithUs', {
+			lang: (this.props.lang).toUpperCase(),
+			user_id: this.props.user.user_id,
+			title: this.state.address,
+			message: this.state.msg,
+			type:  0,
+		}).then( response => {
+
+			Toast.show({
+				text: response.data.message,
+				type: response.data.status == 1 ? "success" : "danger",
+				duration: 3000
+			});
+
+			this.setState({ isSubmitted: false });
+		})
+	}
+
+
+	renderSubmit(){
+		if (this.state.address == '' || this.state.msg == '' ){
+			return(
+				<Button disabled style={[Styles.loginBtn , {marginBottom:40, backgroundColor: '#999' }]}>
+					<Text style={Styles.btnTxt}>{ i18n.t('sendButton') }</Text>
+				</Button>
+			)
+		}
+
+		if (this.state.isSubmitted){
+			return (
+				<View style={{ width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+					<DoubleBounce size={20} color="#00918B" />
+				</View>
+			);
+		}
+
+		return (
+			<Button onPress={() => this.onContactUs()} style={[Styles.loginBtn , {width:'90%' , marginBottom:40 }]}>
+				<Text style={Styles.btnTxt}>{ i18n.t('sendButton') }</Text>
+			</Button>
+		);
+	}
+
+	render() {
         return (
 
             <Container style={{}}>
@@ -50,13 +100,19 @@ class CompSug extends Component {
                         </Form>
                     </KeyboardAvoidingView>
                 </Content>
-                <Button onPress={() => this.props.navigation.navigate('home')} style={[Styles.loginBtn , {width:'90%' , marginBottom:40 }]}>
-                    <Text style={Styles.btnTxt}>{ i18n.t('sendButton') }</Text>
-                </Button>
+                { this.renderSubmit() }
             </Container>
 
         );
     }
 }
 
-export default CompSug;
+
+const mapStateToProps = ({ lang, profile  }) => {
+	return {
+		lang: lang.lang,
+		user: profile.user,
+	};
+};
+
+export default connect(mapStateToProps, {})(CompSug);

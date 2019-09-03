@@ -1,8 +1,13 @@
 import React, { Component } from "react";
-import { View, Text, Image, TouchableOpacity , I18nManager , FlatList} from "react-native";
+import { View, Text, Image, TouchableOpacity, FlatList} from "react-native";
 import {Container, Content, Header, Item, Input, Label, Form, Button} from 'native-base'
 import Styles from '../../assets/styles'
 import i18n from '../../local/i18n'
+import axios from "axios";
+import CONST from "../consts";
+import {DoubleBounce} from "react-native-loader";
+import {connect} from "react-redux";
+import {NavigationEvents} from "react-navigation";
 
 class AddInterest extends Component {
     constructor(props){
@@ -10,8 +15,9 @@ class AddInterest extends Component {
 
         this.state={
             interestName:'',
-            interests:['oooo', 'kkkk'],
-            isRefreshed:false
+            interests:[],
+            isRefreshed:false,
+			isSubmitted: false
         }
     }
 
@@ -22,13 +28,13 @@ class AddInterest extends Component {
     _keyExtractor = (item, index) => item.id;
 
     renderItems = (item) => {
-        console.log('ooooooooo', item);
         return(
             <View style={Styles.interestParent} >
                 <Text style={[Styles.confirmText , {fontSize:13}]}>{item}</Text>
             </View>
         );
     }
+
     addInterest(){
         this.setState({isRefreshed : !this.state.isRefreshed})
         let interests = this.state.interests;
@@ -37,10 +43,53 @@ class AddInterest extends Component {
 
     }
 
+	onConfirm(){
+		this.setState({ isSubmitted: true });
+		axios.post(CONST.url + 'user/importants', {
+			important: this.state.interests,
+			user_id: this.props.user.user_id,
+			lang: (this.props.lang).toUpperCase(),
+		}).then(response => {
+			this.setState({ isSubmitted: false });
+
+			if (response.data.status == '1')
+				this.props.navigation.navigate('interests')
+		}).catch(e => console.warn(e));
+
+	}
+
+	renderSubmit(){
+		if (this.state.interests.length == 0 ){
+			return(
+				<Button disabled style={[Styles.loginBtn , {marginBottom:40, backgroundColor: '#999' }]}>
+					<Text style={Styles.btnTxt}>{ i18n.t('confirm') }</Text>
+				</Button>
+			)
+		}
+
+		if (this.state.isSubmitted){
+			return (
+				<View style={{ width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+					<DoubleBounce size={20} color="#00918B" />
+				</View>
+			);
+		}
+
+		return (
+			<Button onPress={() => this.onConfirm()} style={[Styles.loginBtn , {marginBottom:40 , width:'90%'}]}>
+				<Text style={Styles.btnTxt}>{ i18n.t('confirm') }</Text>
+			</Button>
+		);
+	}
+
+	onFocus(){
+		this.setState({ employerName: '', photos: [{ file: null }], jobTitle: '' })
+	}
+
     render() {
         return (
-
             <Container style={{}}>
+				<NavigationEvents onWillFocus={() => this.onFocus()} />
                 <Header style={Styles.header} noShadow>
                     <View style={Styles.headerView}>
                         <TouchableOpacity onPress={() => this.props.navigation.goBack()} style={Styles.headerTouch}>
@@ -73,13 +122,19 @@ class AddInterest extends Component {
                         </View>
                     </Form>
                 </Content>
-                <Button onPress={() => this.props.navigation.navigate('interests')} style={[Styles.loginBtn , {marginBottom:40 , width:'90%'}]}>
-                    <Text style={Styles.btnTxt}>{ i18n.t('confirm') }</Text>
-                </Button>
+                { this.renderSubmit() }
             </Container>
 
         );
     }
 }
 
-export default AddInterest;
+
+const mapStateToProps = ({ lang, profile  }) => {
+	return {
+		lang: lang.lang,
+		user: profile.user,
+	};
+};
+
+export default connect(mapStateToProps, {})(AddInterest);
