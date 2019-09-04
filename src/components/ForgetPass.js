@@ -1,8 +1,12 @@
 import React, { Component } from "react";
 import {View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, I18nManager, KeyboardAvoidingView , Platform} from "react-native";
-import {Container, Content, Button, Icon, Left, Form, Item,  Label, Input, } from 'native-base'
+import {Container, Content, Button, Icon, Left, Form, Item,  Label, Input, Toast } from 'native-base'
 import Styles from '../../assets/styles'
 import i18n from "../../local/i18n";
+import {DoubleBounce} from "react-native-loader";
+import axios from 'axios';
+import CONST from "../consts";
+import {connect} from "react-redux";
 
 
 const height = Dimensions.get('window').height;
@@ -12,6 +16,7 @@ class ForgetPass extends Component {
 
         this.state={
             phone: '',
+			isSubmitted: false,
         }
     }
 
@@ -19,7 +24,46 @@ class ForgetPass extends Component {
         drawerLabel: () => null
     });
 
-    render() {
+	onCheckPhone(){
+		this.setState({ isSubmitted: true });
+		axios.post(CONST.url + 'user/forgetpassword' ,{
+			PhoneNo: this.state.phone,
+		}).then(response => {
+			Toast.show({
+				text: response.data.message,
+				type: response.data.status == 1 ? "success" : "danger",
+				duration: 3000
+			});
+			this.setState({ isSubmitted: false , phone:'' });
+			this.props.navigation.navigate("verifyCode" , { id:response.data.data.user_id , code: response.data.data.activitionCode });
+		})
+	}
+
+	renderSubmit(){
+		if (this.state.phone == '' ){
+			return(
+				<Button disabled style={[Styles.loginBtn , {marginBottom:40, backgroundColor: '#999' }]}>
+					<Text style={Styles.btnTxt}>{ i18n.t('sendButton') }</Text>
+				</Button>
+			)
+		}
+
+		if (this.state.isSubmitted){
+			return (
+				<View style={{ width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+					<DoubleBounce size={20} color="#00918B" />
+				</View>
+			);
+		}
+
+		return (
+			<Button onPress={() => this.onCheckPhone()} style={Styles.loginBtn}>
+				<Text style={Styles.btnTxt}>{ i18n.t('sendButton') }</Text>
+			</Button>
+		);
+	}
+
+	render() {
         return (
 
             <Container style={{backgroundColor:'#fff'}}>
@@ -46,11 +90,7 @@ class ForgetPass extends Component {
                                         <Input value={this.state.phone} onChangeText={(phone) => this.setState({phone})} keyboardType={'number-pad'} style={Styles.itemInput}  />
                                     </Item>
                                 </View>
-
-                                <Button onPress={() => this.props.navigation.navigate('verifyCode')} style={Styles.loginBtn}>
-                                    <Text style={Styles.btnTxt}>{ i18n.t('sendButton') }</Text>
-                                </Button>
-
+                                { this.renderSubmit() }
                             </Form>
                         </View>
                     </KeyboardAvoidingView>
@@ -61,4 +101,12 @@ class ForgetPass extends Component {
     }
 }
 
-export default ForgetPass;
+
+const mapStateToProps = ({ lang, profile }) => {
+	return {
+		lang: lang.lang,
+		user: profile.user,
+	};
+};
+
+export default connect(mapStateToProps, {})(ForgetPass);

@@ -312,7 +312,7 @@ const styles = ({
         marginBottom:15
     },
     notiText:{
-        color:'#707070',
+        // color:'#707070',
         fontSize:15,
         fontFamily:'RegularFont'
     },
@@ -337,7 +337,7 @@ const styles = ({
         backgroundColor:'#F6F6F6',
         height: 30,
         borderRadius: 25,
-        width: '21.5%',
+        width: '30%',
         padding: 0,
         flexDirection: 'row' ,
     },

@@ -1,22 +1,15 @@
 import React, { Component } from "react";
-import {
-    View,
-    Text,
-    Image,
-    TouchableOpacity,
-    I18nManager,
-    FlatList,
-    ImageEditor,
-    Dimensions,
-    KeyboardAvoidingView
-} from "react-native";
+import { View, Text, Image, TouchableOpacity, I18nManager, FlatList, ImageEditor, Dimensions, KeyboardAvoidingView, ImageStore } from "react-native";
 import {Container, Content, Icon, Header, Item, Input, Button, Form, Label} from 'native-base'
 import Styles from '../../assets/styles'
 import i18n from '../../local/i18n'
-import {ImageBrowser,CameraBrowser} from 'expo-multiple-imagepicker';
+import {ImageBrowser, CameraBrowser} from 'expo-multiple-imagepicker';
 import { Permissions } from "expo";
-
-
+import {DoubleBounce} from "react-native-loader";
+import axios from "axios";
+import CONST from "../consts";
+import {connect} from "react-redux";
+import {NavigationEvents} from "react-navigation";
 
 const height = Dimensions.get('window').height;
 let base64   = [];
@@ -33,6 +26,7 @@ class AddCertify extends Component {
             base64: [],
             employerName:'',
             jobTitle:'',
+            isSubmitted: false
         }
     }
 
@@ -96,39 +90,84 @@ class AddCertify extends Component {
             });
 
             const imgs = this.state.photos;
-          //  console.log(imgs);
             for (var i =0; i < imgs.length; i++){
-                const imageURL = imgs[i+1].file;
-                Image.getSize(imageURL, (width, height) => {
-                    var imageSize = {
-                        size: {
-                            width,
-                            height
-                        },
-                        offset: {
-                            x: 0,
-                            y: 0,
-                        },
-                    };
+				if (imgs[i].file != null) {
+					const imageURL = imgs[i].file;
+					Image.getSize(imageURL, (width, height) => {
+						var imageSize = {
+							size: {
+								width,
+								height
+							},
+							offset: {
+								x: 0,
+								y: 0,
+							},
+						};
 
-                    // ImageEditor.cropImage(imageURL, imageSize, (imageURI) => {
-                    //     console.log(imageURI);
-                    //     ImageStore.getBase64ForTag(imageURI, (base64Data) => {
-                    //         base64.push(base64Data);
-                    //         ImageStore.removeImageForTag(imageURI);
-                    //     }, (reason) => console.log(reason) )
-                    // }, (reason) => console.log(reason) )
-                }, (reason) => console.log(reason))
+						ImageEditor.cropImage(imageURL, imageSize, (imageURI) => {
+							console.log(imageURI);
+							ImageStore.getBase64ForTag(imageURI, (base64Data) => {
+								base64.push(base64Data);
+								ImageStore.removeImageForTag(imageURI);
+							}, (reason) => console.log(reason))
+						}, (reason) => console.log(reason))
+					}, (reason) => console.log(reason))
+				}
             }
         }).catch((e) => console.log(e))
     };
 
     array_move(arr, old_index, new_index) {
         arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
-        return arr; // for testing
+        return arr;
     };
 
-    render() {
+    onConfirm(){
+		this.setState({ isSubmitted: true });
+		axios.post(CONST.url + 'user/Certification', {
+			nameCompany: this.state.employerName,
+			nameWork: this.state.jobTitle,
+			certificates: base64,
+			user_id: this.props.user.user_id,
+			lang: (this.props.lang).toUpperCase(),
+		}).then(response => {
+			this.setState({ isSubmitted: false });
+
+			if (response.data.status == '1')
+                this.props.navigation.navigate('certify')
+		}).catch(e => console.warn(e));
+
+	}
+
+	renderSubmit(){
+		if (this.state.employerName == '' || this.state.jobTitle == '' || base64.length == 0 ){
+			return(
+				<Button disabled style={[Styles.loginBtn , {marginBottom:40, backgroundColor: '#999' }]}>
+					<Text style={Styles.btnTxt}>{ i18n.t('confirm') }</Text>
+				</Button>
+			)
+		}
+
+		if (this.state.isSubmitted){
+		    return (
+				<View style={{ width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+					<DoubleBounce size={20} color="#00918B" />
+				</View>
+            );
+        }
+
+		return (
+			<Button onPress={() => this.onConfirm()} style={[Styles.loginBtn , {marginBottom:40 }]}>
+				<Text style={Styles.btnTxt}>{ i18n.t('confirm') }</Text>
+			</Button>
+		);
+	}
+
+	onFocus(){
+        this.setState({ employerName: '', photos: [{ file: null }], jobTitle: '' })
+    }
+	render() {
         if (this.state.imageBrowserOpen) {
             return(<ImageBrowser base64={true} max={10} callback={this.imageBrowserCallback}/>);
         }else if (this.state.cameraBrowserOpen) {
@@ -136,12 +175,12 @@ class AddCertify extends Component {
         }
 
         const oldIndex =  (this.state.photos).findIndex(x => x.file === null );
-        const photos = this.array_move(this.state.photos, oldIndex, (this.state.photos).length - 1);
+        const photos   = this.array_move(this.state.photos, oldIndex, (this.state.photos).length - 1);
         console.log('image arr ..', photos);
 
         return (
-
             <Container style={{}}>
+				<NavigationEvents onWillFocus={() => this.onFocus()} />
                 <Header style={Styles.header} noShadow>
                     <View style={Styles.headerView}>
                         <TouchableOpacity onPress={() => this.props.navigation.goBack()} style={Styles.headerTouch}>
@@ -182,9 +221,7 @@ class AddCertify extends Component {
 
                         </Form>
                     </KeyboardAvoidingView>
-                    <Button onPress={() => this.props.navigation.navigate('certify')} style={[Styles.loginBtn , {marginBottom:40 }]}>
-                        <Text style={Styles.btnTxt}>{ i18n.t('confirm') }</Text>
-                    </Button>
+                    { this.renderSubmit() }
                 </Content>
             </Container>
 
@@ -192,4 +229,11 @@ class AddCertify extends Component {
     }
 }
 
-export default AddCertify;
+const mapStateToProps = ({ lang, profile  }) => {
+	return {
+		lang: lang.lang,
+		user: profile.user,
+	};
+};
+
+export default connect(mapStateToProps, {})(AddCertify);

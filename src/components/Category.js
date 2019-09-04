@@ -1,10 +1,16 @@
 import React, { Component } from "react";
-import { View, Text, Image, TouchableOpacity , I18nManager , FlatList} from "react-native";
-import {Container, Content, Icon, Header, Item, Input, Label, Picker} from 'native-base'
+import { View, Text, Image, TouchableOpacity , I18nManager , Dimensions} from "react-native";
+import {Container, Content, Icon, Header, Item, Picker, Toast} from 'native-base'
 import Styles from '../../assets/styles'
 import i18n from '../../local/i18n'
 import Modal from "react-native-modal";
+import axios from "axios";
+import CONST from "../consts";
+import {DoubleBounce} from "react-native-loader";
+import {connect} from "react-redux";
+import {NavigationEvents} from "react-navigation";
 
+const height = Dimensions.get('window').height;
 class Category extends Component {
     constructor(props){
         super(props);
@@ -15,6 +21,14 @@ class Category extends Component {
             selectedHours: null,
             selectedFee: null,
             isModalVisible: false,
+            ads: [],
+            hours: [],
+            prices: [],
+            countries: [],
+            loader: false,
+			percentItem: null,
+			userBalance: 0,
+			selectedAd: null
         }
     }
 
@@ -22,23 +36,117 @@ class Category extends Component {
     static navigationOptions = () => ({
         drawerLabel: () => null
     });
+
     onConfirm() {
         this.setState({ isModalVisible: !this.state.isModalVisible });
-        this.props.navigation.navigate('charge');
+        this.props.navigation.navigate('addDet', { id: this.state.selectedAd, type: 1 });
     };
+
+	noBalance() {
+		this.setState({ isModalVisible: false });
+		this.props.navigation.navigate('charge');
+	};
+
+	componentWillMount() {
+		this.setState({ loader: true });
+		axios.post( CONST.url + 'advertise/departmentAdvertise', { user_id: this.props.user.user_id, lang : (this.props.lang).toUpperCase(), department_id: this.props.navigation.state.params.id})
+			.then(response => {
+				this.setState({ ads: response.data.data, loader: false });
+		});
+
+		axios.post( CONST.url + 'advertise/getHourAdvertise', { lang : (this.props.lang).toUpperCase() })
+			.then(response => {
+				this.setState({ hours: response.data.data, loader: false });
+		});
+
+		axios.post( CONST.url + 'country/allCountry', { lang : (this.props.lang).toUpperCase() })
+			.then(response => {
+				this.setState({ countries: response.data.data, loader: false });
+		});
+
+		axios.post( CONST.url + 'advertise/getFinalPriceAndHourPriceAdvertise', { lang : (this.props.lang).toUpperCase() })
+			.then(response => {
+				this.setState({ prices: response.data.data, loader: false });
+		});
+
+		axios.post( CONST.url + 'user/percent', { lang : (this.props.lang).toUpperCase() })
+			.then(response => {
+				this.setState({ percentItem: response.data.data.percentItem, loader: false });
+			});
+
+		axios.post( CONST.url + 'user/getUserBalance', { lang : (this.props.lang).toUpperCase(), user_id: this.props.user.user_id})
+			.then(response => {
+				this.setState({ userBalance: response.data.data });
+			});
+	}
+
+	renderLoader(){
+		if (this.state.loader){
+			return(
+				<View style={{ alignItems: 'center', justifyContent: 'center', height : height - 200, alignSelf:'center' , backgroundColor:'#fff' , width:'100%'  , position:'absolute' , zIndex:1 }}>
+					<DoubleBounce size={20} color="#00918B" />
+				</View>
+			);
+		}
+	}
+
+	openAd(id){
+		if (this.state.userBalance >= 1){
+			this.setState({ selectedAd: id });
+			this._toggleModal()
+		}else{
+			this.noBalance()
+		}
+	}
+
+	onChangePicker(value, type){
+		if (type == 'country'){
+			console.log('picker_val', value, type);
+			this.setState({ selectedCountry: value })
+		}else if (type == 'price')
+			this.setState({ selectedFee: value })
+		else if (type == 'hour')
+			this.setState({ selectedHours: value })
+
+
+		this.setState({ loader: true });
+
+
+		setTimeout(() =>
+			axios.post( CONST.url + 'advertise/searchAdvertise', {
+				lang : (this.props.lang).toUpperCase(),
+				NumberOfHour: this.state.selectedHours,
+				price: this.state.selectedFee,
+				country_id: this.state.selectedCountry,
+				user_id: this.props.user.user_id,
+			})
+				.then(response => {
+					this.setState({ ads: response.data.data, loader: false });
+				})
+			, 0);
+    }
+
+	onFocus(payload){
+		console.log('this is onWillFocus', payload);
+		this.setState({ loader: null });
+
+		this.componentWillMount()
+	}
+
     render() {
         return (
-
             <Container style={{}}>
+				<NavigationEvents onWillFocus={payload => this.onFocus(payload)} />
                 <Header style={Styles.header} noShadow>
                     <View style={Styles.headerView}>
                         <TouchableOpacity onPress={() => this.props.navigation.goBack()} style={Styles.headerTouch}>
                             <Image source={require('../../assets/images/back.png')} style={[Styles.headerMenu , Styles.transform]} resizeMode={'contain'} />
                         </TouchableOpacity>
-                        <Text style={[Styles.headerBody , { flex:1, top:-3 , left:-15 , textAlign:'center'}]}>اسم القسم</Text>
+                        <Text style={[Styles.headerBody , { flex:1, top:-3 , left:-15 , textAlign:'center'}]}>{ this.props.navigation.state.params.name }</Text>
                     </View>
                 </Header>
                 <Content style={{padding:15}}>
+					{ this.renderLoader() }
                     <View style={Styles.pickersParent}>
                         <Item style={Styles.catPicker} regular >
                             <Picker
@@ -48,32 +156,34 @@ class Category extends Component {
                                 placeholderStyle={{ color: "#acabae" }}
                                 placeholderIconColor="#acabae"
                                 selectedValue={this.state.selectedCountry}
-                                onValueChange={(value) => this.setState({ selectedCountry: value })}
+                                onValueChange={(value) => this.onChangePicker(value, 'country')}
                             >
                                 <Picker.Item label={ i18n.t('country') } value={null} />
-                                <Picker.Item label={'الرياض'} value={"1"} />
-                                <Picker.Item label={'الامارات'} value={"2"} />
-                                <Picker.Item label={'مصر'} value={"3"} />
+                                {
+                                    this.state.countries.map((country, i) => (
+										<Picker.Item label={country.countryName} value={country.country_id} key={i} />
+                                    ))
+                                }
                             </Picker>
                             <Image source={require('../../assets/images/gray-drop.png')}  style={{right:5,width:10 , height:10}} resizeMode={'contain'} />
                         </Item>
-                        <Item style={Styles.catPicker} regular >
-                            <Picker
-                                mode="dropdown"
-                                iosIcon={<Icon name="arrow-down" />}
-                                style={Styles.pickerLabel}
-                                placeholderStyle={{ color: "#acabae" }}
-                                placeholderIconColor="#acabae"
-                                selectedValue={this.state.selectedCity}
-                                onValueChange={(value) => this.setState({ selectedCity: value })}
-                            >
-                                <Picker.Item label={ i18n.t('city') } value={null} />
-                                <Picker.Item label={'القاهرة'} value={"1"} />
-                                <Picker.Item label={'المنصوره'} value={"2"} />
-                                <Picker.Item label={'الاسكندرية'} value={"3"} />
-                            </Picker>
-                            <Image source={require('../../assets/images/gray-drop.png')}  style={{right:5,width:10 , height:10}} resizeMode={'contain'} />
-                        </Item>
+                        {/*<Item style={Styles.catPicker} regular >*/}
+                            {/*<Picker*/}
+                                {/*mode="dropdown"*/}
+                                {/*iosIcon={<Icon name="arrow-down" />}*/}
+                                {/*style={Styles.pickerLabel}*/}
+                                {/*placeholderStyle={{ color: "#acabae" }}*/}
+                                {/*placeholderIconColor="#acabae"*/}
+                                {/*selectedValue={this.state.selectedCity}*/}
+                                {/*onValueChange={(value) => this.setState({ selectedCity: value })}*/}
+                            {/*>*/}
+                                {/*<Picker.Item label={ i18n.t('city') } value={null} />*/}
+                                {/*<Picker.Item label={'القاهرة'} value={"1"} />*/}
+                                {/*<Picker.Item label={'المنصوره'} value={"2"} />*/}
+                                {/*<Picker.Item label={'الاسكندرية'} value={"3"} />*/}
+                            {/*</Picker>*/}
+                            {/*<Image source={require('../../assets/images/gray-drop.png')}  style={{right:5,width:10 , height:10}} resizeMode={'contain'} />*/}
+                        {/*</Item>*/}
                         <Item style={[Styles.catPicker , {width:'33%'}]} regular >
                             <Picker
                                 mode="dropdown"
@@ -82,12 +192,15 @@ class Category extends Component {
                                 placeholderStyle={{ color: "#acabae" }}
                                 placeholderIconColor="#acabae"
                                 selectedValue={this.state.selectedHours}
-                                onValueChange={(value) => this.setState({ selectedHours: value })}
+                                onValueChange={(value) => this.onChangePicker(value, 'hour')}
                             >
                                 <Picker.Item label={ i18n.t('hoursNo') } value={null} />
-                                <Picker.Item label={'ساعه'} value={"1"} />
-                                <Picker.Item label={'ساعتان'} value={"2"} />
-                                <Picker.Item label={'ثلاث ساعات'} value={"3"} />
+                                {
+                                    this.state.hours.map((hour, i) => (
+										<Picker.Item label={hour} value={hour} key={i} />
+                                    ))
+                                }
+
                             </Picker>
                             <Image source={require('../../assets/images/gray-drop.png')}  style={{right:5,width:10 , height:10}} resizeMode={'contain'} />
                         </Item>
@@ -99,80 +212,54 @@ class Category extends Component {
                                 placeholderStyle={{ color: "#acabae" }}
                                 placeholderIconColor="#acabae"
                                 selectedValue={this.state.selectedFee}
-                                onValueChange={(value) => this.setState({ selectedFee: value })}
+                                onValueChange={(value) => this.onChangePicker(value, 'price')}
                             >
                                 <Picker.Item label={ i18n.t('fare') } value={null} />
-                                <Picker.Item label={'1'} value={"1"} />
-                                <Picker.Item label={'2'} value={"2"} />
-                                <Picker.Item label={'3'} value={"3"} />
+								{
+									this.state.prices.map((price, i) => (
+										<Picker.Item label={price} value={price} key={i} />
+									))
+								}
                             </Picker>
                             <Image source={require('../../assets/images/gray-drop.png')} style={{right:5,width:10 , height:10}} resizeMode={'contain'} />
                         </Item>
                     </View>
-                    <TouchableOpacity onPress={this._toggleModal} style={Styles.jobBlock}>
-                        <Text style={[Styles.tegisterText , {marginTop:0}]}>اسم الوظيفة</Text>
-                        <View style={{flexDirection:'row' , justifyContent:'space-between'}}>
+                    {
+                        this.state.ads.map((ad, i) => (
+							<TouchableOpacity key={i} onPress={() => this.openAd(ad._id)} style={Styles.jobBlock}>
+								<Text style={[Styles.tegisterText , {marginTop:0}]}>{ ad.name }</Text>
+								<View style={{flexDirection:'row' , justifyContent:'space-between'}}>
 
-                            <Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('adNumber') }: <Text style={{color:'#444444'}}>22</Text></Text>
-                            <Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('activityName') }: <Text style={{color:'#444444'}}>رياضي</Text></Text>
-                        </View>
-                        <View style={{flexDirection:'row' , justifyContent:'space-between'}}>
-                            <Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('hoursNo') }: <Text style={{color:'#444444'}}>8 ساعات</Text></Text>
-                            <Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('date') }: <Text style={{color:'#444444'}}>2019/6/11</Text></Text>
-                        </View>
-                        <View style={{flexDirection:'row' , justifyContent:'space-between'}}>
-                            <Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('pricePerHour') }: <Text style={{color:'#444444'}}>100 ريال سعودي</Text></Text>
-                            <Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('time') }: <Text style={{color:'#444444'}}>3:00م</Text></Text>
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={this._toggleModal} style={Styles.jobBlock}>
-                        <Text style={[Styles.tegisterText , {marginTop:0}]}>اسم الوظيفة</Text>
-                        <View style={{flexDirection:'row' , justifyContent:'space-between'}}>
+									<Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('adNumber') }: <Text style={{color:'#444444'}}>22</Text></Text>
+									<Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('activityName') }: <Text style={{color:'#444444'}}>{ ad.workStyle }</Text></Text>
+								</View>
+								<View style={{flexDirection:'row' , justifyContent:'space-between'}}>
+									<Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('time') }: <Text style={{color:'#444444'}}>{ ad.timeOFWork }</Text></Text>
+									<Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('date') }: <Text style={{color:'#444444'}}>{ ad.time_Started }</Text></Text>
+								</View>
+								{
+									ad.typeWork == 'with' ? (
+										<View>
+											<View style={{flexDirection:'row' , justifyContent:'space-between'}}>
+												<Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('hoursNo') }: <Text style={{color:'#444444'}}>{ ad.NumberOfHour }</Text></Text>
+												<Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('pricePerHour') }: <Text style={{color:'#444444'}}>{ ad.PriceOfHour } $</Text></Text>
+											</View>
+											<View style={{flexDirection:'row' , justifyContent:'space-between'}}>
+												<Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('distance') }: <Text style={{color:'#444444'}}>{ ad.distance }</Text></Text>
+											</View>
+										</View>
 
-                            <Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('adNumber') }: <Text style={{color:'#444444'}}>22</Text></Text>
-                            <Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('activityName') }: <Text style={{color:'#444444'}}>رياضي</Text></Text>
-                        </View>
-                        <View style={{flexDirection:'row' , justifyContent:'space-between'}}>
-                            <Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('hoursNo') }: <Text style={{color:'#444444'}}>8 ساعات</Text></Text>
-                            <Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('date') }: <Text style={{color:'#444444'}}>2019/6/11</Text></Text>
-                        </View>
-                        <View style={{flexDirection:'row' , justifyContent:'space-between'}}>
-                            <Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('pricePerHour') }: <Text style={{color:'#444444'}}>100 ريال سعودي</Text></Text>
-                            <Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('time') }: <Text style={{color:'#444444'}}>3:00م</Text></Text>
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={this._toggleModal} style={Styles.jobBlock}>
-                        <Text style={[Styles.tegisterText , {marginTop:0}]}>اسم الوظيفة</Text>
-                        <View style={{flexDirection:'row' , justifyContent:'space-between'}}>
+									) : (
+										<View style={{flexDirection:'row' , justifyContent:'space-between'}}>
+											<Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('finalFee') }: <Text style={{color:'#444444'}}>{ ad.finalPrice } $</Text></Text>
+											<Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('distance') }: <Text style={{color:'#444444'}}>{ ad.distance } </Text></Text>
+										</View>
+									)
+								}
+							</TouchableOpacity>
+                        ))
+                    }
 
-                            <Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('adNumber') }: <Text style={{color:'#444444'}}>22</Text></Text>
-                            <Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('activityName') }: <Text style={{color:'#444444'}}>رياضي</Text></Text>
-                        </View>
-                        <View style={{flexDirection:'row' , justifyContent:'space-between'}}>
-                            <Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('hoursNo') }: <Text style={{color:'#444444'}}>8 ساعات</Text></Text>
-                            <Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('date') }: <Text style={{color:'#444444'}}>2019/6/11</Text></Text>
-                        </View>
-                        <View style={{flexDirection:'row' , justifyContent:'space-between'}}>
-                            <Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('pricePerHour') }: <Text style={{color:'#444444'}}>100 ريال سعودي</Text></Text>
-                            <Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('time') }: <Text style={{color:'#444444'}}>3:00م</Text></Text>
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={this._toggleModal} style={Styles.jobBlock}>
-                        <Text style={[Styles.tegisterText , {marginTop:0}]}>اسم الوظيفة</Text>
-                        <View style={{flexDirection:'row' , justifyContent:'space-between'}}>
-
-                            <Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('adNumber') }: <Text style={{color:'#444444'}}>22</Text></Text>
-                            <Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('activityName') }: <Text style={{color:'#444444'}}>رياضي</Text></Text>
-                        </View>
-                        <View style={{flexDirection:'row' , justifyContent:'space-between'}}>
-                            <Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('hoursNo') }: <Text style={{color:'#444444'}}>8 ساعات</Text></Text>
-                            <Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('date') }: <Text style={{color:'#444444'}}>2019/6/11</Text></Text>
-                        </View>
-                        <View style={{flexDirection:'row' , justifyContent:'space-between'}}>
-                            <Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('pricePerHour') }: <Text style={{color:'#444444'}}>100 ريال سعودي</Text></Text>
-                            <Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('time') }: <Text style={{color:'#444444'}}>3:00م</Text></Text>
-                        </View>
-                    </TouchableOpacity>
                     <Modal onBackdropPress={()=> this.setState({ isModalVisible : false })} isVisible={this.state.isModalVisible}>
                         <View style={Styles.modalStyle}>
                             <Image source={require('../../assets/images/alarm.png')}  style={{width:70 , height:70 , transform: I18nManager.isRTL ? [{rotateY : '0deg'}] : [{rotateY : '-180deg'}]}} resizeMode={'contain'} />
@@ -195,4 +282,10 @@ class Category extends Component {
     }
 }
 
-export default Category;
+const mapStateToProps = ({ lang, profile  }) => {
+	return {
+		lang: lang.lang,
+		user: profile.user,
+	};
+};
+export default connect(mapStateToProps, {})(Category);

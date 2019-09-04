@@ -4,6 +4,8 @@ import {Container, Content, Icon, Header, Item, Input, Toast, Picker} from 'nati
 import FooterSection from './FooterSection';
 import Styles from '../../assets/styles'
 import i18n from '../../local/i18n'
+import { connect } from 'react-redux';
+import { chooseLang } from '../actions';
 
 
 class Settings extends Component {
@@ -11,16 +13,21 @@ class Settings extends Component {
         super(props);
 
         this.state={
-            SwitchOnValueHolder : false,
-            language:null
+            SwitchOnValueHolder: false,
+            language: this.props.lang
         }
     }
-
 
     static navigationOptions = () => ({
         drawerLabel: () => null
     });
 
+	onChooseLang(lang) {
+	    if (lang != this.props.lang){
+            this.setState({ language: lang });
+            this.props.chooseLang(lang);
+        }
+	};
 
     stopNotification = (value) =>{
         this.setState({  SwitchOnValueHolder:!this.state.SwitchOnValueHolder})
@@ -52,10 +59,10 @@ class Settings extends Component {
                                 placeholderStyle={{ color: "#acabae" }}
                                 placeholderIconColor="#acabae"
                                 selectedValue={this.state.language}
-                                onValueChange={(value) => this.setState({ language: value })}
+                                onValueChange={(value) => this.onChooseLang(value)}
                             >
-                                <Picker.Item label={'اللغه العربية'} value={"1"} />
-                                <Picker.Item label={'English'} value={"2"} />
+                                <Picker.Item label={'اللغه العربية'} value={"ar"} />
+                                <Picker.Item label={'English'} value={"en"} />
                             </Picker>
                             <Image source={require('../../assets/images/gray-drop.png')}  style={{right:5,width:10 , height:10}} resizeMode={'contain'} />
                         </Item>
@@ -86,4 +93,12 @@ class Settings extends Component {
     }
 }
 
-export default Settings;
+
+const mapStateToProps = ({ lang, profile  }) => {
+	return {
+		lang: lang.lang,
+		user: profile.user,
+	};
+};
+
+export default connect(mapStateToProps, { chooseLang })(Settings);

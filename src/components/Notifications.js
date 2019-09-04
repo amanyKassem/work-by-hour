@@ -1,21 +1,48 @@
 import React, { Component } from "react";
-import { View, Text, Image, TouchableOpacity , I18nManager , FlatList} from "react-native";
+import {View, Text, Image, TouchableOpacity, I18nManager, FlatList, Dimensions} from "react-native";
 import { Container, Content, Icon, Header  ,Item , Input } from 'native-base'
 import Styles from '../../assets/styles'
 import i18n from '../../local/i18n'
+import axios from "axios";
+import CONST from "../consts";
+import {connect} from "react-redux";
+import {DoubleBounce} from "react-native-loader";
 
+const height = Dimensions.get('window').height;
 class Notifications extends Component {
     constructor(props){
         super(props);
 
         this.state={
+			loader: false,
+            notifications: []
         }
     }
 
 
-    static navigationOptions = () => ({
+	componentWillMount() {
+		this.setState({ loader: true });
+		axios.post( CONST.url + 'user/getNotification', { lang : (this.props.lang).toUpperCase(), user_id: this.props.user.user_id })
+			.then(response => {
+				this.setState({ notifications: response.data.data, loader: false });
+			});
+
+		console.log('user_id', this.props.user.user_id);
+	}
+
+	static navigationOptions = () => ({
         drawerLabel: () => null
     });
+
+	renderLoader(){
+		if (this.state.loader){
+			return(
+				<View style={{ alignItems: 'center', justifyContent: 'center', height : height - 200, alignSelf:'center' , backgroundColor:'#fff' , width:'100%'  , position:'absolute' , zIndex:1 }}>
+					<DoubleBounce size={20} color="#00918B" />
+				</View>
+			);
+		}
+	}
 
     render() {
         return (
@@ -30,18 +57,15 @@ class Notifications extends Component {
                     </View>
                 </Header>
                 <Content style={{padding:15}}>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('rate')} style={Styles.noti}>
-                        <View style={Styles.notiBall}/>
-                        <Text style={Styles.notiText}>هناك طلب جديد على وظيفتك</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('rate')} style={Styles.noti}>
-                        <View style={Styles.notiBall}/>
-                        <Text style={Styles.notiText}>لا تنسي تقييم صاحب الاعلان</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('rate')} style={Styles.noti}>
-                        <View style={Styles.notiBall}/>
-                        <Text style={Styles.notiText}>لا تنسي تقييم الباحث عن العمل</Text>
-                    </TouchableOpacity>
+                    { this.renderLoader() }
+                    {
+                        this.state.notifications.map(( notify, i ) => (
+							<TouchableOpacity key={i} onPress={() => this.props.navigation.navigate(notify.isRating == 1 ? 'rate' : '' , { id: notify.rateUser_id })} style={Styles.noti}>
+								<View style={Styles.notiBall}/>
+								<Text style={Styles.notiText}>{ notify.notification }</Text>
+							</TouchableOpacity>
+                        ))
+                    }
                 </Content>
             </Container>
 
@@ -49,4 +73,12 @@ class Notifications extends Component {
     }
 }
 
-export default Notifications;
+
+const mapStateToProps = ({ lang, profile  }) => {
+	return {
+		lang: lang.lang,
+		user: profile.user,
+	};
+};
+
+export default connect(mapStateToProps, {})(Notifications);

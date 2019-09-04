@@ -8,13 +8,19 @@ import {
     Dimensions,
     I18nManager,
     KeyboardAvoidingView,
-    Platform
+    Platform,
+	AsyncStorage
 } from "react-native";
-import {Container, Content, Button, Icon, Picker, Form, Item,  Label, Input, } from 'native-base'
+
+import {Container, Content, Button, Icon, Picker, Form, Item,  Label, Input, Toast } from 'native-base'
 import Styles from '../../assets/styles'
 import i18n from "../../local/i18n";
 
 import { ImagePicker } from 'expo';
+import axios from "axios";
+import CONST from "../consts";
+import {connect} from "react-redux";
+import {DoubleBounce} from "react-native-loader";
 
 
 const height = Dimensions.get('window').height;
@@ -29,14 +35,18 @@ class Register extends Component {
             password: '',
             rePassword: '',
             image: null,
+            base64: null,
             selectedCountry: null,
-            selectedKayan: null,
+            selectedKayan: i18n.t('individual'),
+			countries: [],
+			isSubmitted: false,
         }
     }
 
     static navigationOptions = () => ({
         drawerLabel: () => null
     });
+
     _pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
             allowsEditing: true,
@@ -44,14 +54,115 @@ class Register extends Component {
             base64:true
         });
 
-        console.log(result);
-
         // check if there is image then set it and make button not disabled
         if (!result.cancelled) {
             this.setState({ image: result.uri ,base64:result.base64});
         }
     };
-    render() {
+
+    componentWillMount() {
+		axios.post( CONST.url + 'country/allCountry', { lang : (this.props.lang).toUpperCase() })
+			.then(response => {
+				this.setState({ countries: response.data.data, loader: false, selectedCountry: response.data.data[0].country_id });
+			});
+	}
+
+	onRegister(){
+		const err = this.validate();
+		if (!err){
+			this.setState({ isSubmitted: true });
+			AsyncStorage.getItem('deviceID').then(token => {
+				axios.post(CONST.url + 'user/register' ,{
+					userName: 	this.state.username,
+					phoneNo: 	this.state.phone,
+					password: 	this.state.password,
+					email: 		this.state.mail,
+					lang: 		(this.props.lang).toUpperCase(),
+					device_ID: 	token,
+					userType: 	this.state.selectedKayan,
+					image: 		this.state.base64,
+					country_id: this.state.selectedCountry,
+				}).then(response => {
+					this.setState({ isSubmitted: false });
+
+					if (response.data.status == 1){
+						const {phone, password } = this.state;
+						this.props.navigation.navigate('activateAcc', { phone, password, token, code: response.data.data.activitionCode, userId: response.data.data.user_id })
+					}
+
+					Toast.show({
+						text: response.data.message,
+						type: response.data.status == 1 ? "success" : "danger",
+						duration: 3000
+					});
+				}).catch(e => {
+					this.setState({ isSubmitted: false });
+					Toast.show({
+						text: 'يوجد خطأ ما الرجاء المحاولة مرة اخري',
+						type: "danger",
+						duration: 3000
+					});
+				})
+			})
+		}
+	}
+
+	validate = () => {
+		let isError = false;
+		let msg = '';
+
+		if (this.state.phone.length <= 0 || this.state.phone.length !== 11) {
+			isError = true;
+			msg = i18n.t('phoneValidation');
+		}else if (this.state.password.length <= 0) {
+			isError = true;
+			msg = i18n.t('passwordRequired');
+		}else if (this.state.password != this.state.rePassword) {
+			isError = true;
+			msg = i18n.t('verifyPassword');
+		}else if (this.state.password.length < 6) {
+			isError = true;
+			msg = i18n.t('passwordLength');
+		}else if (this.state.mail.length <= 0 || this.state.mail.indexOf("@") === -1 || this.state.mail.indexOf(".") === -1) {
+			isError = true;
+			msg = i18n.t('emailNotCorrect');
+		}
+
+		if (msg != ''){
+			Toast.show({
+				text: msg,
+				type: "danger",
+				duration: 3000
+			});
+		}
+		return isError;
+	};
+
+	renderSubmit(){
+		if (this.state.username == '' || this.state.phone == '' || this.state.mail == '' || this.state.password == '' || this.state.rePassword == '' || this.state.base64 == null ){
+			return(
+				<Button disabled style={[Styles.loginBtn , {marginBottom:40, backgroundColor: '#999' }]}>
+					<Text style={Styles.btnTxt}>{ i18n.t('registerButton') }</Text>
+				</Button>
+			)
+		}
+
+		if (this.state.isSubmitted){
+			return (
+				<View style={{ width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+					<DoubleBounce size={20} color="#00918B" />
+				</View>
+			);
+		}
+
+		return (
+			<Button onPress={() => this.onRegister()} style={Styles.loginBtn}>
+				<Text style={Styles.btnTxt}>{ i18n.t('registerButton') }</Text>
+			</Button>
+		);
+	}
+
+	render() {
         let image = this.state.image;
         return (
 
@@ -74,7 +185,6 @@ class Register extends Component {
                             <Form style={{width: '100%' , marginTop:30}}>
                                 <Text style={Styles.title}>{ i18n.t('newReg') }</Text>
                                 <View style={Styles.formImgView}>
-
                                     {image != null?
                                         <TouchableOpacity  style={{width:100 , height:100  }} onPress={()=> this._pickImage()} >
                                             <Image
@@ -89,7 +199,6 @@ class Register extends Component {
                                             <Image source={require('../../assets/images/img.png')} style={{width:100 , height:100}} resizeMode={'contain'} />
                                         </TouchableOpacity>
                                     }
-
                                 </View>
                                 <View style={Styles.inputParent}>
                                     <Item stackedLabel style={Styles.item } bordered>
@@ -121,10 +230,11 @@ class Register extends Component {
                                             selectedValue={this.state.selectedCountry}
                                             onValueChange={(value) => this.setState({ selectedCountry: value })}
                                         >
-                                            <Picker.Item label={''} value={null} />
-                                            <Picker.Item label={'الرياض'} value={"1"} />
-                                            <Picker.Item label={'الامارات'} value={"2"} />
-                                            <Picker.Item label={'مصر'} value={"3"} />
+											{
+												this.state.countries.map((country, i) => (
+													<Picker.Item label={country.countryName} value={country.country_id} key={i} />
+												))
+											}
                                         </Picker>
                                         <Image source={require('../../assets/images/dropdown.png')} style={Styles.pickerImg} resizeMode={'contain'} />
                                     </Item>
@@ -141,10 +251,10 @@ class Register extends Component {
                                             selectedValue={this.state.selectedKayan}
                                             onValueChange={(value) => this.setState({ selectedKayan: value })}
                                         >
-                                            <Picker.Item label={''} value={null} />
-                                            <Picker.Item label={'هيئة ١'} value={"1"} />
-                                            <Picker.Item label={'هيئة ٢'} value={"2"} />
-                                            <Picker.Item label={'هيئة ٣'} value={"3"} />
+											<Picker.Item label={i18n.t('individual')} value={i18n.t('individual')} />
+											<Picker.Item label={i18n.t('company')} value={i18n.t('company')} />
+											<Picker.Item label={i18n.t('establishment')} value={i18n.t('establishment')} />
+											<Picker.Item label={i18n.t('other')} value={i18n.t('other')} />
                                         </Picker>
                                         <Image source={require('../../assets/images/dropdown.png')} style={Styles.pickerImg} resizeMode={'contain'} />
                                     </Item>
@@ -155,6 +265,7 @@ class Register extends Component {
                                         <Input autoCapitalize='none' value={this.state.password} onChangeText={(password) => this.setState({password})} secureTextEntry  style={Styles.itemInput}  />
                                     </Item>
                                 </View>
+
                                 <View style={Styles.inputParent}>
                                     <Item stackedLabel style={Styles.item } bordered>
                                         <Label style={Styles.labelItem}>{ i18n.t('verifyNewPass') }</Label>
@@ -167,9 +278,7 @@ class Register extends Component {
                                     <Text style={[Styles.forgetPass , {color:'#00918B'}]}>{ i18n.t('terms') }</Text>
                                 </TouchableOpacity>
 
-                                <Button onPress={() => this.props.navigation.navigate('activateAcc')} style={Styles.loginBtn}>
-                                    <Text style={Styles.btnTxt}>{ i18n.t('registerButton') }</Text>
-                                </Button>
+								{ this.renderSubmit() }
                             </Form>
                         </View>
                     </KeyboardAvoidingView>
@@ -180,4 +289,12 @@ class Register extends Component {
     }
 }
 
-export default Register;
+
+const mapStateToProps = ({ lang, profile  }) => {
+	return {
+		lang: lang.lang,
+		user: profile.user,
+	};
+};
+
+export default connect(mapStateToProps, {})(Register);

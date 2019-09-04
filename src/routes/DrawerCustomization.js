@@ -3,6 +3,9 @@ import {View, Text, Image, TouchableOpacity, Share, I18nManager} from "react-nat
 import {Container, Content, Icon} from 'native-base';
 import {DrawerItems} from 'react-navigation';
 import i18n from "../../local/i18n";
+import { logout, tempAuth } from '../actions'
+import {connect} from "react-redux";
+
 
 
 class DrawerCustomization extends Component {
@@ -26,6 +29,14 @@ class DrawerCustomization extends Component {
             alert(error.message);
         }
     };
+
+	logout(){
+		this.props.logout({ user_id: this.props.user.user_id });
+		this.props.tempAuth();
+
+		this.props.navigation.navigate('login');
+	}
+
     render() {
         return (
             <Container>
@@ -50,7 +61,7 @@ class DrawerCustomization extends Component {
                                  itemStyle  = {{marginBottom:0 , paddingBottom:0 , marginTop:0 , paddingTop:0 , fontFamily: 'RegularFont'}} itemsContainerStyle ={{fontFamily: 'RegularFont'}} />
 
                     <View style={{ flex: 1 }}>
-                        <TouchableOpacity style={{flexDirection: 'row' }}>
+                        <TouchableOpacity style={{flexDirection: 'row' }} onPress={() => this.logout()}>
                             <Image source={require('../../assets/images/logout.png')} style={{ height: 18, width: 18 , marginRight:15, top:10 , marginLeft:20  , transform: I18nManager.isRTL ? [{rotateY : '0deg'}] : [{rotateY : '-180deg'}]}} resizeMode={'contain'} />
                             <Text style={{color:'#00918B',  fontSize:17, fontFamily: 'RegularFont'}}>{ i18n.t('logout') }</Text>
                         </TouchableOpacity>
@@ -63,4 +74,11 @@ class DrawerCustomization extends Component {
 }
 
 
-export default DrawerCustomization;
+const mapStateToProps = ({ auth, profile }) => {
+	return {
+		auth: auth.user,
+		user: profile.user
+	};
+};
+
+export default connect(mapStateToProps, { logout, tempAuth })(DrawerCustomization);

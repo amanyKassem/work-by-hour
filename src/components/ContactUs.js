@@ -1,9 +1,24 @@
 import React, { Component } from "react";
-import {View, Text, Image, TouchableOpacity, I18nManager, FlatList, KeyboardAvoidingView, Linking} from "react-native";
-import {Container, Content, Icon, Header, Item, Input, Button, Form, Label, Textarea} from 'native-base'
+import {
+	View,
+	Text,
+	Image,
+	TouchableOpacity,
+	I18nManager,
+	FlatList,
+	KeyboardAvoidingView,
+	Linking,
+	Dimensions
+} from "react-native";
+import {Container, Content, Icon, Header, Item, Input, Button, Form, Label, Textarea, Toast} from 'native-base'
 import Styles from '../../assets/styles'
 import i18n from '../../local/i18n'
+import {DoubleBounce} from "react-native-loader";
+import axios from "axios";
+import CONST from "../consts";
+import {connect} from "react-redux";
 
+const height = Dimensions.get('window').height;
 class ContactUs extends Component {
     constructor(props){
         super(props);
@@ -12,9 +27,11 @@ class ContactUs extends Component {
             email:'',
             subTitle:'',
             msg:'',
+            socials: [],
+			isSubmitted: false,
+			loader: false
         }
     }
-
 
     static navigationOptions = () => ({
         drawerLabel: i18n.t('contactUs') ,
@@ -25,9 +42,76 @@ class ContactUs extends Component {
         Linking.openURL(url);
     }
 
+	componentWillMount() {
+		this.setState({ loader: true });
+		axios.post( CONST.url + 'user/siteInfoDetails', { lang : (this.props.lang).toUpperCase() })
+			.then(response => {
+				this.setState({ socials: response.data.data, loader: false });
+			});
+	}
+
+	renderLoader(){
+		if (this.state.loader){
+			return(
+				<View style={{ alignItems: 'center', justifyContent: 'center', height : height - 200, alignSelf:'center' , backgroundColor:'#fff' , width:'100%'  , position:'absolute' , zIndex:1 }}>
+					<DoubleBounce size={20} color="#00918B" />
+				</View>
+			);
+		}
+	}
+
+	onContactUs(){
+		this.setState({ isSubmitted: true });
+
+		axios.post( CONST.url + 'user/comunicatedWithUs', {
+			lang: (this.props.lang).toUpperCase(),
+			user_id: this.props.user.user_id,
+			title: this.state.subTitle,
+			message: this.state.msg,
+			type:  1,
+			email: this.state.email,
+		}).then( response => {
+
+			Toast.show({
+				text: response.data.message,
+				type: response.data.status == 1 ? "success" : "danger",
+				duration: 3000
+			});
+
+			this.setState({ isSubmitted: false });
+		})
+	}
+
+	renderSubmit(){
+		if (this.state.email == '' || this.state.subTitle == '' || this.state.msg == '' ){
+			return(
+				<Button disabled style={[Styles.loginBtn , {marginBottom:40, backgroundColor: '#999' }]}>
+					<Text style={Styles.btnTxt}>{ i18n.t('sendButton') }</Text>
+				</Button>
+			)
+		}
+
+		if (this.state.isSubmitted){
+			return (
+				<View style={{ width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+					<DoubleBounce size={20} color="#00918B" />
+				</View>
+			);
+		}
+
+		return (
+			<Button onPress={() => this.onContactUs()} style={[Styles.loginBtn , {marginBottom:40 }]}>
+				<Text style={Styles.btnTxt}>{ i18n.t('sendButton') }</Text>
+			</Button>
+		);
+	}
+
+	onFocus(){
+		this.componentWillMount()
+	}
+
     render() {
         return (
-
             <Container style={{}}>
                 <Header style={Styles.header} noShadow>
                     <View style={Styles.headerView}>
@@ -58,25 +142,18 @@ class ContactUs extends Component {
                                 </Item>
                                 <Textarea value={this.state.msg} onChangeText={(msg) => this.setState({msg})} autoCapitalize='none' style={[Styles.inputParent ,{color: '#035F5B', borderColor:  '#eee', textAlign: I18nManager.isRTL ?'right' : 'left' , paddingVertical:10 , paddingHorizontal: 35 , backgroundColor:'#F6F6F6' , borderRadius:25 , height:250 , marginBottom:20}]}  />
                             </View>
-                            <View style={{flexDirection:'row'  , alignItems:'center' , justifyContent:'center' , marginBottom:10 , marginTop:10}}>
-                                <TouchableOpacity onPress={()=> this._linkPressed('https://web.whatsapp.com/')}>
-                                    <Image source={require('../../assets/images/whatsaap.png')} style={{width:35 , height:35}} resizeMode={'contain'} />
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={()=> this._linkPressed('https://www.instagram.com/')}>
-                                    <Image source={require('../../assets/images/instagram.png')} style={{width:35 , height:35}} resizeMode={'contain'} />
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={()=> this._linkPressed('https://twitter.com/')}>
-                                    <Image source={require('../../assets/images/twitter.png')} style={{width:35 , height:35}} resizeMode={'contain'} />
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={()=> this._linkPressed('https://www.facebook.com/')}>
-                                    <Image source={require('../../assets/images/facebook.png')} style={{width:35 , height:35}} resizeMode={'contain'} />
-                                </TouchableOpacity>
+                            <View style={{flexDirection:'row'  , alignItems:'center' , justifyContent:'center' , marginBottom:5 , marginTop:5}}>
+                                {
+                                    this.state.socials.map(( social, i ) => (
+										<TouchableOpacity key={i} onPress={()=> this._linkPressed(social.linkUrl)} style={{ margin: 2 }}>
+											<Image source={{ uri: 'https://' + social.linkImage }} style={{width:35 , height:35}} resizeMode={'contain'} />
+										</TouchableOpacity>
+                                    ))
+                                }
                             </View>
                         </Form>
                     </KeyboardAvoidingView>
-                    <Button onPress={() => this.props.navigation.navigate('home')} style={[Styles.loginBtn , {marginBottom:40 }]}>
-                        <Text style={Styles.btnTxt}>{ i18n.t('sendButton') }</Text>
-                    </Button>
+                    { this.renderSubmit() }
                 </Content>
             </Container>
 
@@ -84,4 +161,12 @@ class ContactUs extends Component {
     }
 }
 
-export default ContactUs;
+
+const mapStateToProps = ({ lang, profile  }) => {
+	return {
+		lang: lang.lang,
+		user: profile.user,
+	};
+};
+
+export default connect(mapStateToProps, {})(ContactUs);
