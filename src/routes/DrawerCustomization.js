@@ -5,8 +5,7 @@ import {DrawerItems} from 'react-navigation';
 import i18n from "../../local/i18n";
 import { logout, tempAuth } from '../actions'
 import {connect} from "react-redux";
-
-
+import CONST from "../consts";
 
 class DrawerCustomization extends Component {
     onShare = async () => {
@@ -38,12 +37,19 @@ class DrawerCustomization extends Component {
 	}
 
     render() {
+		let { user } = this.props;
+		if (user === null)
+			user = {
+				imageProfile:  'https://' + CONST.url + 'images/defaultUser.jpg',
+				userName: i18n.t('guest')
+			}
+
         return (
             <Container>
                 <Content style={{backgroundColor:'#fff'}}>
                     <TouchableOpacity onPress={()=> this.props.navigation.navigate("profile")} style={{flex:1 , alignItems: 'center' , marginBottom:5, paddingTop:40}}>
-                        <Image source={require('../../assets/images/profile_pic.png')} resizeMode={'cover'} style={{ width: 90, height: 90 , borderRadius:50 }}/>
-                        <Text style={{color:'#00918B',  fontSize:17, fontFamily: 'RegularFont'}}>اماني قاسم</Text>
+                        <Image source={{ uri: 'https://' + user.imageProfile }} resizeMode={'cover'} style={{ width: 90, height: 90 , borderRadius:50 }}/>
+                        <Text style={{color:'#00918B',  fontSize:17, fontFamily: 'RegularFont'}}>{ user.userName }</Text>
                     </TouchableOpacity>
                     <View style={{borderWidth:1 , borderColor:'#e6e6e6' , marginTop:5}}/>
                     <DrawerItems {...this.props}
