@@ -70,15 +70,15 @@ class AddDet extends Component {
         Linking.openURL(url);
     }
 
-	renderLoader(){
-		if (this.state.loader){
-			return(
-				<View style={{ alignItems: 'center', justifyContent: 'center', height : height - 200, alignSelf:'center' , backgroundColor:'#fff' , width:'100%'  , position:'absolute' , zIndex:1 }}>
-					<DoubleBounce size={20} color="#00918B" />
-				</View>
-			);
-		}
-	}
+    renderLoader(){
+        if (this.state.loader){
+            return(
+                <View style={{ alignItems: 'center', justifyContent: 'center', height, alignSelf:'center' , backgroundColor:'#fff' , width:'100%'  , position:'absolute' , zIndex:1 }}>
+                    <DoubleBounce size={20} color="#00918B" />
+                </View>
+            );
+        }
+    }
 
 	onFocus(){
 		this.componentWillMount()
@@ -95,7 +95,7 @@ class AddDet extends Component {
                         <TouchableOpacity onPress={() => this.props.navigation.goBack()} style={Styles.headerTouch}>
                             <Image source={require('../../assets/images/back.png')} style={[Styles.headerMenu , Styles.transform]} resizeMode={'contain'} />
                         </TouchableOpacity>
-                        <Text style={[Styles.headerBody , { flex:1, top:-3 , left:-15 , textAlign:'center'}]}>{ i18n.t('addDet') }</Text>
+                        <Text style={[Styles.headerBody , { flex:1, top:-3 , left:-15 , textAlign:'center'}]}>{ this.state.userData.workName }</Text>
                     </View>
                 </Header>
                 <Content style={{padding:15}}>
@@ -117,7 +117,7 @@ class AddDet extends Component {
                     <View style={{borderWidth:1 , borderColor:'#e6e6e6' , marginVertical:10}}/>
 
                     <Text style={{color:'#00918B',  fontSize:15, fontFamily: 'RegularFont' }}>{ i18n.t('jobDet') }</Text>
-                    <Text style={{color:'#878787',  fontSize:13, fontFamily: 'RegularFont' ,  textAlign: I18nManager.isRTL ?'right' : 'left',}}>{ this.state.dataAdvertise.details }</Text>
+                    <Text style={{color:'#878787',  fontSize:13, fontFamily: 'RegularFont' ,  alignSelf: 'flex-start'}}>{ this.state.dataAdvertise.details }</Text>
 
                     <View style={{borderWidth:1 , borderColor:'#e6e6e6' , marginVertical:10}}/>
 

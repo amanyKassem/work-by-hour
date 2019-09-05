@@ -83,7 +83,7 @@ class Category extends Component {
 	renderLoader(){
 		if (this.state.loader){
 			return(
-				<View style={{ alignItems: 'center', justifyContent: 'center', height : height - 200, alignSelf:'center' , backgroundColor:'#fff' , width:'100%'  , position:'absolute' , zIndex:1 }}>
+				<View style={{ alignItems: 'center', justifyContent: 'center', height, alignSelf:'center' , backgroundColor:'#fff' , width:'100%'  , position:'absolute' , zIndex:1 }}>
 					<DoubleBounce size={20} color="#00918B" />
 				</View>
 			);
@@ -227,7 +227,7 @@ class Category extends Component {
                     {
                         this.state.ads.map((ad, i) => (
 							<TouchableOpacity key={i} onPress={() => this.openAd(ad._id)} style={Styles.jobBlock}>
-								<Text style={[Styles.tegisterText , {marginTop:0}]}>{ ad.name }</Text>
+								<Text style={[Styles.tegisterText , {marginTop:0}]}>{ ad.workName }</Text>
 								<View style={{flexDirection:'row' , justifyContent:'space-between'}}>
 
 									<Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('adNumber') }: <Text style={{color:'#444444'}}>22</Text></Text>

@@ -3,9 +3,9 @@
     "name": "work-by-hour",
     "slug": "work-by-hour",
     "privacy": "public",
-    "sdkVersion": "31.0.0",
+    "sdkVersion": "33.0.0",
     "platforms": ["ios", "android"],
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -21,10 +21,16 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.aait.wbh"
+      "bundleIdentifier": "com.aait.workbyhour"
     },
     "android": {
-      "package": "com.aait.wbh"
+      "package": "com.aait.workbyhour",
+      "versionCode": 2,
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyDDGCkEv3jHUzSA1FVI26h_OadsG297Pe8"
+        }
+      }
     }
   }
 }

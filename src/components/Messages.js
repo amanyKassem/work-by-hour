@@ -33,15 +33,15 @@ class Messages extends Component {
 			});
 	}
 
-	renderLoader(){
-		if (this.state.loader){
-			return(
-				<View style={{ alignItems: 'center', justifyContent: 'center', height, alignSelf:'center' , backgroundColor:'#fff' , width:'100%'  , position:'absolute' , zIndex:1 }}>
-					<DoubleBounce size={20} color="#00918B" />
-				</View>
-			);
-		}
-	}
+    renderLoader(){
+        if (this.state.loader){
+            return(
+                <View style={{ alignItems: 'center', justifyContent: 'center', height, alignSelf:'center' , backgroundColor:'#fff' , width:'100%'  , position:'absolute' , zIndex:1 }}>
+                    <DoubleBounce size={20} color="#00918B" />
+                </View>
+            );
+        }
+    }
 
 	onFocus(){
 		this.componentWillMount()
