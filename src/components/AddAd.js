@@ -322,15 +322,15 @@ class AddAd extends Component {
 		}).catch(e => console.warn(e));
     }
 
-	renderLoader(){
-		if (this.state.loader){
-			return(
-				<View style={{ alignItems: 'center', justifyContent: 'center', height : height - 200, alignSelf:'center' , backgroundColor:'#fff' , width:'100%'  , position:'absolute' , zIndex:1 }}>
-					<DoubleBounce size={20} color="#00918B" />
-				</View>
-			);
-		}
-	}
+    renderLoader(){
+        if (this.state.loader){
+            return(
+                <View style={{ alignItems: 'center', justifyContent: 'center', height, alignSelf:'center' , backgroundColor:'#fff' , width:'100%'  , position:'absolute' , zIndex:1 }}>
+                    <DoubleBounce size={20} color="#00918B" />
+                </View>
+            );
+        }
+    }
 
 	renderSubmit(){
     	console.log('name :', this.state.jobName , 'desc :', this.state.jobDet, 'date :', this.state.date, 'time :', this.state.time, 'country :', this.state.selectedCountry , 'cat :', this.state.selectedSection, 'cost :', ( (( this.state.selectedType == 1 && this.state.hoursNo == null ) || ( this.state.selectedType == 1  && this.state.pricePerHour == null )) || (this.state.selectedType == 2 && this.state.finalFee == null) ));
