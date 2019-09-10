@@ -6,13 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="3117f9af-5ec7-4477-9799-dd59271b8851" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/app.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/local/i18n.js" beforeDir="false" afterPath="$PROJECT_DIR$/local/i18n.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/actions/LangAction.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/actions/LangAction.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AddDet.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AddDet.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/DrawerCustomization.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/DrawerCustomization.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -44,11 +40,11 @@
               <caret line="35" column="1" lean-forward="true" selection-start-line="35" selection-start-column="1" selection-end-line="35" selection-end-column="1" />
 =======
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/routes/index.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="654">
-              <caret line="92" column="6" lean-forward="true" selection-start-line="92" selection-start-column="6" selection-end-line="98" selection-end-column="6" />
+              <caret line="92" column="6" selection-start-line="92" selection-start-column="6" selection-end-line="98" selection-end-column="6" />
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
               </folding>
@@ -60,16 +56,22 @@
         <entry file="file://$PROJECT_DIR$/src/actions/LangAction.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="30">
-              <caret line="2" selection-start-line="2" selection-end-line="2" />
+              <caret line="2" column="30" selection-start-line="2" selection-end-line="3" />
+              <folding>
+                <element signature="e#0#57#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/package.json">
+        <entry file="file://$PROJECT_DIR$/src/components/Category.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="13" column="13" selection-start-line="13" selection-start-column="13" selection-end-line="13" selection-end-column="19" />
+            <state relative-caret-position="532">
+              <caret line="283" selection-start-line="283" selection-end-line="283" />
+              <folding>
+                <element signature="e#0#41#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -77,8 +79,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="345">
-              <caret line="23" column="47" lean-forward="true" selection-start-line="23" selection-start-column="47" selection-end-line="23" selection-end-column="47" />
+            <state relative-caret-position="435">
+              <caret line="29" column="23" selection-start-line="29" selection-start-column="23" selection-end-line="29" selection-end-column="23" />
             </state>
           </provider>
         </entry>
@@ -87,6 +89,10 @@
         <entry file="file://$PROJECT_DIR$/src/components/AddDet.js">
           <provider selected="true" editor-type-id="text-editor">
 <<<<<<< HEAD
+            <state relative-caret-position="2070">
+              <caret line="138" column="92" selection-start-line="123" selection-start-column="20" selection-end-line="138" selection-end-column="92" />
+=======
+<<<<<<< HEAD
             <state relative-caret-position="431">
               <caret line="66" column="151" selection-start-line="66" selection-start-column="151" selection-end-line="66" selection-end-column="151" />
 >>>>>>> f19b0ded245de6de97b284f706e9f39a1ae54995
@@ -94,6 +100,7 @@
             <state relative-caret-position="273">
               <caret line="98" column="27" lean-forward="true" selection-start-line="98" selection-start-column="27" selection-end-line="98" selection-end-column="27" />
 >>>>>>> ed3760b5dffd2fccc7b81d10a9db4486e744ed4c
+>>>>>>> c5f8de26db4aa68cb92c42622e85dd37ce4143cd
               <folding>
                 <element signature="e#0#41#0" expanded="true" />
               </folding>
@@ -102,7 +109,19 @@
         </entry>
       </file>
 <<<<<<< HEAD
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/package.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="135">
+              <caret line="11" column="23" lean-forward="true" selection-start-line="11" selection-start-column="23" selection-end-line="11" selection-end-column="23" />
+            </state>
+          </provider>
+        </entry>
+      </file>
 =======
+<<<<<<< HEAD
+=======
+>>>>>>> c5f8de26db4aa68cb92c42622e85dd37ce4143cd
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/routes/DrawerCustomization.js">
           <provider selected="true" editor-type-id="text-editor">
@@ -132,15 +151,6 @@
               <folding>
                 <element signature="e#0#40#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/node_modules/react-native/ReactAndroid/src/main/AndroidManifest.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="75">
-              <caret line="5" selection-start-line="5" selection-end-line="5" />
             </state>
           </provider>
         </entry>
@@ -280,7 +290,6 @@
         <option value="$PROJECT_DIR$/src/components/Category.js" />
         <option value="$PROJECT_DIR$/src/components/Messages.js" />
         <option value="$PROJECT_DIR$/src/components/Chat.js" />
-        <option value="$PROJECT_DIR$/package.json" />
         <option value="$PROJECT_DIR$/node_modules/react-native/ReactAndroid/src/main/AndroidManifest.xml" />
         <option value="$PROJECT_DIR$/app.json" />
         <option value="$PROJECT_DIR$/src/components/AddDet.js" />
@@ -288,13 +297,13 @@
         <option value="$PROJECT_DIR$/local/i18n.js" />
         <option value="$PROJECT_DIR$/src/actions/LangAction.js" />
         <option value="$PROJECT_DIR$/src/routes/index.js" />
+        <option value="$PROJECT_DIR$/package.json" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" fullScreen="true">
-    <option name="y" value="23" />
-    <option name="width" value="1440" />
-    <option name="height" value="877" />
+    <option name="width" value="1920" />
+    <option name="height" value="1080" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -408,15 +417,22 @@
       <workItem from="1566121215166" duration="86801000" />
       <workItem from="1567063663615" duration="13540000" />
 <<<<<<< HEAD
+      <workItem from="1567499280786" duration="11088000" />
+=======
+<<<<<<< HEAD
       <workItem from="1567499280786" duration="4805000" />
 >>>>>>> f19b0ded245de6de97b284f706e9f39a1ae54995
 =======
       <workItem from="1567499280786" duration="8015000" />
 >>>>>>> ed3760b5dffd2fccc7b81d10a9db4486e744ed4c
+>>>>>>> c5f8de26db4aa68cb92c42622e85dd37ce4143cd
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
+<<<<<<< HEAD
+    <option name="totallyTimeSpent" value="292956000" />
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
     <option name="totallyTimeSpent" value="171216000" />
@@ -431,13 +447,18 @@
 =======
     <option name="totallyTimeSpent" value="289883000" />
 >>>>>>> ed3760b5dffd2fccc7b81d10a9db4486e744ed4c
+>>>>>>> c5f8de26db4aa68cb92c42622e85dd37ce4143cd
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
     <editor active="true" />
     <layout>
+<<<<<<< HEAD
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.19384836" />
+=======
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.19384836" />
 >>>>>>> f19b0ded245de6de97b284f706e9f39a1ae54995
+>>>>>>> c5f8de26db4aa68cb92c42622e85dd37ce4143cd
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -1139,6 +1160,8 @@
       </provider>
     </entry>
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/src/components/CompSug.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="645">
@@ -1161,6 +1184,7 @@
         <state relative-caret-position="210">
           <caret line="30" column="24" selection-start-line="30" selection-start-column="24" selection-end-line="31" selection-end-column="34" />
 =======
+>>>>>>> c5f8de26db4aa68cb92c42622e85dd37ce4143cd
     <entry file="file://$PROJECT_DIR$/src/components/Messages.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="431">
@@ -1172,6 +1196,8 @@
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/src/components/Settings.js">
@@ -1192,27 +1218,11 @@
         </state>
       </provider>
     </entry>
+>>>>>>> c5f8de26db4aa68cb92c42622e85dd37ce4143cd
     <entry file="file://$PROJECT_DIR$/node_modules/react-native/ReactAndroid/src/main/AndroidManifest.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="75">
           <caret line="5" selection-start-line="5" selection-end-line="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="23" column="47" lean-forward="true" selection-start-line="23" selection-start-column="47" selection-end-line="23" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/AddDet.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="273">
-          <caret line="98" column="27" lean-forward="true" selection-start-line="98" selection-start-column="27" selection-end-line="98" selection-end-column="27" />
-          <folding>
-            <element signature="e#0#41#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1262,21 +1272,63 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/actions/LangAction.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" selection-start-line="2" selection-end-line="2" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/routes/index.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="654">
-          <caret line="92" column="6" lean-forward="true" selection-start-line="92" selection-start-column="6" selection-end-line="98" selection-end-column="6" />
->>>>>>> ed3760b5dffd2fccc7b81d10a9db4486e744ed4c
+          <caret line="92" column="6" selection-start-line="92" selection-start-column="6" selection-end-line="98" selection-end-column="6" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/Category.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="532">
+          <caret line="283" selection-start-line="283" selection-end-line="283" />
           <folding>
             <element signature="e#0#41#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/actions/LangAction.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="30" selection-start-line="2" selection-end-line="3" />
+          <folding>
+            <element signature="e#0#57#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app.json">
+      <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
+        <state relative-caret-position="435">
+          <caret line="29" column="23" selection-start-line="29" selection-start-column="23" selection-end-line="29" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/AddDet.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2070">
+          <caret line="138" column="92" selection-start-line="123" selection-start-column="20" selection-end-line="138" selection-end-column="92" />
+=======
+        <state relative-caret-position="654">
+          <caret line="92" column="6" lean-forward="true" selection-start-line="92" selection-start-column="6" selection-end-line="98" selection-end-column="6" />
+>>>>>>> ed3760b5dffd2fccc7b81d10a9db4486e744ed4c
+>>>>>>> c5f8de26db4aa68cb92c42622e85dd37ce4143cd
+          <folding>
+            <element signature="e#0#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="11" column="23" lean-forward="true" selection-start-line="11" selection-start-column="23" selection-end-line="11" selection-end-column="23" />
         </state>
       </provider>
     </entry>
