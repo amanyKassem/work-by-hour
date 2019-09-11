@@ -56,7 +56,9 @@ class Notifications extends Component {
                         <Text style={[Styles.headerBody , { flex:1, top:-3 , left:-15 , textAlign:'center'}]}>{ i18n.t('notifications') }</Text>
                     </View>
                 </Header>
-                <Content style={{padding:15}}>
+                <Content >
+                    <View style={{padding:15}}>
+
                     { this.renderLoader() }
                     {
                         this.state.notifications.map(( notify, i ) => (
@@ -66,6 +68,7 @@ class Notifications extends Component {
 							</TouchableOpacity>
                         ))
                     }
+                    </View>
                 </Content>
             </Container>
 

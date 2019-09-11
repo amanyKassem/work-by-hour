@@ -1,4 +1,4 @@
-import {Dimensions, I18nManager} from "react-native";
+import {Dimensions, I18nManager, Platform} from "react-native";
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -60,12 +60,12 @@ const styles = ({
         marginBottom:10
     },
     LoginParentView : {
-        flex:1,
+        // flex:1,
         backgroundColor:'#fff',
         width:'100%',
         borderTopRightRadius:60  ,
         padding:10,
-        height:'auto' ,
+        // height:'auto' ,
         paddingHorizontal:30 ,
         marginTop:-120 ,
         borderTopLeftRadius:60,
@@ -110,11 +110,24 @@ const styles = ({
         paddingLeft:10,
         fontFamily: 'RegularFont',
     },
+    itemText:{
+        width: '100%',
+        color: '#035F5B',
+        fontSize: 15,
+        paddingLeft:10,
+        fontFamily: 'RegularFont',
+        paddingRight:15 ,
+        top:Platform.OS === 'ios' ? -15 : -25 ,
+        writingDirection: I18nManager.isRTL ?'rtl' : 'ltr',
+        height:30,
+        overflow: 'hidden'
+    },
     forgetPass:{
         color: '#035F5B',
         fontSize: 15,
         textDecorationLine: 'underline',
-        marginTop:20
+        marginTop:20,
+        writingDirection: I18nManager.isRTL ?'rtl' : 'ltr',
     },
     loginBtn:{
         borderRadius: 10,
@@ -141,6 +154,7 @@ const styles = ({
     },
     keyboardAvoid: {
         width:'100%',
+        height: null,
         flex: 1
     },
     formImgView:{
@@ -156,10 +170,10 @@ const styles = ({
         borderRadius: 0,
         width: '100%',
         padding: 5,
-        flexDirection: 'row' ,
+        flexDirection: 'row'
     },
     picker:{
-        width: undefined,
+        width:Platform.OS === 'ios' ? 280 : undefined,
         backgroundColor: 'transparent',
         color: "#035F5B" ,
         fontFamily: 'RegularFont',
@@ -181,8 +195,8 @@ const styles = ({
     flatImage: {
         width: '100%',
         height: 150 ,
-        borderTopLeftRadius: 25,
-        borderBottomRightRadius: 25,
+        // borderTopLeftRadius: 25,
+        // borderBottomRightRadius: 25,
     },
     flatContainer:{
         flexDirection: 'row',
@@ -194,7 +208,12 @@ const styles = ({
     homeViewContainer: {
         flex: 1,
         width: '100%' ,
-        borderRadius:3
+        borderRadius:3,
+        borderTopRightRadius: I18nManager.isRTL ? 25 : 0,
+        borderBottomLeftRadius: I18nManager.isRTL ? 25 : 0,
+        borderTopLeftRadius: I18nManager.isRTL ? 0 : 25,
+        borderBottomRightRadius:  I18nManager.isRTL ? 0 : 25,
+        overflow:'hidden'
     },
     homeTextCont: {
         width:'100%' ,
@@ -205,16 +224,13 @@ const styles = ({
         position: 'absolute',
         zIndex:1,
         bottom:0,
-        borderTopRightRadius: I18nManager.isRTL ? 25 : 0,
-        borderBottomLeftRadius: I18nManager.isRTL ? 25 : 0,
-        borderTopLeftRadius: I18nManager.isRTL ? 0 : 25,
-        borderBottomRightRadius:  I18nManager.isRTL ? 0 : 25,
     },
 
     homeText: {
         color:'#fff' ,
         fontFamily: 'BoldFont' ,
-        fontSize:18
+        fontSize:18,
+        textAlign:'center'
     },
     categoryList: {
         alignItems: 'center',
@@ -342,7 +358,7 @@ const styles = ({
         flexDirection: 'row' ,
     },
     pickerLabel:{
-        width: undefined,
+        width: Platform.OS === 'ios' ? 95: undefined,
         backgroundColor: 'transparent',
         color: "#969292" ,
         fontFamily: 'RegularFont',

@@ -1,5 +1,20 @@
 import React, { Component } from "react";
+<<<<<<< HEAD
 import {  View, Text, Image, TouchableOpacity, I18nManager, FlatList, KeyboardAvoidingView, Dimensions, ImageEditor, ImageStore } from "react-native";
+=======
+import {
+    View,
+    Text,
+    Image,
+    TouchableOpacity,
+    I18nManager,
+    FlatList,
+    KeyboardAvoidingView,
+    Dimensions,
+    ImageEditor,
+    ImageStore, Platform
+} from "react-native";
+>>>>>>> 50b5d81e83c7c903eb9793e92e640e935c785bff
 import {Container, Content, Icon, Header, Item, Input, Button, Form, Label, Picker , Textarea} from 'native-base'
 import Styles from '../../assets/styles'
 import i18n from '../../local/i18n'
@@ -362,9 +377,10 @@ class AddAd extends Component {
                         <Text style={[Styles.headerBody , { flex:1, top:-3 , left:-15 , textAlign:'center'}]}>{ i18n.t('addAd') }</Text>
                     </View>
                 </Header>
-                <Content style={{padding:15}}>
+                <Content >
 					{ this.renderLoader() }
-                    <KeyboardAvoidingView behavior={'padding'} style={Styles.keyboardAvoid}>
+					<View style={{padding:15}}>
+                    <KeyboardAvoidingView behavior={'absolute'} style={Styles.keyboardAvoid}>
                     <Form style={{width: '100%' }}>
                         <View style={[Styles.inputParent ,{ borderColor:  '#eee' , backgroundColor:'#F6F6F6' , borderRadius:25 , height:40 , marginBottom:20}]}>
                             <Item stackedLabel style={Styles.item } bordered>
@@ -377,8 +393,8 @@ class AddAd extends Component {
                                 <Label style={[Styles.labelItem , {top:-35 , left:5 , position:'absolute'}]}>{ i18n.t('section') }</Label>
                                 <Picker
                                     mode="dropdown"
-                                    iosIcon={<Icon name="arrow-down" />}
                                     style={Styles.picker}
+                                    placeholder={i18n.t('section')}
                                     placeholderStyle={{ color: "#acabae" }}
                                     placeholderIconColor="#acabae"
                                     selectedValue={this.state.selectedSection}
@@ -410,8 +426,8 @@ class AddAd extends Component {
                                 <Label style={[Styles.labelItem , {top:-35 , left:0 , position:'absolute'}]}>{ i18n.t('workType') }</Label>
                                 <Picker
                                     mode="dropdown"
-                                    iosIcon={<Icon name="arrow-down" />}
                                     style={Styles.picker}
+                                    placeholder={i18n.t('workType')}
                                     placeholderStyle={{ color: "#acabae" }}
                                     placeholderIconColor="#acabae"
                                     selectedValue={this.state.selectedType}
@@ -451,11 +467,11 @@ class AddAd extends Component {
                         }
 
                         <View style={[Styles.inputParent ,{ borderColor:  '#eee' , backgroundColor:'#F6F6F6' , borderRadius:25 , height:40 , marginBottom:20}]}>
-                            <Item stackedLabel style={Styles.item } onPress={this.showDatePicker} bordered>
+                            <TouchableOpacity  style={[Styles.item , {top:0}]} onPress={this.showDatePicker} bordered>
                                 <Label style={[Styles.labelItem , {top:-25 , left:-13 , backgroundColor:'transparent'}]}>{ i18n.t('date') }</Label>
-                                <Input disabled value={this.state.date.toString()} auto-capitalization={false}  style={[Styles.itemInput , {top:-20 , paddingRight:15}]} />
-                            </Item>
-                            <Image source={require('../../assets/images/calendar.png')} style={Styles.itemImage} resizeMode={'contain'}/>
+                                <Text style={[ Styles.itemText]} > {this.state.date.toString()} </Text>
+                            </TouchableOpacity>
+                            <Image source={require('../../assets/images/calendar.png')}  style={Styles.itemImage} resizeMode={'contain'}/>
                             <DateTimePicker
                                 isVisible={this.state.isDatePickerVisible}
                                 onConfirm={this.handleDatePicked}
@@ -463,12 +479,13 @@ class AddAd extends Component {
                                 mode={'date'}
                             />
                         </View>
+
                         <View style={[Styles.inputParent ,{ borderColor:  '#eee' , backgroundColor:'#F6F6F6' , borderRadius:25 , height:40 , marginBottom:20}]}>
-                            <Item stackedLabel style={Styles.item} bordered onPress={this.showTimePicker}>
+                            <TouchableOpacity  style={[Styles.item , {top:0}]} bordered onPress={this.showTimePicker}>
                                 <Label style={[Styles.labelItem , {top:-25 , left:-13 , backgroundColor:'transparent'}]}>{ i18n.t('time') }</Label>
-                                <Input disabled value={this.state.time.toString()} auto-capitalization={false} style={[Styles.itemInput , {top:-20 , paddingRight:15}]}/>
-                            </Item>
-                            <Image source={require('../../assets/images/clock.png')} style={Styles.itemImage} resizeMode={'contain'}/>
+                                <Text style={[ Styles.itemText]} > {this.state.time.toString()} </Text>
+                            </TouchableOpacity>
+                            <Image source={require('../../assets/images/clock.png')}  style={Styles.itemImage} resizeMode={'contain'}/>
                             <DateTimePicker
                                 isVisible={this.state.isTimePickerVisible}
                                 onConfirm={this.handleTimePicked}
@@ -481,8 +498,8 @@ class AddAd extends Component {
                                 <Label style={[Styles.labelItem , {top:-35 , left:0 , position:'absolute'}]}>{ i18n.t('country') }</Label>
                                 <Picker
                                     mode="dropdown"
-                                    iosIcon={<Icon name="arrow-down" />}
-                                    style={[ Styles.picker, { width: '60%' } ]}
+                                    style={[ Styles.picker ]}
+                                    placeholder={i18n.t('country')}
                                     placeholderStyle={{ color: "#acabae" }}
                                     placeholderIconColor="#acabae"
                                     selectedValue={this.state.selectedCountry}
@@ -500,12 +517,13 @@ class AddAd extends Component {
 
 
                         <View style={[Styles.inputParent ,{ borderColor:  '#eee' , backgroundColor:'#F6F6F6' , borderRadius:25 , height:40 , marginBottom:20}]}>
-                            <Item stackedLabel style={Styles.item} bordered onPress={() =>this._toggleModal()}>
+                            <TouchableOpacity  style={[Styles.item , {top:0}]}bordered onPress={() =>this._toggleModal()}>
                                 <Label style={[Styles.labelItem , {top:-25 , left:-13 , backgroundColor:'transparent'}]}>{ i18n.t('location') }</Label>
-                                <Input disabled value={this.state.city} auto-capitalization={false} style={[Styles.itemInput , {top:-20 , paddingRight:15}]}/>
-                            </Item>
-                            <Icon name='map-marker' onPress={() =>this._toggleModal()} type={"FontAwesome"}  style={{ color: '#00918B', fontSize:20 , right: 15, top:10 ,position:'absolute'}}/>
+                                <Text style={[ Styles.itemText]} > {this.state.city} </Text>
+                            </TouchableOpacity>
+                            <Icon name='map-marker' type={"FontAwesome"}  style={{ color: '#00918B', fontSize:20 , right: 15, top:10 ,position:'absolute'}}/>
                         </View>
+
                         <Text style={[Styles.labelItem , {top:0 , left:0 , marginBottom:10 , backgroundColor:'transparent',fontSize:17}]}>{ i18n.t('attachments') }</Text>
                         <FlatList
                             data={photos}
@@ -559,6 +577,7 @@ class AddAd extends Component {
                     </Form>
                         { this.renderSubmit() }
                     </KeyboardAvoidingView>
+                    </View>
                 </Content>
             </Container>
 

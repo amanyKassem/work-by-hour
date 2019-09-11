@@ -97,8 +97,9 @@ class Rate extends Component {
                         <Text style={[Styles.headerBody , { flex:1, top:-3 , left:-15 , textAlign:'center'}]}>{ i18n.t('rate') }</Text>
                     </View>
                 </Header>
-                <Content style={{padding:15}}>
+                <Content >
                     { this.renderLoader() }
+                    <View style={{padding:15}}>
                     <TouchableOpacity onPress={()=> this.props.navigation.navigate("profile")} style={{flex:1 , alignItems: 'center' , marginBottom:5, paddingTop:20}}>
                         <Image source={{ uri: 'https://' + this.state.userData.imageProfile }} resizeMode={'cover'} style={{ width: 90, height: 90 , borderRadius:50 }}/>
                         <Text style={{color:'#00918B',  fontSize:17, fontFamily: 'RegularFont'}}>{ this.state.userData.userName }</Text>
@@ -116,6 +117,7 @@ class Rate extends Component {
                            starStyle={{color: '#ffcd00', marginHorizontal: 1}}
                        />
                    </View>
+					</View>
                 </Content>
                 { this.renderSubmit() }
             </Container>

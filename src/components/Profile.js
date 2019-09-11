@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, Image, TouchableOpacity , I18nManager , FlatList} from "react-native";
+import { View, Text, Image, TouchableOpacity , I18nManager , Platform} from "react-native";
 import { Container, Content, Icon, Header  ,Item , Input } from 'native-base'
 import FooterSection from './FooterSection';
 import Styles from '../../assets/styles'
@@ -37,10 +37,11 @@ class Profile extends Component {
                         </TouchableOpacity>
                     </View>
                 </Header>
-                <Content style={{padding:15}}>
+                <Content >
+                    <View style={{padding:15}}>
                     <View style={{flexDirection:'row' , justifyContent:'space-between', alignItems:'center'}}>
                         <View style={{flexDirection:'row' , alignItems:'center'}}>
-                            <Image source={{ uri: 'https://' + this.props.user.imageProfile }} resizeMode={'cover'} style={{ width: 60, height: 60 , borderRadius:50 , marginRight:10}}/>
+                            <Image source={{ uri: 'https://' + this.props.user.imageProfile }} resizeMode={'cover'} style={{ width: 60, height: 60 , borderRadius:Platform.OS === 'ios' ?35 :50 , marginRight:10}}/>
                             <View>
                                 <Text style={{color:'#00918B',  fontSize:17, fontFamily: 'RegularFont' , lineHeight:14}}>{ this.props.user.userName }</Text>
                                 <Text style={{color:'#878787',  fontSize:15, fontFamily: 'RegularFont', textAlign: I18nManager.isRTL ?'right' : 'left'}}>{ this.props.user.userType }</Text>
@@ -61,6 +62,7 @@ class Profile extends Component {
                         <Icon name='angle-left' type={"FontAwesome"} style={{ color: "#878787", fontSize:23 , transform: I18nManager.isRTL ? [{rotateY : '0deg'}] : [{rotateY : '-180deg'}] }}/>
                     </TouchableOpacity>
                     <View style={{borderWidth:1 , borderColor:'#e6e6e6' , marginVertical:10}}/>
+                    </View>
                 </Content>
                 <FooterSection routeName={'profile'} navigation={this.props.navigation}/>
             </Container>

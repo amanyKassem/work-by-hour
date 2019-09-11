@@ -59,8 +59,9 @@ class Certify extends Component {
                         <Text style={[Styles.headerBody , { flex:1, top:-3 , left:-15 , textAlign:'center'}]}>{ i18n.t('certify&exp') }</Text>
                     </View>
                 </Header>
-                <Content style={{padding:15}}>
+                <Content >
                     { this.renderLoader() }
+                    <View style={{padding:15}}>
 					<View style={{flexDirection:'row' , justifyContent:'space-between', alignItems:'center'}}>
 						<Text style={{color:'#00918B',  fontSize:17, fontFamily: 'RegularFont' }}>{ i18n.t('certifies') }</Text>
 						<TouchableOpacity onPress={() => this.props.navigation.navigate('addCertify')}>
@@ -85,12 +86,13 @@ class Certify extends Component {
                                     }
 								</View>
 								<View style={{borderWidth:1 , borderColor:'#e6e6e6' , marginVertical:15}}/>
-								<Text style={{color:'#00918B',  fontSize:17, fontFamily: 'RegularFont' }}>{ i18n.t('expertise') }</Text>
-								<Text style={{color:'#5d5d5d',  fontSize:16, fontFamily: 'RegularFont' , textAlign: I18nManager.isRTL ?'right' : 'left' }}>{ certificate.nameWork }</Text>
-								<Text style={{color:'#b8b5b5',  fontSize:12, fontFamily: 'RegularFont', lineHeight:14 , textAlign: I18nManager.isRTL ?'right' : 'left'}}>({ certificate.nameCompany })</Text>
+								<Text style={{color:'#00918B',  fontSize:17, fontFamily: 'RegularFont' , alignSelf: 'flex-start' }}>{ i18n.t('expertise') }</Text>
+								<Text style={{color:'#5d5d5d',  fontSize:16, fontFamily: 'RegularFont' ,alignSelf: 'flex-start'  }}>{ certificate.nameWork }</Text>
+								<Text style={{color:'#b8b5b5',  fontSize:12, fontFamily: 'RegularFont', lineHeight:14 ,alignSelf: 'flex-start' }}>({ certificate.nameCompany })</Text>
 							</View>
                         ))
                     }
+					</View>
                 </Content>
             </Container>
 

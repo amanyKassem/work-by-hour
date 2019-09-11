@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {View, Text, Image, TouchableOpacity, Share, I18nManager} from "react-native";
+import {View, Text, Image, TouchableOpacity, Share, I18nManager, Platform} from "react-native";
 import {Container, Content, Icon} from 'native-base';
 import {DrawerItems} from 'react-navigation';
 import i18n from "../../local/i18n";
@@ -48,7 +48,7 @@ class DrawerCustomization extends Component {
             <Container>
                 <Content style={{backgroundColor:'#fff'}}>
                     <TouchableOpacity onPress={()=> this.props.navigation.navigate("profile")} style={{flex:1 , alignItems: 'center' , marginBottom:5, paddingTop:40}}>
-                        <Image source={{ uri: 'https://' + user.imageProfile }} resizeMode={'cover'} style={{ width: 90, height: 90 , borderRadius:50 }}/>
+                        <Image source={{ uri: 'https://' + user.imageProfile }} resizeMode={'cover'} style={{ width: 90, height: 90 , borderRadius:Platform.OS === 'ios' ?45 :50 }}/>
                         <Text style={{color:'#00918B',  fontSize:17, fontFamily: 'RegularFont'}}>{ user.userName }</Text>
                     </TouchableOpacity>
                     <View style={{borderWidth:1 , borderColor:'#e6e6e6' , marginTop:5}}/>

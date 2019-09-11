@@ -98,8 +98,8 @@ class AddInterest extends Component {
                         <Text style={[Styles.headerBody , { flex:1, top:-3 , left:-15 , textAlign:'center'}]}>{ i18n.t('interests') }</Text>
                     </View>
                 </Header>
-                <Content style={{padding:15}}>
-                    <Form style={{width: '100%' , marginTop:15}}>
+                <Content >
+                    <Form style={{width: '100%' , marginTop:15 ,padding:15}}>
                         <Text style={[Styles.labelItem , {top:0 , left:0 , marginBottom:10 , backgroundColor:'transparent',fontSize:17}]}>{ i18n.t('interests') }</Text>
                         <View style={[Styles.inputParent ,{ borderColor:  '#eee' , backgroundColor:'#F6F6F6' , borderRadius:25 , height:40 , marginBottom:10}]}>
                             <Item stackedLabel style={Styles.item } bordered>
@@ -120,9 +120,9 @@ class AddInterest extends Component {
                                 extraData={this.state.isRefreshed}
                             />
                         </View>
+                        { this.renderSubmit() }
                     </Form>
                 </Content>
-                { this.renderSubmit() }
             </Container>
 
         );

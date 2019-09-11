@@ -35,7 +35,11 @@ class ForgetPass extends Component {
 				duration: 3000
 			});
 			this.setState({ isSubmitted: false , phone:'' });
-			this.props.navigation.navigate("verifyCode" , { id:response.data.data.user_id , code: response.data.data.activitionCode });
+
+			if(response.data.status == 1 )
+				this.props.navigation.navigate("verifyCode" , { id:response.data.data.user_id , code: response.data.data.activitionCode })
+			else
+				return false
 		})
 	}
 

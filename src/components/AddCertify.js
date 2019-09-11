@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, Image, TouchableOpacity, I18nManager, FlatList, ImageEditor, Dimensions, KeyboardAvoidingView, ImageStore } from "react-native";
+import { View, Text, Image, TouchableOpacity, Platform, FlatList, ImageEditor, Dimensions, KeyboardAvoidingView, ImageStore } from "react-native";
 import {Container, Content, Icon, Header, Item, Input, Button, Form, Label} from 'native-base'
 import Styles from '../../assets/styles'
 import i18n from '../../local/i18n'
@@ -189,39 +189,41 @@ class AddCertify extends Component {
                         <Text style={[Styles.headerBody , { flex:1, top:-3 , left:-15 , textAlign:'center'}]}>{ i18n.t('certify&exp') }</Text>
                     </View>
                 </Header>
-                <Content style={{padding:15}}>
-                    <KeyboardAvoidingView behavior={'padding'} style={Styles.keyboardAvoid}>
-                        <Form style={{width: '100%' , marginTop:15 , flex:1 }}>
-                            <Text style={[Styles.labelItem , {top:0 , left:0 , marginBottom:10 , backgroundColor:'transparent',fontSize:17}]}>{ i18n.t('certifies') }</Text>
-                            <FlatList
-                                data={photos}
-                                renderItem={({item}) => this.renderItems(item, this.state.imageId)}
-                                numColumns={3}
-                                keyExtractor={this._keyExtractor}
-                                extraData={this.state.refreshed}
-                            />
+                <Content >
+                    <View style={{padding:15}}>
+                        <KeyboardAvoidingView behavior={'padding'} style={Styles.keyboardAvoid}>
+                            <Form style={{width: '100%' , marginTop:15 , flex:1 }}>
+                                <Text style={[Styles.labelItem , {top:0 , left:0 , marginBottom:10 , backgroundColor:'transparent',fontSize:17}]}>{ i18n.t('certifies') }</Text>
+                                <FlatList
+                                    data={photos}
+                                    renderItem={({item}) => this.renderItems(item, this.state.imageId)}
+                                    numColumns={3}
+                                    keyExtractor={this._keyExtractor}
+                                    extraData={this.state.refreshed}
+                                />
 
-                            <View style={{borderWidth:1 , borderColor:'#e6e6e6' , marginVertical:15}}/>
+                                <View style={{borderWidth:1 , borderColor:'#e6e6e6' , marginVertical:15}}/>
 
-                            <Text style={[Styles.labelItem , {top:0 , left:0 , marginBottom:10 , backgroundColor:'transparent',fontSize:17}]}>{ i18n.t('expertise') }</Text>
+                                <Text style={[Styles.labelItem , {top:0 , left:0 , marginBottom:10 , backgroundColor:'transparent',fontSize:17}]}>{ i18n.t('expertise') }</Text>
 
-                            <View style={[Styles.inputParent ,{ borderColor:  '#eee' , backgroundColor:'#F6F6F6' , borderRadius:25 , height:40 , marginBottom:20}]}>
-                                <Item stackedLabel style={Styles.item } bordered>
-                                    <Label style={[Styles.labelItem , {top:-25 , left:-13 , backgroundColor:'transparent'}]}>{ i18n.t('employerName') }</Label>
-                                    <Input value={this.state.employerName} onChangeText={(employerName) => this.setState({employerName})} autoCapitalize='none' style={[Styles.itemInput , {top:-20 , paddingRight:15}]}  />
-                                </Item>
-                            </View>
+                                <View style={[Styles.inputParent ,{ borderColor:  '#eee' , backgroundColor:'#F6F6F6' , borderRadius:25 , height:40 , marginBottom:20}]}>
+                                    <Item stackedLabel style={Styles.item } bordered>
+                                        <Label style={[Styles.labelItem , {top:-25 , left:-13 , backgroundColor:'transparent'}]}>{ i18n.t('employerName') }</Label>
+                                        <Input value={this.state.employerName} onChangeText={(employerName) => this.setState({employerName})} autoCapitalize='none' style={[Styles.itemInput , {top: Platform.OS === 'ios' ? -15 :-20 , paddingRight:15}]}  />
+                                    </Item>
+                                </View>
 
-                            <View style={[Styles.inputParent ,{ borderColor:  '#eee' , backgroundColor:'#F6F6F6' , borderRadius:25 , height:40 , marginBottom:20}]}>
-                                <Item stackedLabel style={Styles.item } bordered>
-                                    <Label style={[Styles.labelItem , {top:-25 , left:-13 , backgroundColor:'transparent'}]}>{ i18n.t('jobTitle') }</Label>
-                                    <Input value={this.state.jobTitle} onChangeText={(jobTitle) => this.setState({jobTitle})} autoCapitalize='none' style={[Styles.itemInput , {top:-20 , paddingRight:15}]}  />
-                                </Item>
-                            </View>
+                                <View style={[Styles.inputParent ,{ borderColor:  '#eee' , backgroundColor:'#F6F6F6' , borderRadius:25 , height:40 , marginBottom:20}]}>
+                                    <Item stackedLabel style={Styles.item } bordered>
+                                        <Label style={[Styles.labelItem , {top:-25 , left:-13 , backgroundColor:'transparent'}]}>{ i18n.t('jobTitle') }</Label>
+                                        <Input value={this.state.jobTitle} onChangeText={(jobTitle) => this.setState({jobTitle})} autoCapitalize='none' style={[Styles.itemInput , {top: Platform.OS === 'ios' ? -15 :-20 , paddingRight:15}]}  />
+                                    </Item>
+                                </View>
 
-                        </Form>
-                    </KeyboardAvoidingView>
-                    { this.renderSubmit() }
+                            </Form>
+                        </KeyboardAvoidingView>
+                        { this.renderSubmit() }
+                    </View>
                 </Content>
             </Container>
 

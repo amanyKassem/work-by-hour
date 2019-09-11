@@ -82,25 +82,27 @@ class CompSug extends Component {
                         <Text style={[Styles.headerBody , { flex:1, top:-3 , left:-15 , textAlign:'center'}]}>{ i18n.t('CompSug') }</Text>
                     </View>
                 </Header>
-                <Content style={{padding:15}}>
-                    <KeyboardAvoidingView behavior={'padding'} style={Styles.keyboardAvoid}>
-                        <Form style={{width: '100%' }}>
-                            <View style={[Styles.inputParent ,{ borderColor:  '#eee' , backgroundColor:'#F6F6F6' , borderRadius:25 , height:40 , marginBottom:20}]}>
-                                <Item stackedLabel style={Styles.item } bordered>
-                                    <Label style={[Styles.labelItem , {top:-25 , left:-13 , backgroundColor:'transparent'}]}>{ i18n.t('address') }</Label>
-                                    <Input value={this.state.address} onChangeText={(address) => this.setState({address})} autoCapitalize='none' style={[Styles.itemInput , {top:-20 , paddingRight:15}]}  />
-                                </Item>
-                            </View>
-                            <View >
-                                <Item stackedLabel style={Styles.item } bordered>
-                                    <Label style={[Styles.labelItem , {top:5 , left:-10 , backgroundColor:'transparent'}]}>{ i18n.t('msgContent') }</Label>
-                                </Item>
-                                <Textarea value={this.state.msg} onChangeText={(msg) => this.setState({msg})} autoCapitalize='none' style={[Styles.inputParent ,{ color: '#035F5B',borderColor:  '#eee', textAlign: I18nManager.isRTL ?'right' : 'left' , paddingVertical:10 , paddingHorizontal: 35 , backgroundColor:'#F6F6F6' , borderRadius:25 , height:350 , marginBottom:20}]}  />
-                            </View>
-                        </Form>
-                    </KeyboardAvoidingView>
+                <Content >
+					<View style={{padding:15}}>
+						<KeyboardAvoidingView behavior={'padding'} style={Styles.keyboardAvoid}>
+							<Form style={{width: '100%' }}>
+								<View style={[Styles.inputParent ,{ borderColor:  '#eee' , backgroundColor:'#F6F6F6' , borderRadius:25 , height:40 , marginBottom:20}]}>
+									<Item stackedLabel style={Styles.item } bordered>
+										<Label style={[Styles.labelItem , {top:-25 , left:-13 , backgroundColor:'transparent'}]}>{ i18n.t('address') }</Label>
+										<Input value={this.state.address} onChangeText={(address) => this.setState({address})} autoCapitalize='none' style={[Styles.itemInput , {top:-20 , paddingRight:15}]}  />
+									</Item>
+								</View>
+								<View >
+									<Item stackedLabel style={Styles.item } bordered>
+										<Label style={[Styles.labelItem , {top:5 , left:-10 , backgroundColor:'transparent'}]}>{ i18n.t('msgContent') }</Label>
+									</Item>
+									<Textarea value={this.state.msg} onChangeText={(msg) => this.setState({msg})} autoCapitalize='none' style={[Styles.inputParent ,{ color: '#035F5B',borderColor:  '#eee', textAlign: I18nManager.isRTL ?'right' : 'left' , paddingVertical:10 , paddingHorizontal: 35 , backgroundColor:'#F6F6F6' , borderRadius:25 , height:350 , marginBottom:20}]}  />
+								</View>
+							</Form>
+						</KeyboardAvoidingView>
+						{ this.renderSubmit() }
+					</View>
                 </Content>
-                { this.renderSubmit() }
             </Container>
 
         );

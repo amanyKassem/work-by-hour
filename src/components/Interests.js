@@ -67,21 +67,23 @@ class Interests extends Component {
                         <Text style={[Styles.headerBody , { flex:1, top:-3 , left:-15 , textAlign:'center'}]}>{ i18n.t('interests') }</Text>
                     </View>
                 </Header>
-                <Content style={{padding:15}}>
+                <Content >
                     { this.renderLoader() }
-                    <View style={{flexDirection:'row' , justifyContent:'space-between', alignItems:'center' , marginBottom:15}}>
-                        <Text style={{color:'#00918B',  fontSize:17, fontFamily: 'RegularFont' }}>{ i18n.t('interests') }</Text>
-                        <TouchableOpacity onPress={() => this.props.navigation.navigate('addInterest')}>
-                            <Icon name='cog' type={"FontAwesome"} style={{ color: "#00918B", fontSize:23 }}/>
-                        </TouchableOpacity>
-                    </View>
-                    <View style={Styles.flatContainer}>
-                        <FlatList
-                            data={this.state.interests}
-                            renderItem={({item}) => this.renderItems(item)}
-                            numColumns={3}
-                            keyExtractor={this._keyExtractor}
-                        />
+                    <View style={{padding:15}}>
+                        <View style={{flexDirection:'row' , justifyContent:'space-between', alignItems:'center' , marginBottom:15}}>
+                            <Text style={{color:'#00918B',  fontSize:17, fontFamily: 'RegularFont' }}>{ i18n.t('interests') }</Text>
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate('addInterest')}>
+                                <Icon name='cog' type={"FontAwesome"} style={{ color: "#00918B", fontSize:23 }}/>
+                            </TouchableOpacity>
+                        </View>
+                        <View style={Styles.flatContainer}>
+                            <FlatList
+                                data={this.state.interests}
+                                renderItem={({item}) => this.renderItems(item)}
+                                numColumns={3}
+                                keyExtractor={this._keyExtractor}
+                            />
+                        </View>
                     </View>
                 </Content>
             </Container>

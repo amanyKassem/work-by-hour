@@ -14,7 +14,8 @@ class Policy extends Component {
 
         this.state={
 			loader: false,
-            terms: ''
+            terms: '',
+            routeName:this.props.routeName,
         }
     }
 
@@ -37,14 +38,16 @@ class Policy extends Component {
             <Container style={{}}>
                 <Header style={Styles.header} noShadow>
                     <View style={Styles.headerView}>
-                        <TouchableOpacity onPress={() => this.props.navigation.goBack()} style={Styles.headerTouch}>
+                        <TouchableOpacity onPress={() => this.state.routeName === 'register' ?this.props.navigation.navigate('register') : this.props.navigation.goBack()} style={Styles.headerTouch}>
                             <Image source={require('../../assets/images/back.png')} style={[Styles.headerMenu , Styles.transform]} resizeMode={'contain'} />
                         </TouchableOpacity>
                         <Text style={[Styles.headerBody , { flex:1, top:-3 , left:-15 , textAlign:'center'}]}>{ i18n.t('terms') }</Text>
                     </View>
                 </Header>
-                <Content style={{padding:15}}>
-                    <WebView source={{ html: this.state.terms }} style={{ width: '100%', height }} />
+                <Content >
+                    <View style={{padding:15}}>
+                    <WebView source={{ html: this.state.terms }} style={{ width: '100%', height , justifyContent:'flex-start' }} />
+                    </View>
                 </Content>
             </Container>
 

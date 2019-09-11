@@ -120,25 +120,25 @@ class ActivateAcc extends Component {
                     </View>
                 </View>
                 <Content style={Styles.homecontent}>
-                    <KeyboardAvoidingView behavior={'padding'} style={Styles.keyboardAvoid}>
                         <View style={Styles.HeadImg }>
                             <Image source={require('../../assets/images/headBg.png')} style={Styles.HeadImg} resizeMode={'contain'} />
 
                         </View>
 
                         <View style={Styles.LoginParentView}>
-                            <Form style={{width: '100%' , marginTop:30}}>
-                                <Text style={Styles.title}>{ i18n.t('activateAcc') }</Text>
-                                <View style={Styles.inputParent}>
-                                    <Item stackedLabel style={Styles.item } bordered>
-                                        <Label style={Styles.labelItem}>{ i18n.t('verifyCode') }</Label>
-                                        <Input value={this.state.verifyCode} onChangeText={(verifyCode) => this.setState({verifyCode})} keyboardType={'number-pad'} style={Styles.itemInput}  />
-                                    </Item>
-                                </View>
-                                { this.renderSubmit() }
-                            </Form>
+							<KeyboardAvoidingView behavior={'padding'} style={Styles.keyboardAvoid}>
+								<Form style={{width: '100%' , marginTop:30}}>
+									<Text style={Styles.title}>{ i18n.t('activateAcc') }</Text>
+									<View style={Styles.inputParent}>
+										<Item stackedLabel style={Styles.item } bordered>
+											<Label style={Styles.labelItem}>{ i18n.t('verifyCode') }</Label>
+											<Input value={this.state.verifyCode} onChangeText={(verifyCode) => this.setState({verifyCode})} keyboardType={'number-pad'} style={Styles.itemInput}  />
+										</Item>
+									</View>
+									{ this.renderSubmit() }
+								</Form>
+							</KeyboardAvoidingView>
                         </View>
-                    </KeyboardAvoidingView>
                 </Content>
             </Container>
 
