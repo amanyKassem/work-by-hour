@@ -136,40 +136,40 @@ class Login extends Component {
             <Container style={{backgroundColor:'#fff'}}>
 				<NavigationEvents onWillFocus={() => this.onFocus()} />
                 <Content style={Styles.homecontent}>
-                    <KeyboardAvoidingView behavior={'padding'} style={Styles.keyboardAvoid}>
                         <View style={Styles.HeadImg }>
                             <Image source={require('../../assets/images/headBg.png')} style={Styles.HeadImg} resizeMode={'contain'} />
 
                         </View>
 
                         <View style={Styles.LoginParentView}>
-                            <Form style={{width: '100%' , marginTop:30}}>
-                                <Text style={Styles.title}>{ i18n.t('login') }</Text>
-                                <View style={Styles.inputParent}>
-                                    <Item stackedLabel style={Styles.item } bordered>
-                                        <Label style={Styles.labelItem}>{ i18n.t('phoneNumber') }</Label>
-                                        <Input value={this.state.phone} onChangeText={(phone) => this.setState({phone})} keyboardType={'number-pad'} style={Styles.itemInput}  />
-                                    </Item>
-                                </View>
-                                <View style={Styles.inputParent}>
-                                    <Item stackedLabel style={Styles.item } bordered>
-                                        <Label style={Styles.labelItem}>{ i18n.t('password') }</Label>
-                                        <Input autoCapitalize='none' value={this.state.password} onChangeText={(password) => this.setState({password})} secureTextEntry  style={Styles.itemInput}  />
-                                    </Item>
-                                </View>
-                                <TouchableOpacity onPress={() => this.props.navigation.navigate('forgetPass')}>
-                                    <Text style={Styles.forgetPass}>{ i18n.t('forgetPass') }</Text>
-                                </TouchableOpacity>
+							<KeyboardAvoidingView behavior={'padding'} style={Styles.keyboardAvoid}>
+								<Form style={{width: '100%' , marginTop:30}}>
+									<Text style={Styles.title}>{ i18n.t('login') }</Text>
+									<View style={Styles.inputParent}>
+										<Item stackedLabel style={Styles.item } bordered>
+											<Label style={Styles.labelItem}>{ i18n.t('phoneNumber') }</Label>
+											<Input value={this.state.phone} onChangeText={(phone) => this.setState({phone})} keyboardType={'number-pad'} style={Styles.itemInput}  />
+										</Item>
+									</View>
+									<View style={Styles.inputParent}>
+										<Item stackedLabel style={Styles.item } bordered>
+											<Label style={Styles.labelItem}>{ i18n.t('password') }</Label>
+											<Input autoCapitalize='none' value={this.state.password} onChangeText={(password) => this.setState({password})} secureTextEntry  style={Styles.itemInput}  />
+										</Item>
+									</View>
+									<TouchableOpacity onPress={() => this.props.navigation.navigate('forgetPass')}>
+										<Text style={Styles.forgetPass}>{ i18n.t('forgetPass') }</Text>
+									</TouchableOpacity>
 
-                                { this.renderSubmit() }
+									{ this.renderSubmit() }
 
-                                <TouchableOpacity  onPress={() => this.props.navigation.navigate('register')}>
-                                    <Text style={Styles.tegisterText}>{ i18n.t('noAcc') }</Text>
-                                </TouchableOpacity>
+									<TouchableOpacity  onPress={() => this.props.navigation.navigate('register')}>
+										<Text style={Styles.tegisterText}>{ i18n.t('noAcc') }</Text>
+									</TouchableOpacity>
 
-                            </Form>
+								</Form>
+							</KeyboardAvoidingView>
                         </View>
-                    </KeyboardAvoidingView>
                 </Content>
             </Container>
         );

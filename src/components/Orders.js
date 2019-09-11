@@ -69,8 +69,9 @@ class Orders extends Component {
                         </TouchableOpacity>
                     </View>
                 </Header>
-                <Content style={{padding:15}}>
+                <Content >
                     { this.renderLoader() }
+                    <View style={{padding:15}}>
                     <View style={Styles.orerBtns}>
                         <TouchableOpacity onPress={() => this.changeType('1')} style={[Styles.touchModal , {width:140,backgroundColor: this.state.type === '1' ? '#035F5B' : '#f6f6f6', marginRight:-30, borderColor:'#eee' , borderWidth:1 }]}>
                             <Text style={[Styles.headerBody , {fontSize:14, color : this.state.type === '1' ? '#fff' : '#035F5B' , textAlign:'center'}]}>{ i18n.t('req') }</Text>
@@ -107,6 +108,7 @@ class Orders extends Component {
 								</TouchableOpacity>
                             ))
                         }
+                    </View>
                     </View>
                 </Content>
                 <FooterSection routeName={'orders'} navigation={this.props.navigation}/>

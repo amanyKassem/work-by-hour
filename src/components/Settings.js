@@ -48,13 +48,13 @@ class Settings extends Component {
                         </TouchableOpacity>
                     </View>
                 </Header>
-                <Content style={{padding:15}}>
+                <Content >
+                    <View style={{padding:15}}>
                     <View style={{flexDirection:'row' , justifyContent:'space-between', alignItems:'center'}}>
                         <Text style={{color:'#00918B',  fontSize:17, fontFamily: 'RegularFont' }}>{ i18n.t('language') }</Text>
                         <Item style={[Styles.catPicker , {width:'40%' , backgroundColor:'transparent' , borderColor:'transparent'}]} regular >
                             <Picker
                                 mode="dropdown"
-                                iosIcon={<Icon name="arrow-down" />}
                                 style={Styles.pickerLabel}
                                 placeholderStyle={{ color: "#acabae" }}
                                 placeholderIconColor="#acabae"
@@ -85,6 +85,7 @@ class Settings extends Component {
                         <Icon name='angle-left' type={"FontAwesome"} style={{ color: "#878787", fontSize:23 , transform: I18nManager.isRTL ? [{rotateY : '0deg'}] : [{rotateY : '-180deg'}] }}/>
                     </TouchableOpacity>
                     <View style={{borderWidth:1 , borderColor:'#e6e6e6' , marginVertical:10}}/>
+                    </View>
                 </Content>
                 <FooterSection routeName={'settings'} navigation={this.props.navigation}/>
             </Container>

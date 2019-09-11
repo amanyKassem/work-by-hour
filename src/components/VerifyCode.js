@@ -6,7 +6,7 @@ import i18n from "../../local/i18n";
 import axios from "axios";
 import CONST from "../consts";
 import {DoubleBounce} from "react-native-loader";
-import connect from "react-redux/es/connect/connect";
+import {connect} from "react-redux";
 
 
 const height = Dimensions.get('window').height;
@@ -88,41 +88,40 @@ class VerifyCode extends Component {
                     </View>
                 </View>
                 <Content style={Styles.homecontent}>
-                    <KeyboardAvoidingView behavior={'padding'} style={Styles.keyboardAvoid}>
                         <View style={Styles.HeadImg }>
                             <Image source={require('../../assets/images/headBg.png')} style={Styles.HeadImg} resizeMode={'contain'} />
                         </View>
 
                         <View style={Styles.LoginParentView}>
-                            <Form style={{width: '100%' , marginTop:30}}>
-                                <Text style={Styles.title}>{ i18n.t('passRecovery') }</Text>
-                                <View style={Styles.inputParent}>
-                                    <Item stackedLabel style={Styles.item } bordered>
-                                        <Label style={Styles.labelItem}>{ i18n.t('verifyCode') }</Label>
-                                        <Input value={this.state.verifyCode} onChangeText={(verifyCode) => this.setState({verifyCode})} keyboardType={'number-pad'} style={Styles.itemInput}  />
-                                    </Item>
-                                </View>
+                            <KeyboardAvoidingView behavior={'padding'} style={Styles.keyboardAvoid}>
+                                <Form style={{width: '100%' , marginTop:30}}>
+                                    <Text style={Styles.title}>{ i18n.t('passRecovery') }</Text>
+                                    <View style={Styles.inputParent}>
+                                        <Item stackedLabel style={Styles.item } bordered>
+                                            <Label style={Styles.labelItem}>{ i18n.t('verifyCode') }</Label>
+                                            <Input value={this.state.verifyCode} onChangeText={(verifyCode) => this.setState({verifyCode})} keyboardType={'number-pad'} style={Styles.itemInput}  />
+                                        </Item>
+                                    </View>
 
-                                <View style={Styles.inputParent}>
-                                    <Item stackedLabel style={Styles.item } bordered>
-                                        <Label style={Styles.labelItem }>{ i18n.t('password') }</Label>
-                                        <Input autoCapitalize='none' value={this.state.password} onChangeText={(password) => this.setState({password})} secureTextEntry style={Styles.itemInput }  />
-                                    </Item>
-                                </View>
+                                    <View style={Styles.inputParent}>
+                                        <Item stackedLabel style={Styles.item } bordered>
+                                            <Label style={Styles.labelItem }>{ i18n.t('password') }</Label>
+                                            <Input autoCapitalize='none' value={this.state.password} onChangeText={(password) => this.setState({password})} secureTextEntry style={Styles.itemInput }  />
+                                        </Item>
+                                    </View>
 
-                                <View style={Styles.inputParent}>
-                                    <Item stackedLabel style={Styles.item } bordered>
-                                        <Label style={Styles.labelItem }>{ i18n.t('verifyPass') }</Label>
-                                        <Input autoCapitalize='none' value={this.state.verifyPass} onChangeText={(verifyPass) => this.setState({verifyPass})} secureTextEntry style={Styles.itemInput }  />
-                                    </Item>
-                                </View>
-                                <Button onPress={() => this.props.navigation.navigate('login')} style={Styles.loginBtn}>
-                                    <Text style={Styles.btnTxt}>{ i18n.t('confirm') }</Text>
-                                </Button>
-
-                            </Form>
+                                    <View style={Styles.inputParent}>
+                                        <Item stackedLabel style={Styles.item } bordered>
+                                            <Label style={Styles.labelItem }>{ i18n.t('verifyPass') }</Label>
+                                            <Input autoCapitalize='none' value={this.state.verifyPass} onChangeText={(verifyPass) => this.setState({verifyPass})} secureTextEntry style={Styles.itemInput }  />
+                                        </Item>
+                                    </View>
+                                    <Button onPress={() => this.props.navigation.navigate('login')} style={Styles.loginBtn}>
+                                        <Text style={Styles.btnTxt}>{ i18n.t('confirm') }</Text>
+                                    </Button>
+                                </Form>
+                            </KeyboardAvoidingView>
                         </View>
-                    </KeyboardAvoidingView>
                 </Content>
             </Container>
 

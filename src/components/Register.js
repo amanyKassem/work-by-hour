@@ -175,113 +175,111 @@ class Register extends Component {
                     </View>
                 </View>
                 <Content style={Styles.homecontent}>
-                    <KeyboardAvoidingView behavior={'padding'} style={Styles.keyboardAvoid}>
                         <View style={Styles.HeadImg }>
                             <Image source={require('../../assets/images/headBg.png')} style={Styles.HeadImg} resizeMode={'contain'} />
 
                         </View>
 
                         <View style={Styles.LoginParentView}>
-                            <Form style={{width: '100%' , marginTop:30}}>
-                                <Text style={Styles.title}>{ i18n.t('newReg') }</Text>
-                                <View style={Styles.formImgView}>
-                                    {image != null?
-                                        <TouchableOpacity  style={{width:100 , height:100  }} onPress={()=> this._pickImage()} >
-                                            <Image
-                                                onPress={()=> this._pickImage()}
-                                                resizeMode={'cover'}
-                                                style={{width:'100%' , height:'100%' , borderRadius:25}}
-                                                source={{ uri: image }}
-                                            />
-                                        </TouchableOpacity>
-                                        :
-                                        <TouchableOpacity  onPress={()=> this._pickImage()} >
-                                            <Image source={require('../../assets/images/img.png')} style={{width:100 , height:100}} resizeMode={'contain'} />
-                                        </TouchableOpacity>
-                                    }
-                                </View>
-                                <View style={Styles.inputParent}>
-                                    <Item stackedLabel style={Styles.item } bordered>
-                                        <Label style={Styles.labelItem}>{ i18n.t('username') }</Label>
-                                        <Input value={this.state.username} onChangeText={(username) => this.setState({username})} autoCapitalize='none' style={Styles.itemInput}  />
-                                    </Item>
-                                </View>
-                                <View style={Styles.inputParent}>
-                                    <Item stackedLabel style={Styles.item } bordered>
-                                        <Label style={Styles.labelItem}>{ i18n.t('phoneNumber') }</Label>
-                                        <Input value={this.state.phone} onChangeText={(phone) => this.setState({phone})} keyboardType={'number-pad'} style={Styles.itemInput}  />
-                                    </Item>
-                                </View>
-                                <View style={Styles.inputParent}>
-                                    <Item stackedLabel style={Styles.item } bordered>
-                                        <Label style={Styles.labelItem}>{ i18n.t('email') }</Label>
-                                        <Input autoCapitalize='none' value={this.state.mail} onChangeText={(mail) => this.setState({mail})} keyboardType={'email-address'}  style={Styles.itemInput}  />
-                                    </Item>
-                                </View>
-                                <View>
-                                    <Item style={Styles.itemPicker} regular >
-                                        <Label style={[Styles.labelItem , {top:-20 , left:15 , position:'absolute'}]}>{ i18n.t('country') }</Label>
-                                        <Picker
-                                            mode="dropdown"
-                                            iosIcon={<Icon name="arrow-down" />}
-                                            style={Styles.picker}
-                                            placeholderStyle={{ color: "#acabae" }}
-                                            placeholderIconColor="#acabae"
-                                            selectedValue={this.state.selectedCountry}
-                                            onValueChange={(value) => this.setState({ selectedCountry: value })}
-                                        >
-											{
-												this.state.countries.map((country, i) => (
-													<Picker.Item label={country.countryName} value={country.country_id} key={i} />
-												))
-											}
-                                        </Picker>
-                                        <Image source={require('../../assets/images/dropdown.png')} style={Styles.pickerImg} resizeMode={'contain'} />
-                                    </Item>
-                                </View>
-                                <View>
-                                    <Item style={Styles.itemPicker} regular >
-                                        <Label style={[Styles.labelItem , {top:-20 , left:15 , position:'absolute'}]}>{ i18n.t('entityType') }</Label>
-                                        <Picker
-                                            mode="dropdown"
-                                            iosIcon={<Icon name="arrow-down" />}
-                                            style={Styles.picker}
-                                            placeholderStyle={{ color: "#acabae" }}
-                                            placeholderIconColor="#acabae"
-                                            selectedValue={this.state.selectedKayan}
-                                            onValueChange={(value) => this.setState({ selectedKayan: value })}
-                                        >
-											<Picker.Item label={i18n.t('individual')} value={i18n.t('individual')} />
-											<Picker.Item label={i18n.t('company')} value={i18n.t('company')} />
-											<Picker.Item label={i18n.t('establishment')} value={i18n.t('establishment')} />
-											<Picker.Item label={i18n.t('other')} value={i18n.t('other')} />
-                                        </Picker>
-                                        <Image source={require('../../assets/images/dropdown.png')} style={Styles.pickerImg} resizeMode={'contain'} />
-                                    </Item>
-                                </View>
-                                <View style={Styles.inputParent}>
-                                    <Item stackedLabel style={Styles.item } bordered>
-                                        <Label style={Styles.labelItem}>{ i18n.t('password') }</Label>
-                                        <Input autoCapitalize='none' value={this.state.password} onChangeText={(password) => this.setState({password})} secureTextEntry  style={Styles.itemInput}  />
-                                    </Item>
-                                </View>
+                            <KeyboardAvoidingView behavior={'absolute'} style={Styles.keyboardAvoid}>
+                                <Form style={{width: '100%' , marginTop:30}}>
+                                    <Text style={Styles.title}>{ i18n.t('newReg') }</Text>
+                                    <View style={Styles.formImgView}>
+                                        {image != null?
+                                            <TouchableOpacity  style={{width:100 , height:100  }} onPress={()=> this._pickImage()} >
+                                                <Image
+                                                    onPress={()=> this._pickImage()}
+                                                    resizeMode={'cover'}
+                                                    style={{width:'100%' , height:'100%' , borderRadius:25}}
+                                                    source={{ uri: image }}
+                                                />
+                                            </TouchableOpacity>
+                                            :
+                                            <TouchableOpacity  onPress={()=> this._pickImage()} >
+                                                <Image source={require('../../assets/images/img.png')} style={{width:100 , height:100}} resizeMode={'contain'} />
+                                            </TouchableOpacity>
+                                        }
+                                    </View>
+                                    <View style={Styles.inputParent}>
+                                        <Item stackedLabel style={Styles.item } bordered>
+                                            <Label style={Styles.labelItem}>{ i18n.t('username') }</Label>
+                                            <Input value={this.state.username} onChangeText={(username) => this.setState({username})} autoCapitalize='none' style={Styles.itemInput}  />
+                                        </Item>
+                                    </View>
+                                    <View style={Styles.inputParent}>
+                                        <Item stackedLabel style={Styles.item } bordered>
+                                            <Label style={Styles.labelItem}>{ i18n.t('phoneNumber') }</Label>
+                                            <Input value={this.state.phone} onChangeText={(phone) => this.setState({phone})} keyboardType={'number-pad'} style={Styles.itemInput}  />
+                                        </Item>
+                                    </View>
+                                    <View style={Styles.inputParent}>
+                                        <Item stackedLabel style={Styles.item } bordered>
+                                            <Label style={Styles.labelItem}>{ i18n.t('email') }</Label>
+                                            <Input autoCapitalize='none' value={this.state.mail} onChangeText={(mail) => this.setState({mail})} keyboardType={'email-address'}  style={Styles.itemInput}  />
+                                        </Item>
+                                    </View>
+                                    <View>
+                                        <Item style={Styles.itemPicker} regular >
+                                            <Label style={[Styles.labelItem , {top:-20 , left:15 , position:'absolute'}]}>{ i18n.t('country') }</Label>
+                                            <Picker
+                                                mode="dropdown"
+                                                style={Styles.picker}
+                                                placeholderStyle={{ color: "#acabae" }}
+                                                placeholderIconColor="#acabae"
+                                                selectedValue={this.state.selectedCountry}
+                                                onValueChange={(value) => this.setState({ selectedCountry: value })}
+                                            >
+                                                {
+                                                    this.state.countries.map((country, i) => (
+                                                        <Picker.Item label={country.countryName} value={country.country_id} key={i} />
+                                                    ))
+                                                }
+                                            </Picker>
+                                            <Image source={require('../../assets/images/dropdown.png')} style={Styles.pickerImg} resizeMode={'contain'} />
+                                        </Item>
+                                    </View>
+                                    <View>
+                                        <Item style={Styles.itemPicker} regular >
+                                            <Label style={[Styles.labelItem , {top:-20 , left:15 , position:'absolute'}]}>{ i18n.t('entityType') }</Label>
+                                            <Picker
+                                                mode="dropdown"
+                                                style={Styles.picker}
+                                                placeholderStyle={{ color: "#acabae" }}
+                                                placeholderIconColor="#acabae"
+                                                selectedValue={this.state.selectedKayan}
+                                                onValueChange={(value) => this.setState({ selectedKayan: value })}
+                                            >
+                                                <Picker.Item label={i18n.t('individual')} value={i18n.t('individual')} />
+                                                <Picker.Item label={i18n.t('company')} value={i18n.t('company')} />
+                                                <Picker.Item label={i18n.t('establishment')} value={i18n.t('establishment')} />
+                                                <Picker.Item label={i18n.t('other')} value={i18n.t('other')} />
+                                            </Picker>
+                                            <Image source={require('../../assets/images/dropdown.png')} style={Styles.pickerImg} resizeMode={'contain'} />
+                                        </Item>
+                                    </View>
+                                    <View style={Styles.inputParent}>
+                                        <Item stackedLabel style={Styles.item } bordered>
+                                            <Label style={Styles.labelItem}>{ i18n.t('password') }</Label>
+                                            <Input autoCapitalize='none' value={this.state.password} onChangeText={(password) => this.setState({password})} secureTextEntry  style={Styles.itemInput}  />
+                                        </Item>
+                                    </View>
 
-                                <View style={Styles.inputParent}>
-                                    <Item stackedLabel style={Styles.item } bordered>
-                                        <Label style={Styles.labelItem}>{ i18n.t('verifyNewPass') }</Label>
-                                        <Input autoCapitalize='none' value={this.state.rePassword} onChangeText={(rePassword) => this.setState({rePassword})} secureTextEntry  style={Styles.itemInput}  />
-                                    </Item>
-                                </View>
+                                    <View style={Styles.inputParent}>
+                                        <Item stackedLabel style={Styles.item } bordered>
+                                            <Label style={Styles.labelItem}>{ i18n.t('verifyNewPass') }</Label>
+                                            <Input autoCapitalize='none' value={this.state.rePassword} onChangeText={(rePassword) => this.setState({rePassword})} secureTextEntry  style={Styles.itemInput}  />
+                                        </Item>
+                                    </View>
 
-                                <TouchableOpacity style={{flexDirection:'row' , justifyContent: 'center' , flexWrap: 'wrap'}}>
-                                    <Text style={{color: '#035F5B',fontSize: 15, marginTop:20}}>{ i18n.t('agreement') } </Text>
-                                    <Text style={[Styles.forgetPass , {color:'#00918B'}]}>{ i18n.t('terms') }</Text>
-                                </TouchableOpacity>
+                                    <TouchableOpacity onPress={() => this.props.navigation.navigate('policy')} routeName={'register'} style={{flexDirection:'row' , justifyContent: 'center' , flexWrap: 'wrap'}}>
+                                        <Text style={{color: '#035F5B',fontSize: 15, marginTop:20}}>{ i18n.t('agreement') } </Text>
+                                        <Text style={[Styles.forgetPass , {color:'#00918B'}]}>{ i18n.t('terms') }</Text>
+                                    </TouchableOpacity>
 
-								{ this.renderSubmit() }
-                            </Form>
+                                    { this.renderSubmit() }
+                                </Form>
+                            </KeyboardAvoidingView>
                         </View>
-                    </KeyboardAvoidingView>
                 </Content>
             </Container>
 

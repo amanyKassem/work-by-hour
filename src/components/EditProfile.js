@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {View, Text, Image, TouchableOpacity, I18nManager, KeyboardAvoidingView, Dimensions} from "react-native";
+import {View, Text, Image, TouchableOpacity, Platform, KeyboardAvoidingView, Dimensions} from "react-native";
 import {Container, Content, Icon, Header, Item, Input, Button, Form, Label, Picker} from 'native-base'
 import Styles from '../../assets/styles'
 import i18n from '../../local/i18n'
@@ -132,8 +132,9 @@ class EditProfile extends Component {
 						<Text style={[Styles.headerBody , { flex:1, top:-3 , left:-15 , textAlign:'center'}]}>{ i18n.t('profile') }</Text>
 					</View>
 				</Header>
-				<Content style={{padding:15}}>
+				<Content >
 					{ this.renderLoader() }
+					<View style={{padding:15}}>
 					<KeyboardAvoidingView behavior={'padding'} style={Styles.keyboardAvoid}>
 
                         <TouchableOpacity onPress={this._pickImage}>
@@ -152,19 +153,19 @@ class EditProfile extends Component {
 							<View style={[Styles.inputParent ,{ borderColor:  '#eee' , backgroundColor:'#F6F6F6' , borderRadius:25 , height:40 , marginBottom:20}]}>
 								<Item stackedLabel style={Styles.item } bordered>
 									<Label style={[Styles.labelItem , {top:-25 , left:-13 , backgroundColor:'transparent'}]}>{ i18n.t('username') }</Label>
-									<Input value={this.state.username} onChangeText={(username) => this.setState({username})} autoCapitalize='none' style={[Styles.itemInput , {top:-20 , paddingRight:15}]}  />
+									<Input value={this.state.username} onChangeText={(username) => this.setState({username})} autoCapitalize='none' style={[Styles.itemInput , {top:Platform.OS === 'ios' ? -15 :-20 , paddingRight:15}]}  />
 								</Item>
 							</View>
 							<View style={[Styles.inputParent ,{ borderColor:  '#eee' , backgroundColor:'#F6F6F6' , borderRadius:25 , height:40 , marginBottom:20}]}>
 								<Item stackedLabel style={Styles.item } bordered>
 									<Label style={[Styles.labelItem , {top:-25 , left:-13 , backgroundColor:'transparent'}]}>{ i18n.t('phoneNumber') }</Label>
-									<Input value={this.state.phone} onChangeText={(phone) => this.setState({phone})} keyboardType={'number-pad'} style={[Styles.itemInput , {top:-20 , paddingRight:15}]}  />
+									<Input value={this.state.phone} onChangeText={(phone) => this.setState({phone})} keyboardType={'number-pad'} style={[Styles.itemInput , {top:Platform.OS === 'ios' ? -15 :-20 , paddingRight:15}]}  />
 								</Item>
 							</View>
 							<View style={[Styles.inputParent ,{ borderColor:  '#eee' , backgroundColor:'#F6F6F6' , borderRadius:25 , height:40 , marginBottom:20}]}>
 								<Item stackedLabel style={Styles.item } bordered>
 									<Label style={[Styles.labelItem , {top:-25 , left:-13 , backgroundColor:'transparent'}]}>{ i18n.t('email') }</Label>
-									<Input autoCapitalize='none' value={this.state.mail} onChangeText={(mail) => this.setState({mail})} keyboardType={'email-address'} style={[Styles.itemInput , {top:-20 , paddingRight:15}]}  />
+									<Input autoCapitalize='none' value={this.state.mail} onChangeText={(mail) => this.setState({mail})} keyboardType={'email-address'} style={[Styles.itemInput , {top:Platform.OS === 'ios' ? -15 :-20 , paddingRight:15}]}  />
 								</Item>
 							</View>
 							<View>
@@ -172,14 +173,13 @@ class EditProfile extends Component {
 									<Label style={[Styles.labelItem , {top:-35 , left:0 , position:'absolute'}]}>{ i18n.t('country') }</Label>
 									<Picker
 										mode="dropdown"
-										iosIcon={<Icon name="arrow-down" />}
 										style={Styles.picker}
+										placeholder={ i18n.t('country') }
 										placeholderStyle={{ color: "#acabae" }}
 										placeholderIconColor="#acabae"
 										selectedValue={this.state.selectedCountry}
 										onValueChange={(value) => this.setState({ selectedCountry: value })}
 									>
-										<Picker.Item label={ i18n.t('country') } value={null} />
 										{
 											this.state.countries.map((country, i) => (
 												<Picker.Item label={country.countryName} value={country.country_id} key={i} />
@@ -194,7 +194,6 @@ class EditProfile extends Component {
 									<Label style={[Styles.labelItem , {top:-35 , left:0 , position:'absolute'}]}>{ i18n.t('entityType') }</Label>
 									<Picker
 										mode="dropdown"
-										iosIcon={<Icon name="arrow-down" />}
 										style={Styles.picker}
 										placeholderStyle={{ color: "#acabae" }}
 										placeholderIconColor="#acabae"
@@ -221,6 +220,7 @@ class EditProfile extends Component {
 						</Form>
 						{ this.renderSubmit() }
 					</KeyboardAvoidingView>
+					</View>
 				</Content>
 			</Container>
 

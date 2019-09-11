@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {View, Text, Image, TouchableOpacity, I18nManager, FlatList, Dimensions} from "react-native";
+import {View, Text, Image, TouchableOpacity, Platform, FlatList, Dimensions} from "react-native";
 import {Container, Content, Icon, Header, Item, Input, Button, Form} from 'native-base'
 import Styles from '../../assets/styles'
 import i18n from '../../local/i18n'
@@ -60,24 +60,26 @@ class Messages extends Component {
                     </View>
                 </Header>
 				{ this.renderLoader() }
-                <Content style={{padding:15}}>
+                <Content >
+                    <View style={{padding:15}}>
                     {
                         this.state.rooms.map((room, i) => (
                             <View key={i}>
 								<TouchableOpacity onPress={() => this.props.navigation.navigate('chat', { roomId: room.room_id, username: room.userName })} style={{flexDirection:'row' , alignItems:'center'}}>
-									<Image source={{ uri: 'https://' + room.image }} resizeMode={'cover'} style={{ width: 60, height: 60 , borderRadius:50 , marginRight:10}}/>
+									<Image source={{ uri: 'https://' + room.image }} resizeMode={'cover'} style={{ width: 60, height: 60 , borderRadius:Platform.OS === 'ios' ?35 :50 , marginRight:10}}/>
 									<View style={{flex:1}}>
 										<View style={{flexDirection:'row' , justifyContent:'space-between'}}>
 											<Text style={{color:'#00918B',  fontSize:17, fontFamily: 'RegularFont' }}>{ room.userName }</Text>
 											<Text style={{color:'#00918B',  fontSize:12, fontFamily: 'RegularFont' }}>{ room.time }</Text>
 										</View>
-										<Text style={{color:'#878787',  fontSize:13, fontFamily: 'RegularFont',textAlign: I18nManager.isRTL ?'right' : 'left'}}>{ room.message }</Text>
+										<Text style={{color:'#878787',  fontSize:13, fontFamily: 'RegularFont',alignSelf: 'flex-start'}}>{ room.message }</Text>
 									</View>
 								</TouchableOpacity>
 								<View style={{borderWidth:1 , borderColor:'#e6e6e6' , marginVertical:15}}/>
                             </View>
                         ))
                     }
+                    </View>
                 </Content>
             </Container>
         );

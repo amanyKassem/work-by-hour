@@ -20,8 +20,8 @@ class AddAdCongrats extends Component {
         return (
 
             <Container style={{}}>
-                <Content style={{padding:15}}>
-                    <View style={Styles.confirm}>
+                <Content >
+                    <View style={[Styles.confirm , {padding:15}]}>
                         <Image source={require('../../assets/images/congrats.png')}  style={{width:220 , height:220}} resizeMode={'contain'} />
                         <Text style={Styles.confirmText}>{ i18n.t('adCongrats') }</Text>
                         <Button onPress={() => this.props.navigation.navigate('home')} style={Styles.loginBtn}>

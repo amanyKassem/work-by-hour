@@ -121,39 +121,41 @@ class ContactUs extends Component {
                         <Text style={[Styles.headerBody , { flex:1, top:-3 , left:-15 , textAlign:'center'}]}>{ i18n.t('contactUs') }</Text>
                     </View>
                 </Header>
-                <Content style={{padding:15}}>
-                    <KeyboardAvoidingView behavior={'padding'} style={Styles.keyboardAvoid}>
-                        <Form style={{width: '100%' }}>
-                            <View style={[Styles.inputParent ,{ borderColor:  '#eee' , backgroundColor:'#F6F6F6' , borderRadius:25 , height:40 , marginBottom:20}]}>
-                                <Item stackedLabel style={Styles.item } bordered>
-                                    <Label style={[Styles.labelItem , {top:-25 , left:-13 , backgroundColor:'transparent'}]}>{ i18n.t('email') }</Label>
-                                    <Input value={this.state.email} onChangeText={(email) => this.setState({email})} autoCapitalize='none' keyboardType={'email-address'} style={[Styles.itemInput , {top:-20 , paddingRight:15}]}  />
-                                </Item>
-                            </View>
-                            <View style={[Styles.inputParent ,{ borderColor:  '#eee' , backgroundColor:'#F6F6F6' , borderRadius:25 , height:40 , marginBottom:20}]}>
-                                <Item stackedLabel style={Styles.item } bordered>
-                                    <Label style={[Styles.labelItem , {top:-25 , left:-13 , backgroundColor:'transparent'}]}>{ i18n.t('subTitle') }</Label>
-                                    <Input value={this.state.subTitle} onChangeText={(subTitle) => this.setState({subTitle})} autoCapitalize='none' style={[Styles.itemInput , {top:-20 , paddingRight:15}]}  />
-                                </Item>
-                            </View>
-                            <View >
-                                <Item stackedLabel style={Styles.item } bordered>
-                                    <Label style={[Styles.labelItem , {top:5 , left:-10 , backgroundColor:'transparent'}]}>{ i18n.t('subCont') }</Label>
-                                </Item>
-                                <Textarea value={this.state.msg} onChangeText={(msg) => this.setState({msg})} autoCapitalize='none' style={[Styles.inputParent ,{color: '#035F5B', borderColor:  '#eee', textAlign: I18nManager.isRTL ?'right' : 'left' , paddingVertical:10 , paddingHorizontal: 35 , backgroundColor:'#F6F6F6' , borderRadius:25 , height:250 , marginBottom:20}]}  />
-                            </View>
-                            <View style={{flexDirection:'row'  , alignItems:'center' , justifyContent:'center' , marginBottom:5 , marginTop:5}}>
-                                {
-                                    this.state.socials.map(( social, i ) => (
-										<TouchableOpacity key={i} onPress={()=> this._linkPressed(social.linkUrl)} style={{ margin: 2 }}>
-											<Image source={{ uri: 'https://' + social.linkImage }} style={{width:35 , height:35}} resizeMode={'contain'} />
-										</TouchableOpacity>
-                                    ))
-                                }
-                            </View>
-                        </Form>
-                    </KeyboardAvoidingView>
-                    { this.renderSubmit() }
+                <Content >
+					<View style={{padding:15}}>
+						<KeyboardAvoidingView behavior={'padding'} style={Styles.keyboardAvoid}>
+							<Form style={{width: '100%' }}>
+								<View style={[Styles.inputParent ,{ borderColor:  '#eee' , backgroundColor:'#F6F6F6' , borderRadius:25 , height:40 , marginBottom:20}]}>
+									<Item stackedLabel style={Styles.item } bordered>
+										<Label style={[Styles.labelItem , {top:-25 , left:-13 , backgroundColor:'transparent'}]}>{ i18n.t('email') }</Label>
+										<Input value={this.state.email} onChangeText={(email) => this.setState({email})} autoCapitalize='none' keyboardType={'email-address'} style={[Styles.itemInput , {top:-20 , paddingRight:15}]}  />
+									</Item>
+								</View>
+								<View style={[Styles.inputParent ,{ borderColor:  '#eee' , backgroundColor:'#F6F6F6' , borderRadius:25 , height:40 , marginBottom:20}]}>
+									<Item stackedLabel style={Styles.item } bordered>
+										<Label style={[Styles.labelItem , {top:-25 , left:-13 , backgroundColor:'transparent'}]}>{ i18n.t('subTitle') }</Label>
+										<Input value={this.state.subTitle} onChangeText={(subTitle) => this.setState({subTitle})} autoCapitalize='none' style={[Styles.itemInput , {top:-20 , paddingRight:15}]}  />
+									</Item>
+								</View>
+								<View >
+									<Item stackedLabel style={Styles.item } bordered>
+										<Label style={[Styles.labelItem , {top:5 , left:-10 , backgroundColor:'transparent'}]}>{ i18n.t('subCont') }</Label>
+									</Item>
+									<Textarea value={this.state.msg} onChangeText={(msg) => this.setState({msg})} autoCapitalize='none' style={[Styles.inputParent ,{color: '#035F5B', borderColor:  '#eee', textAlign: I18nManager.isRTL ?'right' : 'left' , paddingVertical:10 , paddingHorizontal: 35 , backgroundColor:'#F6F6F6' , borderRadius:25 , height:250 , marginBottom:20}]}  />
+								</View>
+								<View style={{flexDirection:'row'  , alignItems:'center' , justifyContent:'center' , marginBottom:5 , marginTop:5}}>
+									{
+										this.state.socials.map(( social, i ) => (
+											<TouchableOpacity key={i} onPress={()=> this._linkPressed(social.linkUrl)} style={{ margin: 2 }}>
+												<Image source={{ uri: 'https://' + social.linkImage }} style={{width:35 , height:35}} resizeMode={'contain'} />
+											</TouchableOpacity>
+										))
+									}
+								</View>
+							</Form>
+						</KeyboardAvoidingView>
+						{ this.renderSubmit() }
+					</View>
                 </Content>
             </Container>
 

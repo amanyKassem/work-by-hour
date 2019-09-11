@@ -6,7 +6,7 @@ import {
 	TouchableOpacity,
 	I18nManager,
 	Linking,
-	KeyboardAvoidingView,
+	Platform,
 	Dimensions
 } from "react-native";
 import {Container, Content, Icon, Header, Item, Input, Button, Form} from 'native-base'
@@ -98,10 +98,11 @@ class AddDet extends Component {
                         <Text style={[Styles.headerBody , { flex:1, top:-3 , left:-15 , textAlign:'center'}]}>{ this.state.userData.workName }</Text>
                     </View>
                 </Header>
-                <Content style={{padding:15}}>
+                <Content >
                     { this.renderLoader() }
+                    <View style={{padding:15}}>
                     <View style={{flexDirection:'row' , alignItems:'center'}}>
-                        <Image source={{ uri: 'https://' + this.state.userData.imageProfile }} resizeMode={'cover'} style={{ width: 60, height: 60 , borderRadius:50 , marginRight:10}}/>
+                        <Image source={{ uri: 'https://' + this.state.userData.imageProfile }} resizeMode={'cover'} style={{ width: 60, height: 60 , borderRadius:Platform.OS === 'ios' ?35 :50 , marginRight:10}}/>
                         <View>
                             <Text style={{color:'#00918B',  fontSize:17, fontFamily: 'RegularFont' }}>{ this.state.userData.userName }</Text>
                             <StarRating
@@ -116,7 +117,7 @@ class AddDet extends Component {
                     </View>
                     <View style={{borderWidth:1 , borderColor:'#e6e6e6' , marginVertical:10}}/>
 
-                    <Text style={{color:'#00918B',  fontSize:15, fontFamily: 'RegularFont' }}>{ i18n.t('jobDet') }</Text>
+                    <Text style={{color:'#00918B',  fontSize:15, fontFamily: 'RegularFont' ,  alignSelf: 'flex-start' , writingDirection: I18nManager.isRTL ?'rtl' : 'ltr'}}>{ i18n.t('jobDet') }</Text>
                     <Text style={{color:'#878787',  fontSize:13, fontFamily: 'RegularFont' ,  alignSelf: 'flex-start'}}>{ this.state.dataAdvertise.details }</Text>
 
                     <View style={{borderWidth:1 , borderColor:'#e6e6e6' , marginVertical:10}}/>
@@ -138,7 +139,7 @@ class AddDet extends Component {
                     
                     <View style={{borderWidth:1 , borderColor:'#e6e6e6' , marginBottom:5}}/>
 
-                    <Text style={{fontFamily: 'RegularFont', fontSize:13 , color:'#444444', marginBottom:5}}>{ i18n.t('ownerLocation') }</Text>
+                    <Text style={{fontFamily: 'RegularFont', fontSize:13 , color:'#444444', marginBottom:5 ,  alignSelf: 'flex-start'}}>{ i18n.t('ownerLocation') }</Text>
                     {
                         this.state.dataAdvertise.lat && this.state.dataAdvertise.long ? (
 							<MapView
@@ -163,7 +164,7 @@ class AddDet extends Component {
                             <View>
 								<View style={{borderWidth:1 , borderColor:'#e6e6e6' , marginTop:15 , marginBottom:5}}/>
 
-								<Text style={{color:'#00918B',  fontSize:15, fontFamily: 'RegularFont' }}>{ i18n.t('attachments') }</Text>
+								<Text style={{color:'#00918B',  fontSize:15, fontFamily: 'RegularFont',  alignSelf: 'flex-start' }}>{ i18n.t('attachments') }</Text>
 
 								<View style={{flexDirection:'row' , flexWrap:'wrap' , alignItems:'center' }}>
 									{
@@ -178,7 +179,7 @@ class AddDet extends Component {
 
                     <View style={{borderWidth:1 , borderColor:'#e6e6e6' , marginVertical:5}}/>
 
-                    <Text style={{color:'#00918B',  fontSize:15, fontFamily: 'RegularFont' }}>{ i18n.t('connectWithAd') }</Text>
+                    <Text style={{color:'#00918B',  fontSize:15, fontFamily: 'RegularFont' ,  alignSelf: 'flex-start'}}>{ i18n.t('connectWithAd') }</Text>
 
                     <View style={{flexDirection:'row'  , alignItems:'center' , justifyContent:'center' , marginBottom:5 , marginTop:10}}>
                         {
@@ -235,7 +236,7 @@ class AddDet extends Component {
                         ) : ( <View/> )
                     }
 
-
+                    </View>
                     <Modal onBackdropPress={()=> this.setState({ isModalVisible : false })} isVisible={this.state.isModalVisible}>
                         <View style={Styles.modalStyle}>
                             <Image source={require('../../assets/images/alarm.png')}  style={{width:70 , height:70 , transform: I18nManager.isRTL ? [{rotateY : '0deg'}] : [{rotateY : '-180deg'}]}} resizeMode={'contain'} />
