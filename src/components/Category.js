@@ -154,14 +154,15 @@ class Category extends Component {
                                 iosIcon={<Icon name="arrow-down" />}
                                 style={Styles.pickerLabel}
                                 placeholderStyle={{ color: "#acabae" }}
+								placeholder={ i18n.t('country') }
                                 placeholderIconColor="#acabae"
                                 selectedValue={this.state.selectedCountry}
                                 onValueChange={(value) => this.onChangePicker(value, 'country')}
                             >
-                                <Picker.Item label={ i18n.t('country') } value={null} />
+                                {/*<Picker.Item label={ i18n.t('country') } value='sdfsdfsdff' key={0} />*/}
                                 {
                                     this.state.countries.map((country, i) => (
-										<Picker.Item label={country.countryName} value={country.country_id} key={i} />
+										<Picker.Item label={country.countryName} value={country.country_id} key={i+1} />
                                     ))
                                 }
                             </Picker>

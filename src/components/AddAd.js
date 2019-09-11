@@ -1,16 +1,5 @@
 import React, { Component } from "react";
-import {
-	View,
-	Text,
-	Image,
-	TouchableOpacity,
-	I18nManager,
-	FlatList,
-	KeyboardAvoidingView,
-	Dimensions,
-    ImageEditor,
-    ImageStore
-} from "react-native";
+import {  View, Text, Image, TouchableOpacity, I18nManager, FlatList, KeyboardAvoidingView, Dimensions, ImageEditor, ImageStore } from "react-native";
 import {Container, Content, Icon, Header, Item, Input, Button, Form, Label, Picker , Textarea} from 'native-base'
 import Styles from '../../assets/styles'
 import i18n from '../../local/i18n'
@@ -259,14 +248,13 @@ class AddAd extends Component {
             let images =  this.state.photos;
             this.setState({
                 imageBrowserOpen: false,
-                photos: images.concat(photos)
+                photos: images.concat(photos),
             });
 
             const imgs = this.state.photos;
              console.log('imgs', imgs);
             for (var i =0; i < imgs.length; i++){
                 if (imgs[i].file != null){
-					const imageURL = imgs[i].file;
 					Image.getSize(imageURL, (width, height) => {
 						var imageSize = {
 							size: {
@@ -396,7 +384,6 @@ class AddAd extends Component {
                                     selectedValue={this.state.selectedSection}
                                     onValueChange={(value) => this.setState({ selectedSection: value })}
                                 >
-									<Picker.Item label={ i18n.t('categories') } value={null} />
 									{
 										this.state.categories.map((category, i) => (
 											<Picker.Item label={category.departmentName} value={category.departement_id} key={i} />
@@ -501,7 +488,6 @@ class AddAd extends Component {
                                     selectedValue={this.state.selectedCountry}
                                     onValueChange={(value) => this.setState({ selectedCountry: value })}
                                 >
-									<Picker.Item label={ i18n.t('countries') } value={null} />
 									{
 										this.state.countries.map((country, i) => (
 											<Picker.Item label={country.countryName} value={country.country_id} key={i} />
@@ -511,6 +497,8 @@ class AddAd extends Component {
                                 <Icon name='angle-down' type={"FontAwesome"} style={{ color: "#878787", fontSize:23 , right: 0}}/>
                             </Item>
                         </View>
+
+
                         <View style={[Styles.inputParent ,{ borderColor:  '#eee' , backgroundColor:'#F6F6F6' , borderRadius:25 , height:40 , marginBottom:20}]}>
                             <Item stackedLabel style={Styles.item} bordered onPress={() =>this._toggleModal()}>
                                 <Label style={[Styles.labelItem , {top:-25 , left:-13 , backgroundColor:'transparent'}]}>{ i18n.t('location') }</Label>
