@@ -73,7 +73,7 @@ class Login extends Component {
 		if (!err){
 			this.setState({ isLoaded: true });
 			const {phone, password, token} = this.state;
-			this.props.userLogin({ phone, password, token : 'a7d019bf-f29f-4216-a61d-dfb308167216' }, (this.props.lang).toUpperCase());
+			this.props.userLogin({ phone, password, token }, (this.props.lang).toUpperCase());
 		}
 	}
 
@@ -94,7 +94,7 @@ class Login extends Component {
 		}
 
 		token = await Notifications.getExpoPushTokenAsync();
-		this.setState({ token, userId: null })
+		this.setState({ token, userId: null });
 		AsyncStorage.setItem('deviceID', token);
 
 		console.log('app lang', this.props.lang);

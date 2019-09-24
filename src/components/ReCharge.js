@@ -15,7 +15,8 @@ class ReCharge extends Component {
         super(props);
 
         this.state={
-			userBalance: 0
+			userBalance: 0,
+			currency: ''
         }
     }
 
@@ -28,7 +29,7 @@ class ReCharge extends Component {
 	componentWillMount() {
 		axios.post( CONST.url + 'user/getUserBalance', { lang : (this.props.lang).toUpperCase(), user_id: this.props.user.user_id})
 			.then(response => {
-				this.setState({ userBalance: response.data.data });
+				this.setState({ userBalance: response.data.data.price, currency: response.data.data.currency });
 			});
 	}
 
@@ -51,7 +52,7 @@ class ReCharge extends Component {
                 <Content style={{padding:15}}>
                     <Text style={[Styles.confirmText , {color:'#444444'}]}>{i18n.t('currentBalance')}</Text>
                     <Text style={[Styles.confirmText , {fontSize:80 , lineHeight:100}]}>{this.state.userBalance}</Text>
-                    <Text style={[Styles.confirmText , {marginBottom:20}]}>{i18n.t('DR')}</Text>
+                    <Text style={[Styles.confirmText , {marginBottom:20}]}>{this.state.currency}</Text>
                     <View style={{borderWidth:1 , borderColor:'#e6e6e6' , marginTop:5}}/>
                     <Button onPress={() => this.props.navigation.navigate('reChargeWallet')} style={Styles.loginBtn}>
                         <Text style={Styles.btnTxt}>{i18n.t('reChargeWallet')}</Text>

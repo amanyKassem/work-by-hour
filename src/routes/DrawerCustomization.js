@@ -33,7 +33,7 @@ class DrawerCustomization extends Component {
 		this.props.logout({ user_id: this.props.user.user_id });
 		this.props.tempAuth();
 
-		this.props.navigation.navigate('login');
+		this.props.navigation.navigate('language');
 	}
 
     render() {

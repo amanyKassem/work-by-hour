@@ -14,7 +14,7 @@ class FooterSection extends Component {
 
         this.state={
             routeName:this.props.routeName,
-            userBalance: 0
+            userBalance: 0,
         }
     }
 
@@ -22,7 +22,7 @@ class FooterSection extends Component {
     	if (this.props.user){
 			axios.post( CONST.url + 'user/getUserBalance', { lang : (this.props.lang).toUpperCase(), user_id: this.props.user.user_id})
 				.then(response => {
-					this.setState({ userBalance: response.data.data });
+					this.setState({ userBalance: response.data.data.price });
 				});
 		}
 	}

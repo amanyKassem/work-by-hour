@@ -179,6 +179,7 @@ const styles = ({
         fontFamily: 'RegularFont',
         fontWeight: 'normal',
         marginLeft:10,
+		writingDirection: I18nManager.isRTL ?'rtl' : 'ltr',
     },
     pickerImg:{
         width: 20,
@@ -247,7 +248,8 @@ const styles = ({
         width:35,
         height:35 ,
         justifyContent:'center' ,
-        alignItems:'center'
+        alignItems:'center',
+        backgroundColor: '#000'
     },
     headerMenu:{
         width: 25,

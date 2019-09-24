@@ -124,6 +124,13 @@ const en = {
 	'company': 'company',
 	'other': 'other',
 	'distance': 'distance',
+	'km': 'km',
+	'gender': 'gender',
+	'male': 'male',
+	'female': 'female',
+	'both': 'both',
+	'jobNameValid': 'job name has numbers',
+	'activityValid': 'activity has numbers',
 }
 
 export default en;

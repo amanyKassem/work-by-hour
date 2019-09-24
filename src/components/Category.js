@@ -76,7 +76,7 @@ class Category extends Component {
 
 		axios.post( CONST.url + 'user/getUserBalance', { lang : (this.props.lang).toUpperCase(), user_id: this.props.user.user_id})
 			.then(response => {
-				this.setState({ userBalance: response.data.data });
+				this.setState({ userBalance: response.data.data.price });
 			});
 	}
 
@@ -104,10 +104,10 @@ class Category extends Component {
 			console.log('picker_val', value, type);
 			this.setState({ selectedCountry: value })
 		}else if (type == 'price')
-			this.setState({ selectedFee: value })
+			this.setState({ selectedFee: value });
 		else if (type == 'hour')
 			this.setState({ selectedHours: value })
-
+;
 
 		this.setState({ loader: true });
 
@@ -246,14 +246,23 @@ class Category extends Component {
 												<Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('pricePerHour') }: <Text style={{color:'#444444'}}>{ ad.PriceOfHour } $</Text></Text>
 											</View>
 											<View style={{flexDirection:'row' , justifyContent:'space-between'}}>
-												<Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('distance') }: <Text style={{color:'#444444'}}>{ ad.distance }</Text></Text>
+												<Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('distance') }: <Text style={{color:'#444444'}}>{ ad.distance }  { i18n.t('km') }</Text></Text>
+												<Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('gender') }: <Text style={{color:'#444444'}}>{ ad.typeUser } </Text></Text>
+											</View>
+											<View style={{flexDirection:'row' , justifyContent:'space-between'}}>
+												<Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('time') }: <Text style={{color:'#444444'}}>{ ad.timeOFWork }  </Text></Text>
 											</View>
 										</View>
-
 									) : (
-										<View style={{flexDirection:'row' , justifyContent:'space-between'}}>
-											<Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('finalFee') }: <Text style={{color:'#444444'}}>{ ad.finalPrice } $</Text></Text>
-											<Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('distance') }: <Text style={{color:'#444444'}}>{ ad.distance } </Text></Text>
+										<View>
+											<View style={{flexDirection:'row' , justifyContent:'space-between'}}>
+												<Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('finalFee') }: <Text style={{color:'#444444'}}>{ ad.finalPrice } $</Text></Text>
+												<Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13,}]}>{ i18n.t('distance') }: <Text style={{color:'#444444', }}>{ ad.distance } { i18n.t('km') }</Text></Text>
+											</View>
+											<View style={{flexDirection:'row' , justifyContent:'space-between'}}>
+												<Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('gender') }: <Text style={{color:'#444444'}}>{ ad.typeUser } </Text></Text>
+												<Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13,}]}>{ i18n.t('time') }: <Text style={{color:'#444444', }}>{ ad.timeOFWork }</Text></Text>
+											</View>
 										</View>
 									)
 								}

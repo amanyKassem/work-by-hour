@@ -16,7 +16,7 @@ import {Container, Content, Button, Icon, Picker, Form, Item,  Label, Input, Toa
 import Styles from '../../assets/styles'
 import i18n from "../../local/i18n";
 
-import { ImagePicker } from 'expo';
+import {ImagePicker, Permissions} from 'expo';
 import axios from "axios";
 import CONST from "../consts";
 import {connect} from "react-redux";
@@ -47,7 +47,14 @@ class Register extends Component {
         drawerLabel: () => null
     });
 
+	askPermissionsAsync = async () => {
+		await Permissions.askAsync(Permissions.CAMERA);
+		await Permissions.askAsync(Permissions.CAMERA_ROLL);
+	};
+
     _pickImage = async () => {
+
+		this.askPermissionsAsync();
         let result = await ImagePicker.launchImageLibraryAsync({
             allowsEditing: true,
             aspect: [4, 3],
@@ -111,7 +118,7 @@ class Register extends Component {
 		let isError = false;
 		let msg = '';
 
-		if (this.state.phone.length <= 0 || this.state.phone.length !== 11) {
+		if (this.state.phone.length <= 0 || this.state.phone.length !== 10) {
 			isError = true;
 			msg = i18n.t('phoneValidation');
 		}else if (this.state.password.length <= 0) {
@@ -177,9 +184,7 @@ class Register extends Component {
                 <Content style={Styles.homecontent}>
                         <View style={Styles.HeadImg }>
                             <Image source={require('../../assets/images/headBg.png')} style={Styles.HeadImg} resizeMode={'contain'} />
-
                         </View>
-
                         <View style={Styles.LoginParentView}>
                             <KeyboardAvoidingView behavior={'absolute'} style={Styles.keyboardAvoid}>
                                 <Form style={{width: '100%' , marginTop:30}}>

@@ -6,6 +6,8 @@ import i18n from '../../local/i18n'
 import axios from "axios";
 import CONST from "../consts";
 import {connect} from "react-redux";
+import HTML from 'react-native-render-html';
+
 
 const height = Dimensions.get('window').height;
 class Policy extends Component {
@@ -34,7 +36,6 @@ class Policy extends Component {
 
     render() {
         return (
-
             <Container style={{}}>
                 <Header style={Styles.header} noShadow>
                     <View style={Styles.headerView}>
@@ -46,15 +47,14 @@ class Policy extends Component {
                 </Header>
                 <Content >
                     <View style={{padding:15}}>
-                    <WebView source={{ html: this.state.terms }} style={{ width: '100%', height , justifyContent:'flex-start' }} />
-                    </View>
+					<HTML baseFontStyle={{lineHeight : 25,color : '#7d7d7d',fontSize:16,fontFamily : 'RegularFont' , textAlign:'center'}} html={this.state.terms} imagesMaxWidth={Dimensions.get('window').width} />
+					</View>
                 </Content>
             </Container>
 
         );
     }
 }
-
 
 const mapStateToProps = ({ lang, profile  }) => {
 	return {

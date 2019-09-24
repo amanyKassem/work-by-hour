@@ -51,7 +51,7 @@ class AddDet extends Component {
 
     componentWillMount() {
 		this.setState({ loader: true });
-		axios.post( CONST.url + 'advertise/detailsAdvertise', { lang: (this.props.lang).toUpperCase(), _id: '5d665bc5b2859d4335f1cc39' , user_id: this.props.user.user_id, type: 1 })
+		axios.post( CONST.url + 'advertise/detailsAdvertise', { lang: (this.props.lang).toUpperCase(), _id: this.props.navigation.state.params.id , user_id: this.props.user.user_id, type: 1 })
 			.then(response => {
 				this.setState({ dataAdvertise: response.data.dataAdvertise, userData: response.data.userData, socialMediaData: response.data.socialMediaData, loader: false });
 			});
@@ -95,7 +95,7 @@ class AddDet extends Component {
                         <TouchableOpacity onPress={() => this.props.navigation.goBack()} style={Styles.headerTouch}>
                             <Image source={require('../../assets/images/back.png')} style={[Styles.headerMenu , Styles.transform]} resizeMode={'contain'} />
                         </TouchableOpacity>
-                        <Text style={[Styles.headerBody , { flex:1, top:-3 , left:-15 , textAlign:'center'}]}>{ this.state.userData.workName }</Text>
+                        <Text style={[Styles.headerBody , { flex:1, top:-3 , left:-15 , textAlign:'center'}]}>{ this.state.dataAdvertise.workName }</Text>
                     </View>
                 </Header>
                 <Content >
