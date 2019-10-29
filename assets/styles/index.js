@@ -245,11 +245,10 @@ const styles = ({
         borderBottomLeftRadius:  I18nManager.isRTL ? 0 : 25,
     },
     headerTouch:{
-        width:35,
+        width:50,
         height:35 ,
         justifyContent:'center' ,
         alignItems:'center',
-        backgroundColor: '#000'
     },
     headerMenu:{
         width: 25,
@@ -257,8 +256,8 @@ const styles = ({
         alignSelf:'center'
     },
     headerNoti:{
-        width: 20,
-        height: 20,
+        width: 30,
+        height: 30,
         alignSelf:'center'
     },
     header:{
@@ -347,7 +346,8 @@ const styles = ({
         justifyContent:'space-between',
         alignItems:'center',
         marginToo:10,
-        marginBottom:20
+        marginBottom:20,
+        overflow: 'hidden'
     },
     catPicker:{
         borderWidth: 1,
@@ -358,6 +358,7 @@ const styles = ({
         width: '30%',
         padding: 0,
         flexDirection: 'row' ,
+        overflow: 'hidden'
     },
     pickerLabel:{
         width: Platform.OS === 'ios' ? 95: undefined,

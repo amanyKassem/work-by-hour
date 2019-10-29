@@ -3,7 +3,7 @@ import {View, Text, Image, TouchableOpacity, Share, I18nManager, Platform} from 
 import {Container, Content, Icon} from 'native-base';
 import {DrawerItems} from 'react-navigation';
 import i18n from "../../local/i18n";
-import { logout, tempAuth } from '../actions'
+import { logout, tempAuth, chooseLang } from '../actions'
 import {connect} from "react-redux";
 import CONST from "../consts";
 
@@ -32,6 +32,7 @@ class DrawerCustomization extends Component {
 	logout(){
 		this.props.logout({ user_id: this.props.user.user_id });
 		this.props.tempAuth();
+		this.props.chooseLang(null);
 
 		this.props.navigation.navigate('language');
 	}
@@ -80,11 +81,12 @@ class DrawerCustomization extends Component {
 }
 
 
-const mapStateToProps = ({ auth, profile }) => {
+const mapStateToProps = ({ auth, profile, lang }) => {
 	return {
 		auth: auth.user,
-		user: profile.user
+		user: profile.user,
+		lang: lang.lang,
 	};
 };
 
-export default connect(mapStateToProps, { logout, tempAuth })(DrawerCustomization);
+export default connect(mapStateToProps, { logout, tempAuth, chooseLang })(DrawerCustomization);

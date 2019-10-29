@@ -2,15 +2,15 @@ import axios from 'axios';
 import { AsyncStorage } from 'react-native';
 import CONST from '../consts';
 
-export const userLogin = ({phone, password, token}, lang) => {
+export const userLogin = ({phone, password, token, mapRegion}, lang) => {
     return (dispatch) => {
         dispatch({type: 'user/login'});
 
         console.log('auth action lang', lang);
 
-        axios.post( CONST.url + 'user/login', { phoneNo: phone, password, device_ID: token, lang})
-            .then(response => handelLogin(dispatch, response))
-            .catch(error => console.warn(error.data));
+        axios.post( CONST.url + 'user/login', { phoneNo: phone, password, device_ID: token, lang, lat: mapRegion.latitude, lng: mapRegion.longitude})
+             .then(response => handelLogin(dispatch, response))
+             .catch(error => console.warn(error.data));
     };
 };
 
@@ -20,7 +20,6 @@ export const tempAuth = () => {
         dispatch({type: 'temp_auth'});
     };
 };
-
 
 const handelLogin = (dispatch, data) => {
     if (data.status != 1){

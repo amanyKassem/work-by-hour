@@ -5,7 +5,7 @@ import FooterSection from './FooterSection';
 import Styles from '../../assets/styles'
 import i18n from '../../local/i18n'
 import { connect } from 'react-redux';
-import { chooseLang } from '../actions';
+import {chooseLang, logout, tempAuth} from '../actions';
 
 
 class Settings extends Component {
@@ -33,9 +33,17 @@ class Settings extends Component {
         this.setState({  SwitchOnValueHolder:!this.state.SwitchOnValueHolder})
     }
 
+
+	logout(){
+		this.props.logout({ user_id: this.props.user.user_id });
+		this.props.tempAuth();
+		this.props.chooseLang(null);
+
+		// this.props.navigation.navigate('language');
+	}
+
     render() {
         return (
-
             <Container style={{}}>
                 <Header style={Styles.header} noShadow>
                     <View style={Styles.headerView}>
@@ -80,14 +88,14 @@ class Settings extends Component {
                         />
                     </TouchableOpacity>
                     <View style={{borderWidth:1 , borderColor:'#e6e6e6' , marginVertical:10}}/>
-                    <TouchableOpacity style={{flexDirection:'row' , justifyContent:'space-between', alignItems:'center'}}>
+                    <TouchableOpacity onPress={() => this.logout()} style={{flexDirection:'row' , justifyContent:'space-between', alignItems:'center'}}>
                         <Text style={{color:'#00918B',  fontSize:17, fontFamily: 'RegularFont' , top:-3 }}>{ i18n.t('logout') }</Text>
                         <Icon name='angle-left' type={"FontAwesome"} style={{ color: "#878787", fontSize:23 , transform: I18nManager.isRTL ? [{rotateY : '0deg'}] : [{rotateY : '-180deg'}] }}/>
                     </TouchableOpacity>
                     <View style={{borderWidth:1 , borderColor:'#e6e6e6' , marginVertical:10}}/>
                     </View>
                 </Content>
-                <FooterSection routeName={'settings'} navigation={this.props.navigation}/>
+                <FooterSection user_id={ this.props.auth != null ? this.props.auth.data.data.user_id : null} routeName={'settings'} navigation={this.props.navigation}/>
             </Container>
 
         );
@@ -95,11 +103,12 @@ class Settings extends Component {
 }
 
 
-const mapStateToProps = ({ lang, profile  }) => {
+const mapStateToProps = ({ lang, profile, auth  }) => {
 	return {
 		lang: lang.lang,
 		user: profile.user,
+		auth: auth.user,
 	};
 };
 
-export default connect(mapStateToProps, { chooseLang })(Settings);
+export default connect(mapStateToProps, { chooseLang , tempAuth, logout })(Settings);

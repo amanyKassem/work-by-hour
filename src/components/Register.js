@@ -16,12 +16,11 @@ import {Container, Content, Button, Icon, Picker, Form, Item,  Label, Input, Toa
 import Styles from '../../assets/styles'
 import i18n from "../../local/i18n";
 
-import {ImagePicker, Permissions} from 'expo';
+import {ImagePicker, Permissions, Location} from 'expo';
 import axios from "axios";
 import CONST from "../consts";
 import {connect} from "react-redux";
 import {DoubleBounce} from "react-native-loader";
-
 
 const height = Dimensions.get('window').height;
 class Register extends Component {
@@ -40,6 +39,7 @@ class Register extends Component {
             selectedKayan: i18n.t('individual'),
 			countries: [],
 			isSubmitted: false,
+			mapRegion: null
         }
     }
 
@@ -53,7 +53,6 @@ class Register extends Component {
 	};
 
     _pickImage = async () => {
-
 		this.askPermissionsAsync();
         let result = await ImagePicker.launchImageLibraryAsync({
             allowsEditing: true,
@@ -67,11 +66,20 @@ class Register extends Component {
         }
     };
 
-    componentWillMount() {
+    async componentWillMount() {
 		axios.post( CONST.url + 'country/allCountry', { lang : (this.props.lang).toUpperCase() })
 			.then(response => {
 				this.setState({ countries: response.data.data, loader: false, selectedCountry: response.data.data[0].country_id });
 			});
+
+		let { status } = await Permissions.askAsync(Permissions.LOCATION);
+		if (status !== 'granted') {
+			alert('صلاحيات تحديد موقعك الحالي ملغاه');
+		}else {
+			const { coords: { latitude, longitude } } = await Location.getCurrentPositionAsync({});
+			const userLocation = { latitude, longitude };
+			this.setState({  mapRegion: userLocation });
+		}
 	}
 
 	onRegister(){
@@ -89,12 +97,14 @@ class Register extends Component {
 					userType: 	this.state.selectedKayan,
 					image: 		this.state.base64,
 					country_id: this.state.selectedCountry,
+					lat:		this.state.mapRegion.latitude,
+					lng:		this.state.mapRegion.longitude,
 				}).then(response => {
 					this.setState({ isSubmitted: false });
 
 					if (response.data.status == 1){
 						const {phone, password } = this.state;
-						this.props.navigation.navigate('activateAcc', { phone, password, token, code: response.data.data.activitionCode, userId: response.data.data.user_id })
+						this.props.navigation.navigate('activateAcc', { phone, password, token, code: response.data.data.activitionCode, userId: response.data.data.user_id, mapRegion: this.state.mapRegion })
 					}
 
 					Toast.show({
@@ -118,7 +128,7 @@ class Register extends Component {
 		let isError = false;
 		let msg = '';
 
-		if (this.state.phone.length <= 0 || this.state.phone.length !== 10) {
+		if (this.state.phone.length <= 0) {
 			isError = true;
 			msg = i18n.t('phoneValidation');
 		}else if (this.state.password.length <= 0) {
@@ -254,10 +264,10 @@ class Register extends Component {
                                                 selectedValue={this.state.selectedKayan}
                                                 onValueChange={(value) => this.setState({ selectedKayan: value })}
                                             >
-                                                <Picker.Item label={i18n.t('individual')} value={i18n.t('individual')} />
-                                                <Picker.Item label={i18n.t('company')} value={i18n.t('company')} />
-                                                <Picker.Item label={i18n.t('establishment')} value={i18n.t('establishment')} />
-                                                <Picker.Item label={i18n.t('other')} value={i18n.t('other')} />
+                                                <Picker.Item label={i18n.t('individual')} value='individual' />
+                                                <Picker.Item label={i18n.t('company')} value='company' />
+                                                <Picker.Item label={i18n.t('establishment')} value='establishment' />
+                                                <Picker.Item label={i18n.t('other')} value='other' />
                                             </Picker>
                                             <Image source={require('../../assets/images/dropdown.png')} style={Styles.pickerImg} resizeMode={'contain'} />
                                         </Item>

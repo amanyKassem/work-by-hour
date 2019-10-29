@@ -69,7 +69,7 @@ const en = {
     'jobDet': 'Job details',
     'perHour': 'Per hour',
     'noHour': 'Without the number of hours',
-    'hoursNo': 'The number of hours',
+    'hoursNo': 'Hours',
     'pricePerHour': 'Price per hour',
     'finalFee': 'Final fee',
     'attachments': 'Attachments',
@@ -123,7 +123,7 @@ const en = {
 	'individual': 'individual',
 	'company': 'company',
 	'other': 'other',
-	'distance': 'distance',
+	'distance': 'far of',
 	'km': 'km',
 	'gender': 'gender',
 	'male': 'male',
@@ -131,6 +131,7 @@ const en = {
 	'both': 'both',
 	'jobNameValid': 'job name has numbers',
 	'activityValid': 'activity has numbers',
+    'codeNotCorrect': 'code not correct',
 }
 
 export default en;

@@ -56,7 +56,7 @@ class Messages extends Component {
                         <TouchableOpacity onPress={() => this.props.navigation.goBack()} style={Styles.headerTouch}>
                             <Image source={require('../../assets/images/back.png')} style={[Styles.headerMenu , Styles.transform]} resizeMode={'contain'} />
                         </TouchableOpacity>
-                        <Text style={[Styles.headerBody , { flex:1, top:-3 , left:-15 , textAlign:'center'}]}>{ i18n.t('messages') }</Text>
+                        <Text style={[Styles.headerBody , { flex:1, top:-3 , textAlign:'center'}]}>{ i18n.t('messages') }</Text>
                     </View>
                 </Header>
 				{ this.renderLoader() }
@@ -65,7 +65,7 @@ class Messages extends Component {
                     {
                         this.state.rooms.map((room, i) => (
                             <View key={i}>
-								<TouchableOpacity onPress={() => this.props.navigation.navigate('chat', { roomId: room.room_id, username: room.userName })} style={{flexDirection:'row' , alignItems:'center'}}>
+								<TouchableOpacity onPress={() => this.props.navigation.navigate('chat', { roomId: room.room_id, name: room.userName, reciver_id: room.reciver_id })} style={{flexDirection:'row' , alignItems:'center'}}>
 									<Image source={{ uri: 'https://' + room.image }} resizeMode={'cover'} style={{ width: 60, height: 60 , borderRadius:Platform.OS === 'ios' ?35 :50 , marginRight:10}}/>
 									<View style={{flex:1}}>
 										<View style={{flexDirection:'row' , justifyContent:'space-between'}}>

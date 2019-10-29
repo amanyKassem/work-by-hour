@@ -5,7 +5,8 @@ import Styles from '../../assets/styles'
 import axios from "axios";
 import CONST from "../consts";
 import {connect} from "react-redux";
-
+import {NavigationEvents} from "react-navigation";
+import { Permissions, Notifications } from 'expo'
 
 class FooterSection extends Component {
     constructor(props){
@@ -18,19 +19,24 @@ class FooterSection extends Component {
         }
     }
 
-    componentWillMount() {
-    	if (this.props.user){
-			axios.post( CONST.url + 'user/getUserBalance', { lang : (this.props.lang).toUpperCase(), user_id: this.props.user.user_id})
-				.then(response => {
-					this.setState({ userBalance: response.data.data.price });
-				});
-		}
+	componentWillMount() {
+		axios.post( CONST.url + 'user/getUserBalance', { lang : (this.props.lang).toUpperCase(), user_id: this.props.user_id})
+			.then(response => {
+				this.setState({ userBalance: response.data.data.price });
+			});
 	}
+
+    componentDidMount(){
+        Notifications.addListener(this.handleNotification);
+    }
+
+    handleNotification = (notification) => {
+        this.componentWillMount();
+    }
 
 	navigateToAddAd(){
         if (this.state.userBalance > 0)
 			return this.props.navigation.navigate("addAd");
-
 
 		Toast.show({
 			text: i18n.t('noBalance'),
@@ -39,9 +45,15 @@ class FooterSection extends Component {
 		});
     }
 
+
+    onFocus(){
+        this.componentWillMount()
+    }
+
 	render() {
         return (
             <Footer style={Styles.footer}>
+                <NavigationEvents onWillFocus={() => this.onFocus()} />
                 <FooterTab style={Styles.footerTab} >
                     <Button  onPress={()=> this.props.navigation.navigate("home")} style={{}} >
                         <Icon name='home' type={"Entypo"} style={{ color:  this.state.routeName === 'home' ? "#FFCC00" : "#fff" , fontSize:23 , marginBottom:0}}/>

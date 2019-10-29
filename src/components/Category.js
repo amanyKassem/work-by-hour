@@ -69,7 +69,7 @@ class Category extends Component {
 				this.setState({ prices: response.data.data, loader: false });
 		});
 
-		axios.post( CONST.url + 'user/percent', { lang : (this.props.lang).toUpperCase() })
+		axios.post( CONST.url + 'user/percent', { lang : (this.props.lang).toUpperCase(), user_id: this.props.user.user_id })
 			.then(response => {
 				this.setState({ percentItem: response.data.data.percentItem, loader: false });
 			});
@@ -106,29 +106,31 @@ class Category extends Component {
 		}else if (type == 'price')
 			this.setState({ selectedFee: value });
 		else if (type == 'hour')
-			this.setState({ selectedHours: value })
-;
+			this.setState({ selectedHours: value });
 
-		this.setState({ loader: true });
+		setTimeout(() => this.filter() , 0);
+    }
 
+    filter(){
+		if (this.state.selectedHours != null || this.state.selectedFee != null || this.state.selectedCountry != null){
+			this.setState({ loader: true });
 
-		setTimeout(() =>
 			axios.post( CONST.url + 'advertise/searchAdvertise', {
-				lang : (this.props.lang).toUpperCase(),
-				NumberOfHour: this.state.selectedHours,
-				price: this.state.selectedFee,
-				country_id: this.state.selectedCountry,
-				user_id: this.props.user.user_id,
+				lang 			: (this.props.lang).toUpperCase(),
+				NumberOfHour	: this.state.selectedHours,
+				price			: this.state.selectedFee,
+				country_id		: this.state.selectedCountry,
+				user_id			: this.props.user.user_id,
 			})
 				.then(response => {
 					this.setState({ ads: response.data.data, loader: false });
 				})
-			, 0);
-    }
+		}
+	}
 
 	onFocus(payload){
 		console.log('this is onWillFocus', payload);
-		this.setState({ loader: null });
+		this.setState({ loader: null, selectedCountry: null, selectedCity: null, selectedHours: null, selectedFee: null });
 
 		this.componentWillMount()
 	}
@@ -140,9 +142,9 @@ class Category extends Component {
                 <Header style={Styles.header} noShadow>
                     <View style={Styles.headerView}>
                         <TouchableOpacity onPress={() => this.props.navigation.goBack()} style={Styles.headerTouch}>
-                            <Image source={require('../../assets/images/back.png')} style={[Styles.headerMenu , Styles.transform]} resizeMode={'contain'} />
+                            <Image source={require('../../assets/images/back.png')} style={[Styles.headerMenu , Styles.transform, { paddingHorizontal: 20 }]} resizeMode={'contain'} />
                         </TouchableOpacity>
-                        <Text style={[Styles.headerBody , { flex:1, top:-3 , left:-15 , textAlign:'center'}]}>{ this.props.navigation.state.params.name }</Text>
+                        <Text style={[Styles.headerBody , { flex:1, top:-3 , textAlign:'center'}]}>{ this.props.navigation.state.params.name }</Text>
                     </View>
                 </Header>
                 <Content style={{padding:15}}>
@@ -151,7 +153,6 @@ class Category extends Component {
                         <Item style={Styles.catPicker} regular >
                             <Picker
                                 mode="dropdown"
-                                iosIcon={<Icon name="arrow-down" />}
                                 style={Styles.pickerLabel}
                                 placeholderStyle={{ color: "#acabae" }}
 								placeholder={ i18n.t('country') }
@@ -159,36 +160,18 @@ class Category extends Component {
                                 selectedValue={this.state.selectedCountry}
                                 onValueChange={(value) => this.onChangePicker(value, 'country')}
                             >
-                                {/*<Picker.Item label={ i18n.t('country') } value='sdfsdfsdff' key={0} />*/}
+                                <Picker.Item label={ i18n.t('country') } value={null} />
                                 {
                                     this.state.countries.map((country, i) => (
-										<Picker.Item label={country.countryName} value={country.country_id} key={i+1} />
+										<Picker.Item label={country.countryName} value={country.country_id} key={i} />
                                     ))
                                 }
                             </Picker>
                             <Image source={require('../../assets/images/gray-drop.png')}  style={{right:5,width:10 , height:10}} resizeMode={'contain'} />
                         </Item>
-                        {/*<Item style={Styles.catPicker} regular >*/}
-                            {/*<Picker*/}
-                                {/*mode="dropdown"*/}
-                                {/*iosIcon={<Icon name="arrow-down" />}*/}
-                                {/*style={Styles.pickerLabel}*/}
-                                {/*placeholderStyle={{ color: "#acabae" }}*/}
-                                {/*placeholderIconColor="#acabae"*/}
-                                {/*selectedValue={this.state.selectedCity}*/}
-                                {/*onValueChange={(value) => this.setState({ selectedCity: value })}*/}
-                            {/*>*/}
-                                {/*<Picker.Item label={ i18n.t('city') } value={null} />*/}
-                                {/*<Picker.Item label={'القاهرة'} value={"1"} />*/}
-                                {/*<Picker.Item label={'المنصوره'} value={"2"} />*/}
-                                {/*<Picker.Item label={'الاسكندرية'} value={"3"} />*/}
-                            {/*</Picker>*/}
-                            {/*<Image source={require('../../assets/images/gray-drop.png')}  style={{right:5,width:10 , height:10}} resizeMode={'contain'} />*/}
-                        {/*</Item>*/}
                         <Item style={[Styles.catPicker , {width:'33%'}]} regular >
                             <Picker
                                 mode="dropdown"
-                                iosIcon={<Icon name="arrow-down" />}
                                 style={Styles.pickerLabel}
                                 placeholderStyle={{ color: "#acabae" }}
                                 placeholderIconColor="#acabae"
@@ -208,7 +191,6 @@ class Category extends Component {
                         <Item style={Styles.catPicker} regular >
                             <Picker
                                 mode="dropdown"
-                                iosIcon={<Icon name="arrow-down" />}
                                 style={Styles.pickerLabel}
                                 placeholderStyle={{ color: "#acabae" }}
                                 placeholderIconColor="#acabae"
@@ -231,7 +213,7 @@ class Category extends Component {
 								<Text style={[Styles.tegisterText , {marginTop:0}]}>{ ad.workName }</Text>
 								<View style={{flexDirection:'row' , justifyContent:'space-between'}}>
 
-									<Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('adNumber') }: <Text style={{color:'#444444'}}>22</Text></Text>
+									<Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('adNumber') }: <Text style={{color:'#444444'}}>{ ad.advertisingNumber }</Text></Text>
 									<Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('activityName') }: <Text style={{color:'#444444'}}>{ ad.workStyle }</Text></Text>
 								</View>
 								<View style={{flexDirection:'row' , justifyContent:'space-between'}}>
@@ -248,9 +230,6 @@ class Category extends Component {
 											<View style={{flexDirection:'row' , justifyContent:'space-between'}}>
 												<Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('distance') }: <Text style={{color:'#444444'}}>{ ad.distance }  { i18n.t('km') }</Text></Text>
 												<Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('gender') }: <Text style={{color:'#444444'}}>{ ad.typeUser } </Text></Text>
-											</View>
-											<View style={{flexDirection:'row' , justifyContent:'space-between'}}>
-												<Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('time') }: <Text style={{color:'#444444'}}>{ ad.timeOFWork }  </Text></Text>
 											</View>
 										</View>
 									) : (
@@ -274,7 +253,7 @@ class Category extends Component {
                         <View style={Styles.modalStyle}>
                             <Image source={require('../../assets/images/alarm.png')}  style={{width:70 , height:70 , transform: I18nManager.isRTL ? [{rotateY : '0deg'}] : [{rotateY : '-180deg'}]}} resizeMode={'contain'} />
                             <Text style={[Styles.tegisterText , { fontSize:13 , color:'#fff' , top:20 , textAlign:'center', position:'absolute'}]}>{ i18n.t('attention') }</Text>
-                            <Text style={[Styles.tegisterText , {marginTop:5 , marginBottom:15 , fontSize:13 , color:'#444444' , textAlign:'center'}]}>{ i18n.t('noteAdd') } <Text style={{color:'#035F5B'}}>1$</Text> { i18n.t('ofUrWallet') } </Text>
+                            <Text style={[Styles.tegisterText , {marginTop:5 , marginBottom:15 , fontSize:13 , color:'#444444' , textAlign:'center'}]}>{ i18n.t('noteAdd') } <Text style={{color:'#035F5B'}}>{ this.state.percentItem }</Text> { i18n.t('ofUrWallet') } </Text>
                             <View style={{flexDirection:'row' , justifyContent:'center'}}>
                                 <TouchableOpacity onPress={() => this.onConfirm()} style={[Styles.touchModal , {backgroundColor:'#035F5B'}]}>
                                     <Text style={[Styles.headerBody , {fontSize:14}]}>{ i18n.t('confirm') }</Text>

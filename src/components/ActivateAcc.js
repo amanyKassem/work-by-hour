@@ -27,7 +27,6 @@ class ActivateAcc extends Component {
 
     componentWillMount() {
 		const code = this.props.navigation.state.params.code;
-		alert(code);
 		this.setState({ userId: null })
 	}
 
@@ -60,6 +59,7 @@ class ActivateAcc extends Component {
         const password  = this.props.navigation.state.params.password;
         const phone     = this.props.navigation.state.params.phone;
         const token     = this.props.navigation.state.params.token;
+        const mapRegion = this.props.navigation.state.params.mapRegion;
         const user_id   = this.props.navigation.state.params.userId;
 
 		if (code == this.state.verifyCode){
@@ -70,7 +70,7 @@ class ActivateAcc extends Component {
                 lang: (this.props.lang).toUpperCase()
 			}).then(response => {
 				if (response.data.status == 1){
-					this.props.userLogin({ phone, password, token }, (this.props.lang).toUpperCase());
+					this.props.userLogin({ phone, password, token, mapRegion }, (this.props.lang).toUpperCase());
 				}
 			})
 		}else{
