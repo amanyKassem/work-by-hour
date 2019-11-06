@@ -47,6 +47,22 @@ class Certify extends Component {
 		this.componentWillMount()
 	}
 
+	fetchImages(certificates){
+		console.log(certificates);
+		if (certificates.length > 0){
+			certificates.map((img, i) =>{
+				console.log('elmemy', 'https://' + img);
+				return (
+					<Text>fuck all of u, { img }</Text>
+				);
+			})
+		}
+
+		return (
+			<View />
+		)
+	}
+
     render() {
         return (
             <Container style={{}}>
@@ -56,7 +72,7 @@ class Certify extends Component {
                         <TouchableOpacity onPress={() => this.props.navigation.goBack()} style={Styles.headerTouch}>
                             <Image source={require('../../assets/images/back.png')} style={[Styles.headerMenu , Styles.transform]} resizeMode={'contain'} />
                         </TouchableOpacity>
-                        <Text style={[Styles.headerBody , { flex:1, top:-3 , left:-15 , textAlign:'center'}]}>{ i18n.t('certify&exp') }</Text>
+                        <Text style={[Styles.headerBody , { flex:1, top:-3 , textAlign:'center'}]}>{ i18n.t('certify&exp') }</Text>
                     </View>
                 </Header>
                 <Content >
@@ -72,14 +88,14 @@ class Certify extends Component {
                     {
                         this.state.certifications.map(( certificate, i ) => (
 							<View key={i}>
-								<View style={{flexDirection:'row' , flexWrap:'wrap' , justifyContent:'space-between', alignItems:'center' , marginTop:15}}>
+								<View style={{flexDirection:'row' , flexWrap:'wrap' , marginTop:15}}>
                                     {
 										certificate.certificates ?
 										certificate.certificates.map(( img, j ) => {
-										    console.log('img', img);
+										    console.log('img_' + j + i, img);
 										    return (
 												(
-													<Image key={'img_' + j} source={{ uri: 'https://' + img }} style={{width:100 , height:100}} resizeMode={'contain'} />
+													<Image key={'img_' + j + i} source={{ uri: 'https://' + img }} style={{width:'33%' , height:100}} resizeMode={'contain'} />
 												)
                                             )
                                         }) : (<View />)

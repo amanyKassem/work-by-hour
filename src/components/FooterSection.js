@@ -18,13 +18,12 @@ class FooterSection extends Component {
         }
     }
 
-    componentWillMount() {
-    	if (this.props.user){
-			axios.post( CONST.url + 'user/getUserBalance', { lang : (this.props.lang).toUpperCase(), user_id: this.props.user.user_id})
-				.then(response => {
-					this.setState({ userBalance: response.data.data.price });
-				});
-		}
+	componentWillMount() {
+		axios.post( CONST.url + 'user/getUserBalance', { lang : (this.props.lang).toUpperCase(), user_id: this.props.user_id})
+			.then(response => {
+				this.setState({ userBalance: response.data.data.price });
+			});
+
 	}
 
 	navigateToAddAd(){

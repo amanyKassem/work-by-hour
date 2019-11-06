@@ -39,7 +39,7 @@ class AddAd extends Component {
 			jobDet:'',
 			date: '',
 			time: '',
-			hoursNo: null,
+			hoursNo: '',
 			pricePerHour: null,
 			finalFee: null,
 			isDatePickerVisible: false,
@@ -74,30 +74,7 @@ class AddAd extends Component {
 	_toggleModalAd = () => this.setState({ modalAddAd: !this.state.modalAddAd });
 
 	onConfirm() {
-		const jobName = this.state.jobName;
-		const activity = this.state.activity;
 		this.setState({ modalAddAd: !this.state.modalAddAd });
-		for (let i=0; i < jobName.length; i++){
-			if (!isNaN(jobName[i])){
-				Toast.show({
-					text: i18n.t('jobNameValid'),
-					type: "danger",
-					duration: 3000
-				});
-				return false;
-			}
-		}
-
-		for (let i=0; i < activity.length; i++){
-			if (!isNaN(activity[i])){
-				Toast.show({
-					text: i18n.t('activityValid'),
-					type: "danger",
-					duration: 3000
-				});
-				return false;
-			}
-		}
 
 		this.addAd();
 		this.setState({ modalAddAd: !this.state.modalAddAd });
@@ -152,7 +129,7 @@ class AddAd extends Component {
 				this.setState({ countries: response.data.data, loader: false });
 			});
 
-		axios.post( CONST.url + 'user/percent', { lang : (this.props.lang).toUpperCase() })
+		axios.post( CONST.url + 'user/percent', { lang : (this.props.lang).toUpperCase(), user_id: this.props.user.user_id })
 			.then(response => {
 				this.setState({ percentItem: response.data.data.percentItem, loader: false });
 			});
@@ -371,6 +348,20 @@ class AddAd extends Component {
 			</Button>
 		);
 	}
+	
+	validInput(value, type){
+		const numbersEN = ['0' , '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+		const numbersAR = ["٠", "١", "٢", "٣", "٤", "٥", "٦", "٧", "٨", "٩"];
+
+		const letter = value[value.length - 1];
+
+		if (!numbersEN.includes(letter) && !numbersAR.includes(letter) ){
+			if (type == 'job')
+				this.setState({jobName : value});
+			else
+				this.setState({activity : value});
+		}else return false
+	}
 
 	render() {
 		if (this.state.imageBrowserOpen) {
@@ -389,7 +380,7 @@ class AddAd extends Component {
 						<TouchableOpacity onPress={() => this.props.navigation.goBack()} style={Styles.headerTouch}>
 							<Image source={require('../../assets/images/back.png')} style={[Styles.headerMenu , Styles.transform]} resizeMode={'contain'} />
 						</TouchableOpacity>
-						<Text style={[Styles.headerBody , { flex:1, top:-3 , left:-15 , textAlign:'center'}]}>{ i18n.t('addAd') }</Text>
+						<Text style={[Styles.headerBody , { flex:1, top:-3 , textAlign:'center'}]}>{ i18n.t('addAd') }</Text>
 					</View>
 				</Header>
 				<Content >
@@ -400,7 +391,7 @@ class AddAd extends Component {
 								<View style={[Styles.inputParent ,{ borderColor:  '#eee' , backgroundColor:'#F6F6F6' , borderRadius:25 , height:40 , marginBottom:20}]}>
 									<Item stackedLabel style={Styles.item } bordered>
 										<Label style={[Styles.labelItem , {top:-25 , left:-13 , backgroundColor:'transparent'}]}>{ i18n.t('jobName') }</Label>
-										<Input value={this.state.jobName} onChangeText={(jobName) => this.setState({jobName})} autoCapitalize='none' style={[Styles.itemInput , {top:-20 , paddingRight:15}]}  />
+											<Input value={this.state.jobName} onChangeText={(jobName) => this.validInput(jobName, 'job')} autoCapitalize='none' style={[Styles.itemInput , {top:-20 , paddingRight:15}]}  />
 									</Item>
 								</View>
 								<View>
@@ -433,7 +424,7 @@ class AddAd extends Component {
 								<View style={[Styles.inputParent ,{ borderColor:  '#eee' , backgroundColor:'#F6F6F6' , borderRadius:25 , height:40 , marginBottom:20}]}>
 									<Item stackedLabel style={Styles.item } bordered>
 										<Label style={[Styles.labelItem , {top:-25 , left:-13 , backgroundColor:'transparent'}]}>{ i18n.t('activity') }</Label>
-										<Input value={this.state.activity} onChangeText={(activity) => this.setState({activity})} autoCapitalize='none' style={[Styles.itemInput , {top:-20 , paddingRight:15}]}  />
+										<Input value={this.state.activity} onChangeText={(activity) => this.validInput(activity, 'activity')} autoCapitalize='none' style={[Styles.itemInput , {top:-20 , paddingRight:15}]}  />
 									</Item>
 								</View>
 								<View>
@@ -456,11 +447,11 @@ class AddAd extends Component {
 								</View>
 								<View>
 									<Item style={[Styles.inputParent ,{ borderColor:  '#eee' , backgroundColor:'#F6F6F6' , borderRadius:25 , height:40 , marginBottom:20}]} regular >
-										<Label style={[Styles.labelItem , {top:-35 , left:0 , position:'absolute'}]}>{ i18n.t('workType') }</Label>
+										<Label style={[Styles.labelItem , {top:-35 , left:0 , position:'absolute'}]}>{ i18n.t('gender') }</Label>
 										<Picker
 											mode="dropdown"
 											style={Styles.picker}
-											placeholder={i18n.t('workType')}
+											placeholder={i18n.t('gender')}
 											placeholderStyle={{ color: "#acabae" }}
 											placeholderIconColor="#acabae"
 											selectedValue={this.state.selectedGender}
@@ -480,13 +471,13 @@ class AddAd extends Component {
 											<View style={[Styles.inputParent ,{ borderColor:  '#eee' , backgroundColor:'#F6F6F6' , borderRadius:25 , height:40 , marginBottom:20}]}>
 												<Item stackedLabel style={Styles.item } bordered>
 													<Label style={[Styles.labelItem , {top:-25 , left:-13 , backgroundColor:'transparent'}]}>{ i18n.t('hoursNo') }</Label>
-													<Input value={this.state.hoursNo} onChangeText={(hoursNo) => this.setState({hoursNo})} autoCapitalize='none' style={[Styles.itemInput , {top:-20 , paddingRight:15}]}  />
+													<Input keyboardType={'number-pad'} value={this.state.hoursNo} onChangeText={(hoursNo) =>  this.setState({hoursNo})} maxLength={3} autoCapitalize='none' style={[Styles.itemInput , {top:-20 , paddingRight:15}]}  />
 												</Item>
 											</View>
 											<View style={[Styles.inputParent ,{ borderColor:  '#eee' , backgroundColor:'#F6F6F6' , borderRadius:25 , height:40 , marginBottom:20}]}>
 												<Item stackedLabel style={Styles.item } bordered>
 													<Label style={[Styles.labelItem , {top:-25 , left:-13 , backgroundColor:'transparent'}]}>{ i18n.t('pricePerHour') }</Label>
-													<Input value={this.state.pricePerHour} onChangeText={(pricePerHour) => this.setState({pricePerHour})} autoCapitalize='none' style={[Styles.itemInput , {top:-20 , paddingRight:15}]}  />
+													<Input maxLength={3} keyboardType={'number-pad'} value={this.state.pricePerHour} onChangeText={(pricePerHour) => this.setState({pricePerHour})} autoCapitalize='none' style={[Styles.itemInput , {top:-20 , paddingRight:15}]}  />
 												</Item>
 											</View>
 										</View>
@@ -598,7 +589,7 @@ class AddAd extends Component {
 									<View style={Styles.modalStyle}>
 										<Image source={require('../../assets/images/alarm.png')}  style={{width:70 , height:70 , transform: I18nManager.isRTL ? [{rotateY : '0deg'}] : [{rotateY : '-180deg'}]}} resizeMode={'contain'} />
 										<Text style={[Styles.tegisterText , { fontSize:13 , color:'#fff' , top:20 , textAlign:'center', position:'absolute'}]}>{ i18n.t('attention') }</Text>
-										<Text style={[Styles.tegisterText , {marginTop:5 , marginBottom:15 , fontSize:13 , color:'#444444' , textAlign:'center'}]}>{ i18n.t('noteThat') } <Text style={{color:'#035F5B'}}>{ this.state.percentItem }$</Text> { i18n.t('ofUrWallet') } </Text>
+										<Text style={[Styles.tegisterText , {marginTop:5 , marginBottom:15 , fontSize:13 , color:'#444444' , textAlign:'center'}]}>{ i18n.t('noteThat') } <Text style={{color:'#035F5B'}}>{ this.state.percentItem }</Text> { i18n.t('ofUrWallet') } </Text>
 										<View style={{flexDirection:'row' , justifyContent:'center'}}>
 											<TouchableOpacity onPress={() => this.onConfirm()} style={[Styles.touchModal , {backgroundColor:'#035F5B'}]}>
 												<Text style={[Styles.headerBody , {fontSize:14}]}>{ i18n.t('confirm') }</Text>

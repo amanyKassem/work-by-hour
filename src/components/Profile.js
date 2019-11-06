@@ -5,8 +5,7 @@ import FooterSection from './FooterSection';
 import Styles from '../../assets/styles'
 import i18n from '../../local/i18n'
 import {connect} from "react-redux";
-
-
+import { profile } from '../actions'
 
 class Profile extends Component {
     constructor(props){
@@ -16,15 +15,17 @@ class Profile extends Component {
         }
     }
 
-
     static navigationOptions = () => ({
         drawerLabel: () => null
     });
 
+    componentWillMount() {
+        this.props.profile(this.props.user.user_id, (this.props.lang).toUpperCase())
+	}
 
-    render() {
+
+	render() {
         return (
-
             <Container style={{}}>
                 <Header style={Styles.header} noShadow>
                     <View style={Styles.headerView}>
@@ -64,7 +65,7 @@ class Profile extends Component {
                     <View style={{borderWidth:1 , borderColor:'#e6e6e6' , marginVertical:10}}/>
                     </View>
                 </Content>
-                <FooterSection routeName={'profile'} navigation={this.props.navigation}/>
+                <FooterSection user_id={ this.props.auth != null ? this.props.auth.data.data.user_id : null} routeName={'profile'} navigation={this.props.navigation}/>
             </Container>
 
         );
@@ -72,11 +73,12 @@ class Profile extends Component {
 }
 
 
-const mapStateToProps = ({ lang, profile  }) => {
+const mapStateToProps = ({ lang, profile, auth  }) => {
 	return {
 		lang: lang.lang,
 		user: profile.user,
+		auth: auth.user,
 	};
 };
 
-export default connect(mapStateToProps, {})(Profile);
+export default connect(mapStateToProps, { profile })(Profile);

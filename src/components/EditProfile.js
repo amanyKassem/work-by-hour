@@ -129,7 +129,7 @@ class EditProfile extends Component {
 						<TouchableOpacity onPress={() => this.props.navigation.goBack()} style={Styles.headerTouch}>
 							<Image source={require('../../assets/images/back.png')} style={[Styles.headerMenu , Styles.transform]} resizeMode={'contain'} />
 						</TouchableOpacity>
-						<Text style={[Styles.headerBody , { flex:1, top:-3 , left:-15 , textAlign:'center'}]}>{ i18n.t('profile') }</Text>
+						<Text style={[Styles.headerBody , { flex:1, top:-3 , textAlign:'center'}]}>{ i18n.t('profile') }</Text>
 					</View>
 				</Header>
 				<Content >
@@ -200,11 +200,10 @@ class EditProfile extends Component {
 										selectedValue={this.state.selectedKayan}
 										onValueChange={(value) => this.setState({ selectedKayan: value })}
 									>
-										<Picker.Item label={i18n.t('individual')} value={i18n.t('individual')} />
-										<Picker.Item label={i18n.t('company')} value={i18n.t('company')} />
-										<Picker.Item label={i18n.t('establishment')} value={i18n.t('establishment')} />
-										<Picker.Item label={i18n.t('other')} value={i18n.t('other')} />
-
+										<Picker.Item label={i18n.t('individual')} value='individual' />
+										<Picker.Item label={i18n.t('company')} value='company' />
+										<Picker.Item label={i18n.t('establishment')} value='establishment' />
+										<Picker.Item label={i18n.t('other')} value='other' />
 									</Picker>
 									<Icon name='angle-down' type={"FontAwesome"} style={Styles.pickerImg} style={{ color: "#878787", fontSize:23 , right: 10}}/>
 								</Item>

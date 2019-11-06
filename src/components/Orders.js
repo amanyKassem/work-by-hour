@@ -83,7 +83,7 @@ class Orders extends Component {
                     <View style={{marginBottom:20}}>
                         {
                             this.state.ads.map((ad, i ) => (
-								<TouchableOpacity key={i} onPress={() => this.props.navigation.navigate('addDet', { id: ad._id } )} style={Styles.jobBlock}>
+								<TouchableOpacity key={i} onPress={() => this.props.navigation.navigate('addDet', { id: ad._id, type: 0 } )} style={Styles.jobBlock}>
 									<Text style={[Styles.tegisterText , {marginTop:0}]}>{ ad.workName }</Text>
 									<View style={{flexDirection:'row' , justifyContent:'space-between'}}>
 										<Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('adNumber') }: <Text style={{color:'#444444'}}>{ ad.advertisingNumber }</Text></Text>
@@ -111,17 +111,18 @@ class Orders extends Component {
                     </View>
                     </View>
                 </Content>
-                <FooterSection routeName={'orders'} navigation={this.props.navigation}/>
+                <FooterSection user_id={ this.props.auth != null ? this.props.auth.data.data.user_id : null} routeName={'orders'} navigation={this.props.navigation}/>
             </Container>
 
         );
     }
 }
 
-const mapStateToProps = ({ lang, profile  }) => {
+const mapStateToProps = ({ lang, profile, auth  }) => {
 	return {
 		lang: lang.lang,
 		user: profile.user,
+		auth: auth.user,
 	};
 };
 

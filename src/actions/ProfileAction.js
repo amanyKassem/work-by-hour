@@ -5,6 +5,7 @@ import {AsyncStorage} from "react-native";
 
 
 export const profile = (id, lang) => {
+    // alert(lang);
     return (dispatch) => {
         axios({
             method: 'POST',

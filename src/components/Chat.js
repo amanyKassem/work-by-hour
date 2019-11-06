@@ -81,6 +81,15 @@ class Chat extends Component {
 		this.componentWillMount()
 	}
 
+	sendMessage(){
+	    const reciver_id = this.props.navigation.state.params.reciver_id;
+		axios.post( CONST.url + 'user/SendChat', { lang : (this.props.lang).toUpperCase(), sender_id: this.props.user.user_id, reciver_id, message: this.state.msg })
+			.then(response => {
+				this.setState({ msg: null, loader: false });
+				this.componentWillMount();
+			});
+    }
+
     render() {
         return (
             <Container style={{}}>
@@ -90,7 +99,7 @@ class Chat extends Component {
                         <TouchableOpacity onPress={() => this.props.navigation.goBack()} style={Styles.headerTouch}>
                             <Image source={require('../../assets/images/back.png')} style={[Styles.headerMenu , Styles.transform]} resizeMode={'contain'} />
                         </TouchableOpacity>
-                        <Text style={[Styles.headerBody , { flex:1, top:-3 , left:-15 , textAlign:'center'}]}>{ this.props.navigation.state.params.username }</Text>
+                        <Text style={[Styles.headerBody , { flex:1, top:-3 , textAlign:'center'}]}>{ this.props.navigation.state.params.name }</Text>
                     </View>
                 </Header>
 				{ this.renderLoader() }
