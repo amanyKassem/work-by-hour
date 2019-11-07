@@ -21,6 +21,7 @@ class Home extends Component {
             search:'',
 			loader: false,
 			token: '',
+            notifyCounter: 0,
 			routeName: this.props.navigation.state.routeName
         }
     }
@@ -28,9 +29,9 @@ class Home extends Component {
     async componentWillMount() {
 		Notifications.setBadgeNumberAsync(0);
 		this.setState({ loader: true });
-		axios.post( CONST.url + 'department/allDepartment', { lang : (this.props.lang).toUpperCase()})
+		axios.post( CONST.url + 'department/allDepartment', { lang : (this.props.lang).toUpperCase(), user_id: this.props.user.user_id})
 			.then(response => {
-                this.setState({ categories: response.data.data, loader: false });
+                this.setState({ categories: response.data.data, loader: false, notifyCounter: response.data.counterNotification });
             });
 
 		const { status: existingStatus } = await Permissions.getAsync(
@@ -135,6 +136,13 @@ class Home extends Component {
                         <Text style={Styles.headerBody}>{ i18n.t('home') }</Text>
                         <TouchableOpacity onPress={() => this.props.navigation.navigate('notifications')} style={Styles.headerTouch}>
                             <Image source={require('../../assets/images/notifications.png')} style={Styles.headerNoti} resizeMode={'contain'} />
+                            {
+                                this.state.notifyCounter > 0 ? (
+                                    <View style={{ backgroundColor: 'red', borderRadius: 30, width: 20, height: 20, alignItems: 'center', justifyContent: 'center', position: 'absolute', right: 25, top: 5 }}>
+                                        <Text style={{ color: '#fff' }}>{ this.state.notifyCounter }</Text>
+                                    </View>
+                                ) : ( <View /> )
+                            }
                         </TouchableOpacity>
                     </View>
                 </Header>

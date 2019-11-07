@@ -131,6 +131,7 @@ const en = {
 	'both': 'both',
 	'jobNameValid': 'job name has numbers',
 	'activityValid': 'activity has numbers',
+    'codeNotCorrect': 'code not correct',
 }
 
 export default en;

@@ -5,7 +5,9 @@ import FooterSection from './FooterSection';
 import Styles from '../../assets/styles'
 import i18n from '../../local/i18n'
 import { connect } from 'react-redux';
-import {chooseLang, logout, tempAuth} from '../actions';
+import {chooseLang, logout, tempAuth, updateProfile , profile} from '../actions';
+import axios from "axios";
+import CONST from "../consts";
 
 
 class Settings extends Component {
@@ -14,11 +16,22 @@ class Settings extends Component {
 
         this.state={
             SwitchOnValueHolder: false,
+			isSubmitted: false,
             language: this.props.lang
         }
+
     }
 
-    static navigationOptions = () => ({
+    componentWillMount() {
+        if(this.props.user.isNotify === "1")
+        {
+            this.setState({SwitchOnValueHolder : true})
+        }else{
+            this.setState({SwitchOnValueHolder : false})
+        }
+	}
+
+	static navigationOptions = () => ({
         drawerLabel: () => null
     });
 
@@ -31,13 +44,43 @@ class Settings extends Component {
 
     stopNotification = (value) =>{
         this.setState({  SwitchOnValueHolder:!this.state.SwitchOnValueHolder})
+
+		this.setState({ isSubmitted: true });
+		axios.post(CONST.url + 'user/isNotify' ,{
+			user_id: this.props.user.user_id,
+            type   : (this.state.SwitchOnValueHolder === true ) ?  1 : 0
+		}).then(response => {
+
+
+			Toast.show({
+				text: response.data.message,
+				type: response.data.status == 1 ? "success" : "danger",
+				duration: 3000
+			});
+			 this.setState({ isSubmitted: false , phone:'' });
+
+		     this.props.profile(this.props.user.user_id, (this.props.lang).toUpperCase());
+
+
+
+
+		})
     }
 
 
+    componentWillReceiveProps(newProps) {
+
+	}
+
+
 	logout(){
-		this.props.logout({ user_id: this.props.user.user_id });
-		this.props.tempAuth();
-		this.props.chooseLang(null);
+
+
+		setTimeout(()=> {
+			this.props.logout({ user_id: this.props.user.user_id });
+			this.props.tempAuth();
+			 this.props.chooseLang(null);
+        }, 300)
 
 		// this.props.navigation.navigate('language');
 	}
@@ -76,7 +119,7 @@ class Settings extends Component {
                         </Item>
                     </View>
                     <View style={{borderWidth:1 , borderColor:'#e6e6e6' , marginVertical:10}}/>
-                    <TouchableOpacity  onPress={() => this.props.navigation.navigate('certify')} style={{flexDirection:'row' , justifyContent:'space-between', alignItems:'center'}}>
+                    <TouchableOpacity  style={{flexDirection:'row' , justifyContent:'space-between', alignItems:'center'}}>
                         <Text style={{color:'#00918B',  fontSize:17, fontFamily: 'RegularFont' }}>{ i18n.t('notifications') }</Text>
                         <Switch
                             onValueChange={(value) => this.stopNotification(value)}
@@ -111,4 +154,4 @@ const mapStateToProps = ({ lang, profile, auth  }) => {
 	};
 };
 
-export default connect(mapStateToProps, { chooseLang , tempAuth, logout })(Settings);
+export default connect(mapStateToProps, { chooseLang , tempAuth, logout ,updateProfile ,profile })(Settings);

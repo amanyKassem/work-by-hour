@@ -38,7 +38,6 @@ class AddDet extends Component {
         }
     }
 
-
     static navigationOptions = () => ({
         drawerLabel: () => null
     });
@@ -62,9 +61,8 @@ class AddDet extends Component {
 		axios.post( CONST.url + 'advertise/deleteAdvertise', { _id: this.props.navigation.state.params.id, })
 			.then(response => {
 				this.setState({ isModalVisible : false });
+                this.props.navigation.navigate('orders');
 			});
-
-		this.props.navigation.navigate('drawerNavigator');
     }
 
 	_linkPressed (url){
@@ -93,7 +91,7 @@ class AddDet extends Component {
 				<NavigationEvents onWillFocus={() => this.onFocus()} />
                 <Header style={Styles.header} noShadow>
                     <View style={Styles.headerView}>
-                        <TouchableOpacity onPress={() => this.props.navigation.goBack()} style={Styles.headerTouch}>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('myAdds')} style={Styles.headerTouch}>
                             <Image source={require('../../assets/images/back.png')} style={[Styles.headerMenu , Styles.transform]} resizeMode={'contain'} />
                         </TouchableOpacity>
                         <Text style={[Styles.headerBody , { flex:1, top:-3 , textAlign:'center'}]}>{ this.state.dataAdvertise.workName }</Text>

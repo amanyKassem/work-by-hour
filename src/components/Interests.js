@@ -61,7 +61,7 @@ class Interests extends Component {
 				<NavigationEvents onWillFocus={() => this.onFocus()} />
                 <Header style={Styles.header} noShadow>
                     <View style={Styles.headerView}>
-                        <TouchableOpacity onPress={() => this.props.navigation.goBack()} style={Styles.headerTouch}>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('profile')} style={Styles.headerTouch}>
                             <Image source={require('../../assets/images/back.png')} style={[Styles.headerMenu , Styles.transform]} resizeMode={'contain'} />
                         </TouchableOpacity>
                         <Text style={[Styles.headerBody , { flex:1, top:-3 , textAlign:'center'}]}>{ i18n.t('interests') }</Text>

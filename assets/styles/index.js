@@ -256,8 +256,8 @@ const styles = ({
         alignSelf:'center'
     },
     headerNoti:{
-        width: 20,
-        height: 20,
+        width: 30,
+        height: 30,
         alignSelf:'center'
     },
     header:{

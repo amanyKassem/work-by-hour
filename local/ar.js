@@ -10,6 +10,7 @@ const ar = {
     'newPass': 'كلمة المرور الجديدة',
     'verifyPass': 'تأكيد كلمة المرور',
     'verifyNewPass': 'تأكيد كلمة المرور الجديدة',
+    'codeNotCorrect': 'كود التفعيل غير صحيح',
     'confirm': 'تأكيد',
     'username': 'اسم المستخدم',
     'email': 'البريد الالكتروني',

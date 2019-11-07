@@ -75,6 +75,7 @@ const DrawerNavigator = createDrawerNavigator({
     activateAcc:ActivateAcc,
     addAdCongrats:AddAdCongrats,
 
+
 },{
     initialRouteName:'home',
     drawerPosition:I18nManager.isRTL ?'right' : 'left',

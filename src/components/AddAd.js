@@ -20,6 +20,7 @@ import axios from 'axios';
 import {ImageBrowser,CameraBrowser} from 'expo-multiple-imagepicker';
 import {DoubleBounce} from "react-native-loader";
 import {connect} from "react-redux";
+import {NavigationEvents} from "react-navigation"
 
 import Modal from "react-native-modal";
 import CONST from "../consts";
@@ -62,16 +63,27 @@ class AddAd extends Component {
 			countries: [],
 			loader: false,
 			isSubmitted: false,
-			percentItem: null
+			percentItem: null,
+			userBalance: 0
 		}
 	}
-
 
 	static navigationOptions = () => ({
 		drawerLabel: () => null
 	});
 
-	_toggleModalAd = () => this.setState({ modalAddAd: !this.state.modalAddAd });
+	_toggleModalAd = () =>{
+		console.log(this.state.userBalance);
+		if (this.state.userBalance > 0)
+			this.setState({ modalAddAd: !this.state.modalAddAd });
+		else {
+			Toast.show({
+				text: i18n.t('noBalance'),
+				type: "danger",
+				duration: 3000
+			});
+		}
+	}
 
 	onConfirm() {
 		this.setState({ modalAddAd: !this.state.modalAddAd });
@@ -117,11 +129,15 @@ class AddAd extends Component {
 
 
 	async componentWillMount() {
-
 		this.setState({ loader: true });
 		axios.post( CONST.url + 'department/allDepartment', { lang : (this.props.lang).toUpperCase()})
 			.then(response => {
 				this.setState({ categories: response.data.data, loader: false });
+			});
+
+		axios.post( CONST.url + 'user/getUserBalance', { lang : (this.props.lang).toUpperCase(), user_id: this.props.user.user_id })
+			.then(response => {
+				this.setState({ userBalance: response.data.data.price });
 			});
 
 		axios.post( CONST.url + 'country/allCountry', { lang : (this.props.lang).toUpperCase() })
@@ -147,7 +163,7 @@ class AddAd extends Component {
 
 		let getCity = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=';
 		getCity += this.state.mapRegion.latitude + ',' + this.state.mapRegion.longitude;
-		getCity += '&key=AIzaSyDYjCVA8YFhqN2pGiW4I8BCwhlxThs1Lc0&language=ar&sensor=true';
+		getCity += '&key=AIzaSyCJTSwkdcdRpIXp2yG7DfSRKFWxKhQdYhQ&language=ar&sensor=true';
 
 		console.log(getCity);
 
@@ -174,7 +190,7 @@ class AddAd extends Component {
 
 		let getCity = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=';
 		getCity += mapRegion.latitude + ',' + mapRegion.longitude;
-		getCity += '&key=AIzaSyDYjCVA8YFhqN2pGiW4I8BCwhlxThs1Lc0&language=ar&sensor=true';
+		getCity += '&key=AIzaSyCJTSwkdcdRpIXp2yG7DfSRKFWxKhQdYhQ&language=ar&sensor=true';
 		console.log('locations data', getCity);
 
 		try {
@@ -363,6 +379,11 @@ class AddAd extends Component {
 		}else return false
 	}
 
+	onFocus(){
+		this.setState({ jobName:'', selectedType:1, selectedGender:1, selectedSection:null, selectedCountry:null, jobDet:'', date: '', time: '', hoursNo: '', pricePerHour: null, finalFee: null, isDatePickerVisible: false, isTimePickerVisible: false, location: '', activity: '', isModalVisible: false, city: '', mapRegion: null, hasLocationPermissions: false, initMap: true, imageBrowserOpen: false, cameraBrowserOpen: false, photos: [{ file: null }], imageId: null, refreshed: false, base64: [], modalAddAd: false, loader: false, isSubmitted: false, percentItem: null })
+		this.componentWillMount();
+	}
+
 	render() {
 		if (this.state.imageBrowserOpen) {
 			return(<ImageBrowser base64={true} max={10} callback={this.imageBrowserCallback}/>);
@@ -375,6 +396,7 @@ class AddAd extends Component {
 
 		return (
 			<Container style={{}}>
+				<NavigationEvents onWillFocus={() => this.onFocus()} />
 				<Header style={Styles.header} noShadow>
 					<View style={Styles.headerView}>
 						<TouchableOpacity onPress={() => this.props.navigation.goBack()} style={Styles.headerTouch}>
@@ -485,7 +507,7 @@ class AddAd extends Component {
 										<View style={[Styles.inputParent ,{ borderColor:  '#eee' , backgroundColor:'#F6F6F6' , borderRadius:25 , height:40 , marginBottom:20}]}>
 											<Item stackedLabel style={Styles.item } bordered>
 												<Label style={[Styles.labelItem , {top:-25 , left:-13 , backgroundColor:'transparent'}]}>{ i18n.t('finalFee') }</Label>
-												<Input value={this.state.finalFee} onChangeText={(finalFee) => this.setState({finalFee})} autoCapitalize='none' style={[Styles.itemInput , {top:-20 , paddingRight:15}]}  />
+												<Input value={this.state.finalFee} maxLength={3} onChangeText={(finalFee) => this.setState({finalFee})} autoCapitalize='none' style={[Styles.itemInput , {top:-20 , paddingRight:15}]}  />
 											</Item>
 										</View>
 									)
