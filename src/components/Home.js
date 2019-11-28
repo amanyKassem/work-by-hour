@@ -29,7 +29,7 @@ class Home extends Component {
     async componentWillMount() {
 		Notifications.setBadgeNumberAsync(0);
 		this.setState({ loader: true });
-		axios.post( CONST.url + 'department/allDepartment', { lang : (this.props.lang).toUpperCase(), user_id: this.props.user.user_id})
+		axios.post( CONST.url + 'department/allDepartment', { lang : (this.props.lang).toUpperCase(), user_id: this.props.auth != null ? this.props.auth.data.data.user_id : null})
 			.then(response => {
                 this.setState({ categories: response.data.data, loader: false, notifyCounter: response.data.counterNotification });
             });

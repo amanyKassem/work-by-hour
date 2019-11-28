@@ -12,6 +12,7 @@ const ar = {
     'verifyNewPass': 'تأكيد كلمة المرور الجديدة',
     'codeNotCorrect': 'كود التفعيل غير صحيح',
     'confirm': 'تأكيد',
+    'selectedKayanValidation': 'قم بتحديد نوع الكيان',
     'username': 'اسم المستخدم',
     'email': 'البريد الالكتروني',
     'noNotifications': 'لا يوجد اشعارات',
@@ -96,6 +97,7 @@ const ar = {
     'req&ann': 'طلباتي واعلاناتي',
     'req': 'طلباتي',
     'ann': 'اعلاناتي',
+    'other': 'أخري',
     'urRate': 'لا تنسي ان تضع تقييمك',
     'currentBalance': 'رصيدك الحالي',
     'DR': 'دولار',
@@ -131,6 +133,7 @@ const ar = {
 	'noBalance': 'ليس لديك رصيد كافٍ لإضافة إعلان جديد',
 	'jobNameValid': 'اسم الوظيفة يحتوي علي ارقام',
 	'activityValid': 'النشاط يحتوي علي ارقام',
+	'verifyPassword': 'كلمة المرور و تأكيد كلمة المرور غير متطابقة',
 
 }
 

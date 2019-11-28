@@ -13,6 +13,7 @@ const en = {
     'stopNotification': 'Stop notification',
     'shareApp': 'Share app',
     'verifyCode': 'Verification code',
+    'selectedKayanValidation': 'Type is required',
     'newPass': 'New password',
     'verifyNewPass': 'Confirm your new password',
     'verifyPass': 'Confirm your password',
@@ -132,6 +133,7 @@ const en = {
 	'jobNameValid': 'job name has numbers',
 	'activityValid': 'activity has numbers',
     'codeNotCorrect': 'code not correct',
+    'verifyPassword': 'Password and Confirm Password do not match',
 }
 
 export default en;

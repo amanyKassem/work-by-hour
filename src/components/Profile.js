@@ -25,6 +25,16 @@ class Profile extends Component {
 
 
 	render() {
+
+		let { user } = this.props;
+		if (user === null)
+			user = {
+				imageProfile:  'cross.4hoste.com:30011/images/defaultUser.jpg',
+				userName:       i18n.t('guest'),
+				mobile: '',
+				userType: ''
+			}
+
         return (
             <Container style={{}}>
                 <Header style={Styles.header} noShadow>
@@ -42,10 +52,10 @@ class Profile extends Component {
                     <View style={{padding:15}}>
                     <View style={{flexDirection:'row' , justifyContent:'space-between', alignItems:'center'}}>
                         <View style={{flexDirection:'row' , alignItems:'center'}}>
-                            <Image source={{ uri: 'https://' + this.props.user.imageProfile }} resizeMode={'cover'} style={{ width: 60, height: 60 , borderRadius:Platform.OS === 'ios' ?35 :50 , marginRight:10}}/>
+                            <Image source={{ uri: 'https://' + user.imageProfile }} resizeMode={'cover'} style={{ width: 60, height: 60 , borderRadius:Platform.OS === 'ios' ?35 :50 , marginRight:10}}/>
                             <View>
-                                <Text style={{color:'#00918B',  fontSize:17, fontFamily: 'RegularFont' , lineHeight:14}}>{ this.props.user.userName }</Text>
-                                <Text style={{color:'#878787',  fontSize:15, fontFamily: 'RegularFont', textAlign: I18nManager.isRTL ?'right' : 'left'}}>{ this.props.user.userType }</Text>
+                                <Text style={{color:'#00918B',  fontSize:17, fontFamily: 'RegularFont' , lineHeight:14}}>{ user.userName }</Text>
+                                <Text style={{color:'#878787',  fontSize:15, fontFamily: 'RegularFont', textAlign: I18nManager.isRTL ?'right' : 'left'}}>{ user.userType }</Text>
                             </View>
                         </View>
                         <TouchableOpacity onPress={() => this.props.navigation.navigate('editProfile')}>

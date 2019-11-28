@@ -42,7 +42,7 @@ class Settings extends Component {
         }
 	};
 
-    stopNotification = (value) =>{
+    stopNotification = () =>{
         this.setState({  SwitchOnValueHolder:!this.state.SwitchOnValueHolder})
 
 		this.setState({ isSubmitted: true });
@@ -75,14 +75,13 @@ class Settings extends Component {
 
 	logout(){
 
-
 		setTimeout(()=> {
 			this.props.logout({ user_id: this.props.user.user_id });
 			this.props.tempAuth();
 			 this.props.chooseLang(null);
         }, 300)
 
-		// this.props.navigation.navigate('language');
+		this.props.navigation.navigate('language');
 	}
 
     render() {
@@ -119,10 +118,10 @@ class Settings extends Component {
                         </Item>
                     </View>
                     <View style={{borderWidth:1 , borderColor:'#e6e6e6' , marginVertical:10}}/>
-                    <TouchableOpacity  style={{flexDirection:'row' , justifyContent:'space-between', alignItems:'center'}}>
+                    <TouchableOpacity onPress={() => this.stopNotification()}  style={{flexDirection:'row' , justifyContent:'space-between', alignItems:'center'}}>
                         <Text style={{color:'#00918B',  fontSize:17, fontFamily: 'RegularFont' }}>{ i18n.t('notifications') }</Text>
                         <Switch
-                            onValueChange={(value) => this.stopNotification(value)}
+                            onValueChange={() => this.stopNotification()}
                             style={{right:-3 }}
                             value={this.state.SwitchOnValueHolder}
                             onTintColor={'#00918B'}

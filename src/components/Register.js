@@ -36,7 +36,7 @@ class Register extends Component {
             image: null,
             base64: null,
             selectedCountry: null,
-            selectedKayan: i18n.t('individual'),
+            selectedKayan: null,
 			countries: [],
 			isSubmitted: false,
 			mapRegion: null
@@ -137,6 +137,9 @@ class Register extends Component {
 		}else if (this.state.password != this.state.rePassword) {
 			isError = true;
 			msg = i18n.t('verifyPassword');
+		}else if (this.state.selectedKayan === null) {
+			isError = true;
+			msg = i18n.t('selectedKayanValidation');
 		}else if (this.state.password.length < 6) {
 			isError = true;
 			msg = i18n.t('passwordLength');
@@ -264,6 +267,7 @@ class Register extends Component {
                                                 selectedValue={this.state.selectedKayan}
                                                 onValueChange={(value) => this.setState({ selectedKayan: value })}
                                             >
+                                                <Picker.Item label={i18n.t('entityType')} value={null} />
                                                 <Picker.Item label={i18n.t('individual')} value='individual' />
                                                 <Picker.Item label={i18n.t('company')} value='company' />
                                                 <Picker.Item label={i18n.t('establishment')} value='establishment' />
