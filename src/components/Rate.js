@@ -42,6 +42,8 @@ class Rate extends Component {
 
 	onConfirmRate(){
 		const user_id = this.props.navigation.state.params.id;
+		const adId = this.props.navigation.state.params.adId;
+
 		this.setState({ isSubmitted: true });
 
 		axios.post( CONST.url + 'user/Rating', {
@@ -56,6 +58,8 @@ class Rate extends Component {
 			});
 
 			this.setState({ starCount: response.data.data.rating, isSubmitted: false });
+
+			this.props.navigation.navigate('addDet', { id: adId, type: 0 });
 		})
     }
 

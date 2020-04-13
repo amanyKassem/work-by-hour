@@ -25,7 +25,7 @@
     },
     "android": {
       "package": "com.aait.workbyhour",
-      "versionCode": 21,
+      "versionCode": 26,
       "config": {
         "googleMaps": {
           "apiKey": "AIzaSyDDGCkEv3jHUzSA1FVI26h_OadsG297Pe8"

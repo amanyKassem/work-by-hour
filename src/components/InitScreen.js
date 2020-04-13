@@ -10,6 +10,7 @@ class InitScreen extends Component {
 
 	async componentWillMount() {
 		console.log('langRR..', this.props.lang);
+
 		if (this.props.lang == null)
 			this.props.navigation.navigate('language');
 		else if (this.props.auth == null || this.props.user == null)

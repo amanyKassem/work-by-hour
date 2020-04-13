@@ -9,7 +9,7 @@ import CONST from "../consts";
 import {DoubleBounce} from "react-native-loader";
 import {connect} from "react-redux";
 import {NavigationEvents} from "react-navigation";
-
+import StarRating from 'react-native-star-rating';
 
 const height = Dimensions.get('window').height;
 class Orders extends Component {
@@ -85,13 +85,30 @@ class Orders extends Component {
                             this.state.ads.map((ad, i ) => (
 								<TouchableOpacity key={i} onPress={() => this.props.navigation.navigate('addDet', { id: ad._id, type: 0 } )} style={Styles.jobBlock}>
 									<Text style={[Styles.tegisterText , {marginTop:0}]}>{ ad.workName }</Text>
+									<View style={{ alignItems: 'center', alignSelf: 'center', width: 155, marginTop: 5 }}>
+										<StarRating
+											disabled={true}
+											maxStars={5}
+											rating={ ad.rating }
+											fullStarColor={'#ffcd00'}
+											starSize={14}
+											starStyle={{color: '#ffcd00', marginHorizontal: 1}}
+										/>
+									</View>
 									<View style={{flexDirection:'row' , justifyContent:'space-between'}}>
 										<Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('adNumber') }: <Text style={{color:'#444444'}}>{ ad.advertisingNumber }</Text></Text>
 										<Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('activityName') }: <Text style={{color:'#444444'}}>{ ad.workStyle }</Text></Text>
 									</View>
 									<View style={{flexDirection:'row' , justifyContent:'space-between'}}>
-										<Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('time') }: <Text style={{color:'#444444'}}>{ ad.timeOFWork }</Text></Text>
-										<Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('date') }: <Text style={{color:'#444444'}}>{ ad.time_Started }</Text></Text>
+										{
+											ad.timeOFWork != '' ?
+												<Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('time') }: <Text style={{color:'#444444'}}>{ ad.timeOFWork }</Text></Text> : null
+										}
+
+										{
+											ad.time_Started != '' ?
+												<Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('date') }: <Text style={{color:'#444444'}}>{ ad.time_Started }</Text></Text> : null
+										}
 									</View>
 									{
 										ad.typeWork == 'with' ? (

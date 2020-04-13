@@ -9,7 +9,7 @@ import {
 	Platform,
 	Dimensions
 } from "react-native";
-import {Container, Content, Icon, Header, Item, Input, Button, Form} from 'native-base'
+import {Container, Content, Icon, Header, Item, Input, Button, Form, Toast} from 'native-base'
 import Styles from '../../assets/styles'
 import i18n from '../../local/i18n'
 import StarRating from 'react-native-star-rating';
@@ -28,13 +28,13 @@ class AddDet extends Component {
         super(props);
 
         this.state={
-            starCount:3,
             isModalVisible: false,
 			dataAdvertise: [],
 			userData: [],
 			socialMediaData: [],
 			loader: false,
-			roomId: null
+			roomId: null,
+			starCount: 0,
         }
     }
 
@@ -69,6 +69,24 @@ class AddDet extends Component {
         Linking.openURL(url);
     }
 
+	onStarRatingPress(rating) {
+		this.setState({ starCount: rating });
+
+		axios.post( CONST.url + 'user/Rating', {
+			lang: (this.props.lang).toUpperCase(),
+			rating,
+			user_id : this.state.userData.user_id,
+		}).then( response => {
+			Toast.show({
+				text: response.data.message,
+				type: response.data.status == 1 ? "success" : "danger",
+				duration: 3000
+			});
+
+			// this.setState({ starCount: response.data.data.rating, isSubmitted: false });
+		})
+	}
+
     renderLoader(){
         if (this.state.loader){
             return(
@@ -78,6 +96,18 @@ class AddDet extends Component {
             );
         }
     }
+
+	linkingToGoogleMap(lat, lng){
+		const scheme = Platform.select({ ios: 'maps:0,0?q=', android: 'geo:0,0?q=' });
+		const latLng = `${lat},${lng}`;
+		const label = 'Custom Label';
+		const url = Platform.select({
+			ios : `${scheme}${label}@${latLng}`,
+			android: `${scheme}${latLng}(${label})`,
+		});
+
+		Linking.openURL(url);
+	}
 
 	onFocus(){
 		this.componentWillMount()
@@ -118,6 +148,25 @@ class AddDet extends Component {
 
                     <Text style={{color:'#00918B',  fontSize:15, fontFamily: 'RegularFont' ,  alignSelf: 'flex-start' , writingDirection: I18nManager.isRTL ?'rtl' : 'ltr'}}>{ i18n.t('jobDet') }</Text>
                     <Text style={{color:'#878787',  fontSize:13, fontFamily: 'RegularFont' ,  alignSelf: 'flex-start'}}>{ this.state.dataAdvertise.details }</Text>
+						{
+							this.state.userData.user_id != this.props.user.user_id ?
+								<View>
+									<View style={{borderWidth:1 , borderColor:'#e6e6e6' , marginVertical:10}}/>
+
+									<Text style={{color:'#00918B',  fontSize:15, fontFamily: 'RegularFont' ,  alignSelf: 'flex-start' , writingDirection: I18nManager.isRTL ?'rtl' : 'ltr'}}>{ i18n.t('rate') }</Text>
+									<View style={{width:'40%' , alignSelf:'center' , marginTop:20}}>
+										<StarRating
+											disabled={false}
+											maxStars={5}
+											rating={this.state.starCount}
+											fullStarColor={'#ffcd00'}
+											selectedStar={(rating) => this.onStarRatingPress(rating)}
+											starSize={20}
+											starStyle={{color: '#ffcd00', marginHorizontal: 1}}
+										/>
+									</View>
+								</View> : null
+						}
 
                     <View style={{borderWidth:1 , borderColor:'#e6e6e6' , marginVertical:10}}/>
 
@@ -135,26 +184,29 @@ class AddDet extends Component {
 							)
 						}
                     </View>
-                    
+
                     <View style={{borderWidth:1 , borderColor:'#e6e6e6' , marginBottom:5}}/>
 
                     <Text style={{fontFamily: 'RegularFont', fontSize:13 , color:'#444444', marginBottom:5 ,  alignSelf: 'flex-start'}}>{ i18n.t('ownerLocation') }</Text>
                     {
                         this.state.dataAdvertise.lat && this.state.dataAdvertise.long ? (
-							<MapView
-								style={{ flex: 1 , width:'100%' , height:150 }}
-								initialRegion={{
-									latitude: this.state.dataAdvertise.lat,
-									longitude:  this.state.dataAdvertise.long,
-									latitudeDelta: 0.0922,
-									longitudeDelta: 0.0421,
-								}}>
-								<MapView.Marker
-									coordinate={{latitude: this.state.dataAdvertise.lat, longitude: this.state.dataAdvertise.long}}
-								>
-									<Image source={require('../../assets/images/location_map.png')} resizeMode={'cover'} style={{ width: 35, height: 35 }}/>
-								</MapView.Marker>
-							</MapView>
+							<TouchableOpacity onPress={() => this.linkingToGoogleMap(this.state.dataAdvertise.lat, this.state.dataAdvertise.long)} style={{ width: '100%', height: 160 }}>
+								<View  style={{ width: '100%', height: 160, backgroundColor: 'transparent' , zIndex: 1, position: 'absolute' }} />
+								<MapView
+									style={{ flex: 1 , width:'100%' , height:150 }}
+									initialRegion={{
+										latitude: this.state.dataAdvertise.lat,
+										longitude:  this.state.dataAdvertise.long,
+										latitudeDelta: 0.0922,
+										longitudeDelta: 0.0421,
+									}}>
+									<MapView.Marker
+										coordinate={{latitude: this.state.dataAdvertise.lat, longitude: this.state.dataAdvertise.long}}
+									>
+										<Image source={require('../../assets/images/location_map.png')} resizeMode={'cover'} style={{ width: 35, height: 35 }}/>
+									</MapView.Marker>
+								</MapView>
+							</TouchableOpacity>
                         ) : ( <View/> )
                     }
 
@@ -197,7 +249,7 @@ class AddDet extends Component {
 							) : ( <View /> )
 						}
 
-                        <TouchableOpacity onPress={() => Communications.phonecall('0123456789', true)}>
+                        <TouchableOpacity onPress={() => Communications.phonecall(this.state.socialMediaData.phoneNo, true)}>
                             <Image source={require('../../assets/images/calling.png')} style={{width:35 , height:35}} resizeMode={'contain'} />
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => this.props.navigation.navigate('chat', { roomId: this.state.roomId, name: this.state.userData.userName, reciver_id: this.state.userData.user_id })}>

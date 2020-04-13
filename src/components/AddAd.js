@@ -61,6 +61,8 @@ class AddAd extends Component {
 			modalAddAd: false,
 			categories: [],
 			countries: [],
+			subcategories: [],
+			selectedSubCategory: null,
 			loader: false,
 			isSubmitted: false,
 			percentItem: null,
@@ -315,6 +317,7 @@ class AddAd extends Component {
 		axios.post(CONST.url + 'advertise/addAdvertiseApp', {
 			workName: this.state.jobName,
 			department_id: this.state.selectedSection,
+			subDepartmentId: this.state.selectedSubCategory,
 			user_id: this.props.user.user_id,
 			country_id: this.state.selectedCountry,
 			typeUser: this.state.selectedGender,
@@ -347,8 +350,7 @@ class AddAd extends Component {
 	}
 
 	renderSubmit(){
-		if (this.state.jobName == '' || this.state.jobDet == '' || this.state.date == '' || this.state.time == ''
-			|| this.state.selectedSection == null || this.state.selectedCountry == null ||
+		if (this.state.jobName == '' || this.state.jobDet == '' || this.state.selectedSection == null || this.state.selectedCountry == null ||
 			( (( this.state.selectedType == 1 && this.state.hoursNo == null ) || ( this.state.selectedType == 1  && this.state.pricePerHour == null )) || (this.state.selectedType == 2 && this.state.finalFee == null) )
 		){
 			return(
@@ -364,7 +366,7 @@ class AddAd extends Component {
 			</Button>
 		);
 	}
-	
+
 	validInput(value, type){
 		const numbersEN = ['0' , '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 		const numbersAR = ["٠", "١", "٢", "٣", "٤", "٥", "٦", "٧", "٨", "٩"];
@@ -377,6 +379,14 @@ class AddAd extends Component {
 			else
 				this.setState({activity : value});
 		}else return false
+	}
+
+	getSubCategories(value){
+		this.setState({ selectedSection: value });
+		axios.post( CONST.url + 'department/getSubDepartment', { lang : (this.props.lang).toUpperCase(), department_id: value})
+			.then(response => {
+				this.setState({ subcategories: response.data.data });
+			});
 	}
 
 	onFocus(){
@@ -426,11 +436,33 @@ class AddAd extends Component {
 											placeholderStyle={{ color: "#acabae" }}
 											placeholderIconColor="#acabae"
 											selectedValue={this.state.selectedSection}
-											onValueChange={(value) => this.setState({ selectedSection: value })}
+											onValueChange={(value) => this.getSubCategories(value)}
 										>
 											{
 												this.state.categories.map((category, i) => (
 													<Picker.Item label={category.departmentName} value={category.departement_id} key={i} />
+												))
+											}
+										</Picker>
+										<Icon name='angle-down' type={"FontAwesome"} style={Styles.pickerImg} style={{ color: "#878787", fontSize:23 , right: 0}}/>
+									</Item>
+								</View>
+
+								<View>
+									<Item style={[Styles.inputParent ,{ borderColor:  '#eee' , backgroundColor:'#F6F6F6' , borderRadius:25 , height:40 , marginBottom:20}]} regular >
+										<Label style={[Styles.labelItem , {top:-35 , left:5 , position:'absolute'}]}>{ i18n.t('subSection') }</Label>
+										<Picker
+											mode="dropdown"
+											style={Styles.picker}
+											placeholder={i18n.t('subSection')}
+											placeholderStyle={{ color: "#acabae" }}
+											placeholderIconColor="#acabae"
+											selectedValue={this.state.selectedSubCategory}
+											onValueChange={(value) => this.setState({ selectedSubCategory: value })}
+										>
+											{
+												this.state.subcategories.map((subcategory, i) => (
+													<Picker.Item label={subcategory.subDepartmentName} value={subcategory.subDepartmentId} key={'_' + i} />
 												))
 											}
 										</Picker>

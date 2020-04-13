@@ -16,13 +16,14 @@ class FooterSection extends Component {
         this.state={
             routeName:this.props.routeName,
             userBalance: 0,
+			hasDollar: false
         }
     }
 
 	componentWillMount() {
 		axios.post( CONST.url + 'user/getUserBalance', { lang : (this.props.lang).toUpperCase(), user_id: this.props.user_id})
 			.then(response => {
-				this.setState({ userBalance: response.data.data.price });
+				this.setState({ userBalance: response.data.data.price, hasDollar: response.data.data.hasDollar });
 			});
 
 	}
@@ -36,11 +37,11 @@ class FooterSection extends Component {
     }
 
 	navigateToAddAd(){
-        if (this.state.userBalance > 0)
+        if (this.state.hasDollar)
 			return this.props.navigation.navigate("addAd");
 
 		Toast.show({
-			text: i18n.t('noBalance'),
+			text: i18n.t('noBalanceAdd'),
 			type: "danger",
 			duration: 3000
 		});

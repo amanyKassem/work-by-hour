@@ -40,7 +40,7 @@ class ReCharge extends Component {
 
 	handleNotification = (notification) => {
 		this.componentWillMount();
-	}
+	};
 
 	onFocus(){
 		this.componentWillMount()
@@ -61,10 +61,14 @@ class ReCharge extends Component {
                 <Content style={{padding:15}}>
                     <Text style={[Styles.confirmText , {color:'#444444'}]}>{i18n.t('currentBalance')}</Text>
                     <Text style={[Styles.confirmText , {fontSize:80 , lineHeight:100}]}>{this.state.userBalance}</Text>
-                    <Text style={[Styles.confirmText , {marginBottom:20}]}>{this.state.currency}</Text>
+                    <Text style={[Styles.confirmText , {marginBottom:20}]}>{this.state.currency} </Text>
                     <View style={{borderWidth:1 , borderColor:'#e6e6e6' , marginTop:5}}/>
-                    <Button onPress={() => this.props.navigation.navigate('reChargeWallet')} style={Styles.loginBtn}>
-                        <Text style={Styles.btnTxt}>{i18n.t('reChargeWallet')}</Text>
+					<Image source={require('../../assets/images/pay.png')} style={{ width: '85%', height: 250, alignSelf: 'center' }} resizeMode={'contain'} />
+					<Button onPress={() => this.props.navigation.navigate('reChargeWallet', { type: 'online' })} style={Styles.loginBtn}>
+						<Text style={Styles.btnTxt}>{i18n.t('onlinePayment')}</Text>
+					</Button>
+					<Button onPress={() => this.props.navigation.navigate('reChargeWallet', { type: 'bank' })} style={Styles.loginBtn}>
+                        <Text style={Styles.btnTxt}>{i18n.t('bankTransfer')}</Text>
                     </Button>
                 </Content>
             </Container>

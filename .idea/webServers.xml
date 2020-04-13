@@ -3,7 +3,7 @@
   <component name="WebServers">
     <option name="servers">
       <webServer id="77b50002-8097-43be-9789-c5f2536b234a" name="fallah" url="http://shams.arabsdesign.com">
-        <fileTransfer host="shams.arabsdesign.com" port="21" rootFolder="/public_html/fallah">
+        <fileTransfer host="shams.arabsdesign.com" port="21" rootFolder="/public_html/eBST-backend">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
           </advancedOptions>
@@ -12,6 +12,14 @@
       </webServer>
       <webServer id="075b5db3-9075-4b53-8f99-d2709b610b55" name="cmta" url="http://88.198.40.76">
         <fileTransfer host="88.198.40.76" port="21" rootFolder="/public_html">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+          <option name="port" value="21" />
+        </fileTransfer>
+      </webServer>
+      <webServer id="a0c44fa2-4e9b-458c-92a9-52c441fda180" name="monasbah" url="http://195.154.133.185">
+        <fileTransfer host="195.154.133.185" port="21">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
           </advancedOptions>

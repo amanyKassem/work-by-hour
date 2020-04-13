@@ -16,7 +16,9 @@ class Login extends Component {
 
         this.state={
             password: '',
+			passwordValidation: '',
             phone: '',
+			phoneValidation: '',
 			token: '',
 			userId: null,
 			isLoaded: false,
@@ -36,13 +38,15 @@ class Login extends Component {
 		if (this.state.phone.length <= 0) {
 			isError = true;
 			msg = i18n.t('phoneValidation');
-		}else if ( this.state.phone.length < 10 || this.state.phone.length > 11) {
-			isError = true;
-			msg = i18n.t('passwordRequired');
+			this.setState({ phoneValidation: msg, passwordValidation: ''});
 		}else if (this.state.password.length <= 0) {
 			isError = true;
 			msg = i18n.t('passwordRequired');
+			this.setState({ phoneValidation: '', passwordValidation: msg});
+		}else{
+			this.setState({ phoneValidation: '', passwordValidation: ''});
 		}
+
 		if (msg != ''){
 			Toast.show({
 				text: msg,
@@ -178,16 +182,18 @@ class Login extends Component {
 						<KeyboardAvoidingView behavior={'padding'} style={Styles.keyboardAvoid}>
 							<Form style={{width: '100%' , marginTop:30}}>
 								<Text style={Styles.title}>{ i18n.t('login') }</Text>
-								<View style={Styles.inputParent}>
+								<View style={[Styles.inputParent, { borderColor: this.state.phoneValidation != '' ? '#f00' : '#035F5B' }]}>
 									<Item stackedLabel style={Styles.item } bordered>
 										<Label style={Styles.labelItem}>{ i18n.t('phoneNumber') }</Label>
 										<Input value={this.state.phone} onChangeText={(phone) => this.setState({phone})} keyboardType={'number-pad'} style={Styles.itemInput}  />
+										<Text style={{ color: '#f00', top: -12 }}>{ this.state.phoneValidation }</Text>
 									</Item>
 								</View>
-								<View style={Styles.inputParent}>
+								<View style={[Styles.inputParent, { borderColor: this.state.passwordValidation != '' ? '#f00' : '#035F5B' }]}>
 									<Item stackedLabel style={Styles.item } bordered>
 										<Label style={Styles.labelItem}>{ i18n.t('password') }</Label>
 										<Input autoCapitalize='none' value={this.state.password} onChangeText={(password) => this.setState({password})} secureTextEntry  style={Styles.itemInput}  />
+										<Text style={{ color: '#f00', top: -12 }}>{ this.state.passwordValidation }</Text>
 									</Item>
 								</View>
 								<TouchableOpacity onPress={() => this.props.navigation.navigate('forgetPass')}>

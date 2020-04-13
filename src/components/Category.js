@@ -9,6 +9,7 @@ import CONST from "../consts";
 import {DoubleBounce} from "react-native-loader";
 import {connect} from "react-redux";
 import {NavigationEvents} from "react-navigation";
+import StarRating from 'react-native-star-rating';
 
 const height = Dimensions.get('window').height;
 class Category extends Component {
@@ -49,7 +50,7 @@ class Category extends Component {
 
 	componentWillMount() {
 		this.setState({ loader: true });
-		axios.post( CONST.url + 'advertise/departmentAdvertise', { user_id: this.props.user.user_id, lang : (this.props.lang).toUpperCase(), department_id: this.props.navigation.state.params.id})
+		axios.post( CONST.url + 'advertise/departmentAdvertise', { user_id: this.props.user.user_id, lang : (this.props.lang).toUpperCase(), subDepartmentId: this.props.navigation.state.params.id})
 			.then(response => {
 				this.setState({ ads: response.data.data, loader: false });
 		});
@@ -111,9 +112,11 @@ class Category extends Component {
 		setTimeout(() => this.filter() , 0);
     }
 
-    filter(){
-		if (this.state.selectedHours != null || this.state.selectedFee != null || this.state.selectedCountry != null){
-			this.setState({ loader: true });
+	filter(){
+		// if (this.state.selectedHours != null || this.state.selectedFee != null || this.state.selectedCountry != null){
+			// this.setState({ loader: true });
+
+			const { id, departmentId } = this.props.navigation.state.params;
 
 			axios.post( CONST.url + 'advertise/searchAdvertise', {
 				lang 			: (this.props.lang).toUpperCase(),
@@ -121,11 +124,13 @@ class Category extends Component {
 				price			: this.state.selectedFee,
 				country_id		: this.state.selectedCountry,
 				user_id			: this.props.user.user_id,
+				department_id	: departmentId,
+				subDepartmentId : id,
 			})
 				.then(response => {
 					this.setState({ ads: response.data.data, loader: false });
 				})
-		}
+		// }
 	}
 
 	onFocus(payload){
@@ -211,14 +216,32 @@ class Category extends Component {
                         this.state.ads.map((ad, i) => (
 							<TouchableOpacity key={i} onPress={() => this.openAd(ad._id)} style={Styles.jobBlock}>
 								<Text style={[Styles.tegisterText , {marginTop:0}]}>{ ad.workName }</Text>
+								<View style={{ alignItems: 'center', alignSelf: 'center', width: 155, marginTop: 5 }}>
+									<StarRating
+										disabled={true}
+										maxStars={5}
+										rating={ ad.rating }
+										fullStarColor={'#ffcd00'}
+										starSize={14}
+										starStyle={{color: '#ffcd00', marginHorizontal: 1}}
+									/>
+								</View>
 								<View style={{flexDirection:'row' , justifyContent:'space-between'}}>
 
 									<Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('adNumber') }: <Text style={{color:'#444444'}}>{ ad.advertisingNumber }</Text></Text>
 									<Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('activityName') }: <Text style={{color:'#444444'}}>{ ad.workStyle }</Text></Text>
 								</View>
 								<View style={{flexDirection:'row' , justifyContent:'space-between'}}>
-									<Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('time') }: <Text style={{color:'#444444'}}>{ ad.timeOFWork }</Text></Text>
-									<Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('date') }: <Text style={{color:'#444444'}}>{ ad.time_Started }</Text></Text>
+									{
+										ad.timeOFWork != '' ?
+											<Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('time') }: <Text style={{color:'#444444'}}>{ ad.timeOFWork }</Text></Text> : null
+
+									}
+									{
+										ad.time_Started != '' ?
+											<Text style={[Styles.tegisterText , {marginTop:0 , fontSize:13}]}>{ i18n.t('date') }: <Text style={{color:'#444444'}}>{ ad.time_Started }</Text></Text> : null
+									}
+
 								</View>
 								{
 									ad.typeWork == 'with' ? (

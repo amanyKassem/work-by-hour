@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import {View, Text, Image, TouchableOpacity, I18nManager, WebView, Dimensions} from "react-native";
-import {Container, Content, Icon, Header, Item, Input, Button, Form} from 'native-base'
+import {View, Text, Image, TouchableOpacity, I18nManager, WebView, Dimensions, Linking} from "react-native";
+import {Container, Content, Header } from 'native-base'
 import Styles from '../../assets/styles'
 import i18n from '../../local/i18n'
 import axios from "axios";
@@ -8,8 +8,8 @@ import CONST from "../consts";
 import {connect} from "react-redux";
 import HTML from 'react-native-render-html';
 
-
 const height = Dimensions.get('window').height;
+
 class Policy extends Component {
     constructor(props){
         super(props);
@@ -47,7 +47,7 @@ class Policy extends Component {
                 </Header>
                 <Content >
                     <View style={{padding:15}}>
-					<HTML baseFontStyle={{lineHeight : 25,color : '#7d7d7d',fontSize:16,fontFamily : 'RegularFont' , textAlign:'center'}} html={this.state.terms} imagesMaxWidth={Dimensions.get('window').width} />
+					<HTML onLinkPress={(evt, href) =>  Linking.openURL(href) } baseFontStyle={{lineHeight : 25,color : '#7d7d7d',fontSize:16,fontFamily : 'RegularFont' , textAlign:'center'}} html={this.state.terms} imagesMaxWidth={Dimensions.get('window').width} />
 					</View>
                 </Content>
             </Container>

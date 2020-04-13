@@ -35,6 +35,7 @@
     "react-redux": "^6.0.1",
     "redux": "^4.0.1",
     "redux-persist": "^5.10.0",
+    "lodash": "^4.17.11",
     "redux-thunk": "^2.3.0"
   },
   "devDependencies": {

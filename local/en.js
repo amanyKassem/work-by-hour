@@ -134,6 +134,18 @@ const en = {
 	'activityValid': 'activity has numbers',
     'codeNotCorrect': 'code not correct',
     'verifyPassword': 'Password and Confirm Password do not match',
+	'favs': 'Fav Categories',
+	'noData': 'NO DATA',
+	'subSection': 'Sub Section',
+	'urMoney': 'Your money is added by dollars',
+	'usernameRequired': 'user name is required',
+	'bankTransfer': 'Bank Transfer',
+	'onlinePayment': 'Online Payment',
+	'successPayment': 'payment transaction done successfully',
+	'error': 'something went wrong plz try again',
+	'noBalanceAdd': 'There must be $ 1 to add your ad',
+	'noBalanceReq': 'There must be $ 1 to request this ad',
+	'appRate': 'Rate App',
 }
 
 export default en;

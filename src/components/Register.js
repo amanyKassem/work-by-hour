@@ -29,10 +29,15 @@ class Register extends Component {
 
         this.state={
             username: '',
+            usernameValidation: '',
             phone: '',
+			phoneValidation: '',
             mail: '',
+			mailValidation: '',
             password: '',
+			passwordValidation: '',
             rePassword: '',
+			rePasswordValidation: '',
             image: null,
             base64: null,
             selectedCountry: null,
@@ -131,21 +136,32 @@ class Register extends Component {
 		if (this.state.phone.length <= 0) {
 			isError = true;
 			msg = i18n.t('phoneValidation');
+			this.setState({ usernameValidation: '', phoneValidation: msg, mailValidation: '', passwordValidation: '', rePasswordValidation: '' });
 		}else if (this.state.password.length <= 0) {
 			isError = true;
 			msg = i18n.t('passwordRequired');
+			this.setState({ usernameValidation: '', phoneValidation: '', mailValidation: '', passwordValidation: msg, rePasswordValidation: '' });
+		}else if (this.state.username.length <= 0) {
+			isError = true;
+			msg = i18n.t('usernameRequired');
+			this.setState({ usernameValidation: msg, phoneValidation: '', mailValidation: '', passwordValidation: '', rePasswordValidation: '' });
 		}else if (this.state.password != this.state.rePassword) {
 			isError = true;
 			msg = i18n.t('verifyPassword');
+			this.setState({ usernameValidation: '', phoneValidation: '', mailValidation: '', passwordValidation: '', rePasswordValidation: msg });
 		}else if (this.state.selectedKayan === null) {
 			isError = true;
 			msg = i18n.t('selectedKayanValidation');
 		}else if (this.state.password.length < 6) {
 			isError = true;
 			msg = i18n.t('passwordLength');
+			this.setState({ usernameValidation: '', phoneValidation: '', mailValidation: '', passwordValidation: msg, rePasswordValidation: '' });
 		}else if (this.state.mail.length <= 0 || this.state.mail.indexOf("@") === -1 || this.state.mail.indexOf(".") === -1) {
 			isError = true;
 			msg = i18n.t('emailNotCorrect');
+			this.setState({ usernameValidation: '', phoneValidation: '', mailValidation: msg, passwordValidation: '', rePasswordValidation: '' });
+		}else {
+			this.setState({ usernameValidation: '', phoneValidation: '', mailValidation: '', passwordValidation: '', rePasswordValidation: '' });
 		}
 
 		if (msg != ''){
@@ -218,22 +234,27 @@ class Register extends Component {
                                             </TouchableOpacity>
                                         }
                                     </View>
-                                    <View style={Styles.inputParent}>
-                                        <Item stackedLabel style={Styles.item } bordered>
+
+                                    <View style={[Styles.inputParent, { borderColor: this.state.usernameValidation != '' ? '#f00' : '#035F5B' }]}>
+                                        <Item stackedLabel style={[Styles.item ]} bordered>
                                             <Label style={Styles.labelItem}>{ i18n.t('username') }</Label>
                                             <Input value={this.state.username} onChangeText={(username) => this.setState({username})} autoCapitalize='none' style={Styles.itemInput}  />
+											<Text style={{ color: '#f00', top: -12 }}>{ this.state.usernameValidation }</Text>
                                         </Item>
                                     </View>
-                                    <View style={Styles.inputParent}>
+
+									<View style={[Styles.inputParent, { borderColor: this.state.phoneValidation != '' ? '#f00' : '#035F5B' }]}>
                                         <Item stackedLabel style={Styles.item } bordered>
                                             <Label style={Styles.labelItem}>{ i18n.t('phoneNumber') }</Label>
                                             <Input value={this.state.phone} onChangeText={(phone) => this.setState({phone})} keyboardType={'number-pad'} style={Styles.itemInput}  />
+											<Text style={{ color: '#f00', top: -12 }}>{ this.state.phoneValidation }</Text>
                                         </Item>
                                     </View>
-                                    <View style={Styles.inputParent}>
+									<View style={[Styles.inputParent, { borderColor: this.state.mailValidation != '' ? '#f00' : '#035F5B' }]}>
                                         <Item stackedLabel style={Styles.item } bordered>
                                             <Label style={Styles.labelItem}>{ i18n.t('email') }</Label>
                                             <Input autoCapitalize='none' value={this.state.mail} onChangeText={(mail) => this.setState({mail})} keyboardType={'email-address'}  style={Styles.itemInput}  />
+											<Text style={{ color: '#f00', top: -12 }}>{ this.state.mailValidation }</Text>
                                         </Item>
                                     </View>
                                     <View>
@@ -249,7 +270,7 @@ class Register extends Component {
                                             >
                                                 {
                                                     this.state.countries.map((country, i) => (
-                                                        <Picker.Item label={country.countryName} value={country.country_id} key={i} />
+                                                        <Picker.Item label={country.countryName + ' - (' + country.CountryCode + ')'} value={country.country_id} key={i} />
                                                     ))
                                                 }
                                             </Picker>
@@ -276,17 +297,19 @@ class Register extends Component {
                                             <Image source={require('../../assets/images/dropdown.png')} style={Styles.pickerImg} resizeMode={'contain'} />
                                         </Item>
                                     </View>
-                                    <View style={Styles.inputParent}>
+									<View style={[Styles.inputParent, { borderColor: this.state.passwordValidation != '' ? '#f00' : '#035F5B' }]}>
                                         <Item stackedLabel style={Styles.item } bordered>
                                             <Label style={Styles.labelItem}>{ i18n.t('password') }</Label>
                                             <Input autoCapitalize='none' value={this.state.password} onChangeText={(password) => this.setState({password})} secureTextEntry  style={Styles.itemInput}  />
+											<Text style={{ color: '#f00', top: -12 }}>{ this.state.passwordValidation }</Text>
                                         </Item>
                                     </View>
 
-                                    <View style={Styles.inputParent}>
+									<View style={[Styles.inputParent, { borderColor: this.state.rePasswordValidation != '' ? '#f00' : '#035F5B' }]}>
                                         <Item stackedLabel style={Styles.item } bordered>
                                             <Label style={Styles.labelItem}>{ i18n.t('verifyNewPass') }</Label>
                                             <Input autoCapitalize='none' value={this.state.rePassword} onChangeText={(rePassword) => this.setState({rePassword})} secureTextEntry  style={Styles.itemInput}  />
+											<Text style={{ color: '#f00', top: -12 }}>{ this.state.rePasswordValidation }</Text>
                                         </Item>
                                     </View>
 

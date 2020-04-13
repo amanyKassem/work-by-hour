@@ -19,9 +19,11 @@ class ReChargeWallet extends Component {
             username:'',
             accNum:'',
             money:'',
+			amount:'',
             image: null,
 			base64: null,
-            accounts: []
+            accounts: [],
+			link: ''
         }
     }
 
@@ -62,6 +64,8 @@ class ReChargeWallet extends Component {
 
 	addTransfer(){
 		this.setState({ isSubmitted: true });
+		const { type } = this.props.navigation.state.params;
+
 		axios.post(CONST.url + 'user/bankSend', {
 			accountName: this.state.username,
 			bankName: this.state.bankName,
@@ -69,16 +73,28 @@ class ReChargeWallet extends Component {
 			user_id: this.props.user.user_id,
 			imageTransfer: this.state.base64,
 			lang: (this.props.lang).toUpperCase(),
-			amountTransferred: this.state.money
+			amountTransferred: this.state.money,
+			type
 		}).then(response => {
-
+			this.setState({ link: response.data.data.link })
+			this.props.navigation.navigate(type === 'bank' ? 'congrats' : 'paymentForm', { link: this.state.link });
 		}).catch(e => console.warn(e));
 
-		this.props.navigation.navigate('congrats');
+		// this.props.navigation.navigate(type === 'bank' ? 'congrats' : 'paymentForm', { link: this.state.link });
 	}
 
 	renderSubmit(){
-		if (this.state.bankName == '' || this.state.username == '' || this.state.accNum == '' || this.state.money == ''  || this.state.base64 == null ){
+		const { type } = this.props.navigation.state.params;
+
+    	if (type === 'online' && this.state.money == '') {
+			return(
+				<Button disabled style={[Styles.loginBtn , {marginBottom:40, backgroundColor: '#999'}]}>
+					<Text style={Styles.btnTxt}>{ i18n.t('confirm') }</Text>
+				</Button>
+			)
+		}
+
+		if (type === 'bank' && (this.state.bankName == '' || this.state.username == '' || this.state.accNum == '' || this.state.money == ''  || this.state.base64 == null )){
 			return(
 				<Button disabled style={[Styles.loginBtn , {marginBottom:40, backgroundColor: '#999'}]}>
 					<Text style={Styles.btnTxt}>{ i18n.t('confirm') }</Text>
@@ -96,6 +112,8 @@ class ReChargeWallet extends Component {
 
     render() {
         let image = this.state.image;
+        const { type } = this.props.navigation.state.params;
+
         return (
 
             <Container style={{}}>
@@ -112,67 +130,86 @@ class ReChargeWallet extends Component {
 						{ this.renderLoader() }
 						<KeyboardAvoidingView behavior={'padding'} style={Styles.keyboardAvoid}>
 							{
-								this.state.accounts.map((account, i) => (
-									<View style={Styles.bankImg} key={i}>
-										<Image source={{ uri: 'https://' + account.image }} style={{width:100 , height:100}} resizeMode={'contain'} />
-										<View style={{flexDirection:'column' ,marginLeft:5 }}>
-											<Text  style={[ Styles.bankName ]}>{ account.bankName }</Text>
-											<Text style={[ Styles.bankName ,{color:'#8B8E8D'}]}>{ account.accountName }</Text>
-											<Text style={[ Styles.bankName ,{color:'#8B8E8D'}]}>{ account.accountNumber }</Text>
+								type == 'bank' ?
+									this.state.accounts.map((account, i) => (
+										<View style={Styles.bankImg} key={i}>
+											<Image source={{ uri: 'https://' + account.image }} style={{width:100 , height:100}} resizeMode={'contain'} />
+											<View style={{flexDirection:'column' ,marginLeft:5 }}>
+												<Text  style={[ Styles.bankName ]}>{ account.bankName }</Text>
+												<Text style={[ Styles.bankName ,{color:'#8B8E8D'}]}>{ account.accountName }</Text>
+												<Text style={[ Styles.bankName ,{color:'#8B8E8D'}]}>{ account.accountNumber }</Text>
+											</View>
 										</View>
-									</View>
-								))
+									)) : null
 							}
 
-							<View style={Styles.line}/>
-							<Text style={[ Styles.bankName ,{color:'#444444' , textAlign:'center'}]}>{i18n.t('bankInfo')}</Text>
-							<Form style={{width: '100%' , marginTop:15}}>
-								<View style={[Styles.inputParent ,{ borderColor:  '#707070' , borderRadius:25 , height:40 , marginBottom:10}]}>
-									<Item stackedLabel style={Styles.item } bordered>
-										<Label style={[Styles.labelItem , {top:-25 , left:-13 , backgroundColor:'transparent'}]}>{i18n.t('transBank')}</Label>
-										<Input value={this.state.bankName} onChangeText={(bankName) => this.setState({bankName})} autoCapitalize='none' style={[Styles.itemInput , {top:-20}]}  />
-									</Item>
-								</View>
-								<View style={[Styles.inputParent ,{ borderColor:  '#707070' , borderRadius:25 , height:40, marginBottom:10}]}>
-									<Item stackedLabel style={Styles.item } bordered>
-										<Label style={[Styles.labelItem , {top:-25 , left:-13 , backgroundColor:'transparent'}]}>{i18n.t('accUser')}</Label>
-										<Input value={this.state.username} onChangeText={(username) => this.setState({username})} autoCapitalize='none' style={[Styles.itemInput , {top:-20}]}  />
-									</Item>
-								</View>
-								<View style={[Styles.inputParent ,{ borderColor:  '#707070' , borderRadius:25 , height:40, marginBottom:10}]}>
-									<Item stackedLabel style={Styles.item } bordered>
-										<Label style={[Styles.labelItem , {top:-25 , left:-13 , backgroundColor:'transparent'}]}>{i18n.t('accNum')}</Label>
-										<Input value={this.state.accNum} onChangeText={(accNum) => this.setState({accNum})}keyboardType={'number-pad'} style={[Styles.itemInput , {top:-20}]}  />
-									</Item>
-								</View>
-								<View style={[Styles.inputParent ,{ borderColor:  '#707070' , borderRadius:25 , height:40, marginBottom:10}]}>
-									<Item stackedLabel style={Styles.item } bordered>
-										<Label style={[Styles.labelItem , {top:-25 , left:-13 , backgroundColor:'transparent'}]}>{i18n.t('chargedCredit')}</Label>
-										<Input value={this.state.money} onChangeText={(money) => this.setState({money})}keyboardType={'number-pad'} style={[Styles.itemInput , {top:-20}]}  />
-									</Item>
-								</View>
-								<Label style={[Styles.labelItem , {top:0 , left:0 , marginBottom:10 , backgroundColor:'transparent'}]}>{i18n.t('transferReceipt')}</Label>
+							{
+								type == 'bank' ?
+									<View>
+										<View style={Styles.line}/>
+										<Text style={[ Styles.bankName ,{color:'#444444' , textAlign:'center'}]}>- {i18n.t('bankInfo')} .</Text>
 
-								<View style={{marginVertical:5}}>
+										<Form style={{width: '100%' , marginTop:15}}>
+											<View style={[Styles.inputParent ,{ borderColor:  '#707070' , borderRadius:25 , height:40 , marginBottom:10}]}>
+												<Item stackedLabel style={Styles.item } bordered>
+													<Label style={[Styles.labelItem , {top:-25 , left:-13 , backgroundColor:'transparent'}]}>{i18n.t('transBank')}</Label>
+													<Input value={this.state.bankName} onChangeText={(bankName) => this.setState({bankName})} autoCapitalize='none' style={[Styles.itemInput , {top:-20}]}  />
+												</Item>
+											</View>
+											<View style={[Styles.inputParent ,{ borderColor:  '#707070' , borderRadius:25 , height:40, marginBottom:10}]}>
+												<Item stackedLabel style={Styles.item } bordered>
+													<Label style={[Styles.labelItem , {top:-25 , left:-13 , backgroundColor:'transparent'}]}>{i18n.t('accUser')}</Label>
+													<Input value={this.state.username} onChangeText={(username) => this.setState({username})} autoCapitalize='none' style={[Styles.itemInput , {top:-20}]}  />
+												</Item>
+											</View>
+											<View style={[Styles.inputParent ,{ borderColor:  '#707070' , borderRadius:25 , height:40, marginBottom:10}]}>
+												<Item stackedLabel style={Styles.item } bordered>
+													<Label style={[Styles.labelItem , {top:-25 , left:-13 , backgroundColor:'transparent'}]}>{i18n.t('accNum')}</Label>
+													<Input value={this.state.accNum} onChangeText={(accNum) => this.setState({accNum})}keyboardType={'number-pad'} style={[Styles.itemInput , {top:-20}]}  />
+												</Item>
+											</View>
+											<View style={[Styles.inputParent ,{ borderColor:  '#707070' , borderRadius:25 , height:40, marginBottom:10}]}>
+												<Item stackedLabel style={Styles.item } bordered>
+													<Label style={[Styles.labelItem , {top:-25 , left:-13 , backgroundColor:'transparent'}]}>{i18n.t('chargedCredit')}</Label>
+													<Input value={this.state.money} placeholder={i18n.t('urMoney')} onChangeText={(money) => this.setState({money})} keyboardType={'number-pad'} style={[Styles.itemInput , {top:-20}]}  />
+												</Item>
+											</View>
+											<Label style={[Styles.labelItem , {top:0 , left:0 , marginBottom:10 , backgroundColor:'transparent'}]}>{i18n.t('transferReceipt')}</Label>
 
-									{image != null?
-										<TouchableOpacity  style={{width:100 , height:100  }} onPress={()=> this._pickImage()} >
-											<Image
-												onPress={()=> this._pickImage()}
-												resizeMode={'cover'}
-												style={{width:'100%' , height:'100%' , borderRadius:25}}
-												source={{ uri: image }}
-											/>
-										</TouchableOpacity>
-										:
-										<TouchableOpacity  onPress={()=> this._pickImage()} >
-											<Image source={require('../../assets/images/addImg.png')} style={{width:100 , height:100}} resizeMode={'contain'} />
-										</TouchableOpacity>
-									}
+											<View style={{marginVertical:5}}>
 
-								</View>
-								{ this.renderSubmit() }
-							</Form>
+												{image != null?
+													<TouchableOpacity  style={{width:100 , height:100  }} onPress={()=> this._pickImage()} >
+														<Image
+															onPress={()=> this._pickImage()}
+															resizeMode={'cover'}
+															style={{width:'100%' , height:'100%' , borderRadius:25}}
+															source={{ uri: image }}
+														/>
+													</TouchableOpacity>
+													:
+													<TouchableOpacity  onPress={()=> this._pickImage()} >
+														<Image source={require('../../assets/images/addImg.png')} style={{width:100 , height:100}} resizeMode={'contain'} />
+													</TouchableOpacity>
+												}
+
+											</View>
+										</Form>
+									</View>
+									:
+									<View>
+										<Form style={{width: '100%' , marginTop:15}}>
+											<View style={[Styles.inputParent ,{ borderColor:  '#707070' , borderRadius:25 , height:40, marginBottom:10}]}>
+												<Item stackedLabel style={Styles.item } bordered>
+													<Label style={[Styles.labelItem , {top:-25 , left:-13 , backgroundColor:'transparent'}]}>{i18n.t('chargedCredit')}</Label>
+													<Input placeholder={i18n.t('urMoney')}  value={this.state.money} onChangeText={(money) => this.setState({money})} keyboardType={'number-pad'} style={[Styles.itemInput , {top:-20}]}  />
+												</Item>
+											</View>
+										</Form>
+										<Image source={require('../../assets/images/pay.png')} style={{ width: '85%', height: 250, alignSelf: 'center' }} resizeMode={'contain'} />
+									</View>
+							}
+							{ this.renderSubmit() }
 						</KeyboardAvoidingView>
 					</View>
                 </Content>

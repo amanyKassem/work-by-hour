@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {View, Text, Image, TouchableOpacity, Share, I18nManager, Platform} from "react-native";
+import {View, Text, Image, TouchableOpacity, Share, I18nManager, Platform, Linking} from "react-native";
 import {Container, Content, Icon} from 'native-base';
 import {DrawerItems} from 'react-navigation';
 import i18n from "../../local/i18n";
@@ -70,10 +70,15 @@ setTimeout(()=>{
                                  itemStyle  = {{marginBottom:0 , paddingBottom:0 , marginTop:0 , paddingTop:0 , fontFamily: 'RegularFont'}} itemsContainerStyle ={{fontFamily: 'RegularFont'}} />
 
                     <View style={{ flex: 1 }}>
-                        <TouchableOpacity style={{flexDirection: 'row' }} onPress={() => this.logout()}>
-                            <Image source={require('../../assets/images/logout.png')} style={{ height: 18, width: 18 , marginRight:15, top:10 , marginLeft:20  , transform: I18nManager.isRTL ? [{rotateY : '0deg'}] : [{rotateY : '-180deg'}]}} resizeMode={'contain'} />
-                            <Text style={{color:'#00918B',  fontSize:17, fontFamily: 'RegularFont'}}>{ i18n.t('logout') }</Text>
+                        <TouchableOpacity style={{flexDirection: 'row' }} onPress={() => Linking.openURL('https://play.google.com/store/apps/details?id=com.aait.workbyhour')}>
+                            <Image source={require('../../assets/images/star.png')} style={{ height: 18, width: 18 , marginRight:15, top:10 , marginLeft:20  , transform: I18nManager.isRTL ? [{rotateY : '0deg'}] : [{rotateY : '-180deg'}]}} resizeMode={'contain'} />
+                            <Text style={{color:'#00918B',  fontSize:17, fontFamily: 'RegularFont'}}>{ i18n.t('appRate') }</Text>
                         </TouchableOpacity>
+
+						<TouchableOpacity style={{flexDirection: 'row', marginTop: 10 }} onPress={() => this.logout()}>
+							<Image source={require('../../assets/images/logout.png')} style={{ height: 18, width: 18 , marginRight:15, top:10 , marginLeft:20  , transform: I18nManager.isRTL ? [{rotateY : '0deg'}] : [{rotateY : '-180deg'}]}} resizeMode={'contain'} />
+							<Text style={{color:'#00918B',  fontSize:17, fontFamily: 'RegularFont'}}>{ i18n.t('logout') }</Text>
+						</TouchableOpacity>
                     </View>
                 </Content>
 

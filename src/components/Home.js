@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {View, Text, Image, TouchableOpacity, FlatList, Dimensions, BackHandler} from "react-native";
+import {View, Text, Image, TouchableOpacity, FlatList, Dimensions, BackHandler, Platform} from "react-native";
 import { Container, Content, Icon, Header  ,Item , Input } from 'native-base'
 import FooterSection from './FooterSection';
 import Styles from '../../assets/styles'
@@ -32,7 +32,7 @@ class Home extends Component {
 		axios.post( CONST.url + 'department/allDepartment', { lang : (this.props.lang).toUpperCase(), user_id: this.props.auth != null ? this.props.auth.data.data.user_id : null})
 			.then(response => {
                 this.setState({ categories: response.data.data, loader: false, notifyCounter: response.data.counterNotification });
-            });
+        });
 
 		const { status: existingStatus } = await Permissions.getAsync(
 			Permissions.NOTIFICATIONS
@@ -54,7 +54,7 @@ class Home extends Component {
 
 		// alert(token);
 		//
-		// console.log('device_id_', token);
+		console.log('device_id_', token);
 	}
 
 
@@ -68,7 +68,7 @@ class Home extends Component {
 
     renderItems = (item) => {
         return(
-            <TouchableOpacity onPress={() => this.props.navigation.navigate('category', { id: item.departement_id, name: item.departmentName })} style={Styles.categoryList}>
+			<TouchableOpacity onPress={() => this.props.navigation.navigate('subCategories', { id: item.departement_id, name: item.departmentName, subCategories: item.subDepartment })} style={Styles.categoryList}>
                 <View style={Styles.homeViewContainer}>
                     <View style={Styles.homeTextCont}>
                         <Text style={Styles.homeText}>{item.departmentName}</Text>
@@ -82,8 +82,10 @@ class Home extends Component {
     renderLoader(){
         if (this.state.loader){
             return(
-                <View style={{ alignItems: 'center', justifyContent: 'center', height, alignSelf:'center' , backgroundColor:'#fff' , width:'100%'  , position:'absolute' , zIndex:1 }}>
-                    <DoubleBounce size={20} color="#00918B" />
+                <View style={{ alignItems: 'center', justifyContent: 'center', height: '100%', alignSelf:'center' , backgroundColor:'#fff' , width:'100%'  , position:'absolute' , zIndex:1 }}>
+                    <View style={{ alignItems: 'center', justifyContent: 'center', width: '100%', height, marginTop: 250 }}>
+						<DoubleBounce size={20} color="#00918B" />
+					</View>
                 </View>
             );
         }
@@ -95,13 +97,25 @@ class Home extends Component {
 
 
  	componentDidMount() {
+		if (Platform.OS === 'android') {
+			Notifications.createChannelAndroidAsync('notify', {
+				name: 'Chat messages',
+				sound: true,
+			});
+		}
+
+		Notifications.addListener(this.handleNotification);
+
+
 		BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
 	}
 
 	handleNotification = (notification) => {
-    	alert('dam son of bitch');
-		console.log('fuck _not', notification);
-	}
+    	console.log('notification__', notification);
+    	if (notification.data && notification.data.rateUser_id){
+    		this.props.navigation.navigate('rate', { id: notification.data.rateUser_id, adId: notification.data._id })
+		}
+	};
 
 
 	componentWillUnmount() {
